@@ -7,8 +7,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{pagetitle}} | NTFM</title>
+
+  <!-- My App Css-->
+  <link rel="stylesheet" href="{% static 'css/myappcss.css' %}" />
+
+
   <link rel="shortcut icon" type="image/ico" href="{% static 'img/favicon.ico' %}"/>
-  <link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href='{% static "plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" %}'>
   <link rel="stylesheet" href='{% static "plugins/jqvmap/jqvmap.min.css" %}'>
@@ -31,89 +36,6 @@
   <link rel="stylesheet" href='{% static "plugins/datatables-buttons/css/buttons.bootstrap4.min.css" %}'>
 
 </head>
-<style>
-    .img-circle {
-        border-radius: 23%;
-    }
-  #circle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      z-index: 20;
-      transform: translate(-50%,-50%);
-    width: 150px;
-      height: 150px;  
-  }
-
-  .loader {
-    width: calc(100% - 0px);
-    height: calc(100% - 0px);
-    border: 8px solid #162534;
-    border-top: 8px solid #17a2b8;
-    border-radius: 50%;
-    animation: rotate 5s linear infinite;
-  }
-
-  @keyframes rotate {
-  100% {transform: rotate(360deg);}
-  } 
-  @media (min-width: 1000px){
-  body:not(.sidebar-mini-md) .content-wrapper, body:not(.sidebar-mini-md) .main-footer, body:not(.sidebar-mini-md) .main-header {
-      transition: margin-left 0.3s ease-in-out;
-      margin-left: 253px;
-  }}
-  i.fas.fa-angle-double-right {
-    font-size: 25px;
-  }
-  /* footer.main-footer {
-      margin-top: -18px;
-  } */
-  a.detail {
-    color: #3b38ec;
-  }
-
-  a.edit {
-    color: #0c8ce0;
-  }
-
-  a.delete {
-    color: #971d02;
-  }
-
-  body {
-    color: #404E67;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-  }
-
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #4aa6b4; 
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #343a40;
-    border-radius: 7px;
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #404952;
-    border-radius: 7px;
-  }
-  .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
-  .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
-    background-color: #17a2b8;
-    width: 100%;
-
-  }
-</style>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse" lang="fr">
     <div id="circle" style="display: initial;">
