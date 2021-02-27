@@ -50,8 +50,8 @@ def generate_table_of_facture_items(factureitemsobj, showaction=True):
         D['PT'] = PT
         if showaction == True:
             action = """
-                        <button type="button" class="btn btn-default btn-danger" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button>\n
-                        <button type="button" id="editrow" class="btn btn-default btn-info" onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button>\n
+                        <button type="button" id="editrow" class="btn btn-info btn-sm" style="margin-left: 12px;padding-right: 6px;" onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>
                     """
             D['Action'] = action
         tablebody.append(D)

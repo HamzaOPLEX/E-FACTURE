@@ -122,7 +122,7 @@ function AddToTable() {
     var DESIGNATION = document.getElementById('ProductName').value;
     var PU = document.getElementById('PU').value;
     var PT = document.getElementById('PT').value;
-    var Action = '<button type="button"  class="btn btn-default btn-danger" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button><button type="button" id="editrow" class="btn btn-default btn-info"  onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>'
+    var Action = '<button type="button"  class="btn btn-danger btn-sm" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button><button type="button" id="editrow" class="btn btn-info btn-sm" style="margin-left: 12px;padding-right: 6px;"  onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>'
     var table = document.getElementById('Table').getElementsByTagName('tbody')[0];
     var new_row = table.insertRow(-1)
     var cell_qs = new_row.insertCell(0)
