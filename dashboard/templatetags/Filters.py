@@ -26,7 +26,11 @@ def CreateTableBody_FactureItems(tablebody):
     for data in tablebody:
         tr_tag = '<tr>here</tr>'
         for k, v in data.items():
-            td_tag = f'<td>{v}</td>\nhere'
+            if k == 'Action':
+                td_tag = f'<td style="text-align:center;">{v}</td>\nhere'
+            else:
+                td_tag = f'<td>{v}</td>\nhere'
+
             tr_tag = tr_tag.replace('here', td_tag)
         tr_tag = tr_tag.replace('here', '')
         alltr_tags.append(tr_tag.strip())

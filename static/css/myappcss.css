@@ -79,9 +79,66 @@
     width: 100%   !important;
 
   }
-
+  .card-body.p-0 {
+      overflow-x: hidden !important;
+  }
   .btn-primary {
     background-color:#17a2b8 !important;
     border-radius: 5px !important;
     width: auto !important;
   }
+
+      option {
+        height: calc(1.5em + .75rem + 2px) !important;
+        line-height: 30px !important;
+    }
+
+    .editOption {
+        width: 94% !important;
+        position: relative !important;
+        top: -38px !important;
+        border-bottom-right-radius: unset !important;
+        border-top-right-radius: unset !important;
+    }
+
+    .editOption:focus {
+        box-shadow: none !important;
+    }
+
+    td {
+        max-width: 70px !important;
+        overflow-x: scroll !important;
+        border: 1px solid #b5c0d2 !important;
+
+    }
+
+    tr {
+        overflow: scroll !important;
+        border-bottom: solid 1px #b5c0d2 !important;
+    }
+    button.btn.btn-info.add-new {
+        padding: 5px !important;
+        float: right !important;
+    }
+
+    button.btn.btn-default.btn-danger {
+        background-color: #ffffff;
+        padding: 0px !important;
+        border: none;
+        margin-right: 17px !important;
+    }
+
+    i.fas.fa-trash {
+        font-size: 15px !important;
+        color: red !important;
+    }
+
+    i.fas.fa-edit {
+        color: #ffa600 !important;
+    }
+
+    #editrow {
+        background-color: white !important;
+        border: none !important;
+        padding: 0px !important;
+    }
