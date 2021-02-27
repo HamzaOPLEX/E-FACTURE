@@ -514,7 +514,6 @@ def OpenPdf(requests,facture_id):
                 Company_ICE = APP_Settings.objects.all().first().Company_ICE
                 Company_City = APP_Settings.objects.all().first().Company_Place
                 filepath = DrawNotechPdf(Facture, Facture_item, CalculedTOTAL,Company_TVATAUX,Company_ICE,Company_City)
-                filesize = size(os.path.getsize(filepath))
             except AttributeError:
                 return render(requests, 'ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
             return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
