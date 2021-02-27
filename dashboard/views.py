@@ -798,7 +798,7 @@ def ManageUsers(requests):
                 D['status'] = status
                 D['Action'] = f"""<a class='btn btn-info  btn-sm' href='manage-users/edit/{id}' target='_blank' title='Edit' data-toggle='tooltip'>
                                                 <i class='fas fa-pencil-alt'></i>\n</a>
-                                  <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='LoginPopup(\"/settings/deleteacount/{id}\");' data-toggle='tooltip'>
+                                  <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/deleteacount/{id}\");' data-toggle='tooltip'>
                                                 <i class='fas fa-trash'></i></a>\n
                                   <a class='btn btn-warning btn-sm' target='_blank' href='manage-users/profile/{id}' title='detail' data-toggle='tooltip'>
                                                 <i class='fas fa-folder'></i></a>\n"""

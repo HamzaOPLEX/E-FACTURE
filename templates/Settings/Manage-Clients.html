@@ -106,9 +106,9 @@
         </div>
     </div>
 </section>
-    <form action="" method="POST" id='FormToDeleteClient'>
+    <form action="" method="POST" id='deleteform'>
         {% csrf_token %}
-        <div class="modal fade" id="DeleteClientModal" role="dialog">
+        <div class="modal fade" id="DeleteModal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -203,12 +203,6 @@
         }
     </style>
     <script>
-        function DleteClient(action) {
-            document.getElementById('FormToDeleteClient').action = action
-            $(document).ready(function () {
-                $("#DeleteClientModal").modal({ backdrop: true });
-            });
-        };
         function EditClient(action) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {

@@ -34,3 +34,12 @@ window.onload = function () {
         sidebar.style.visibility = "visible"
     }, 1000);
 }
+
+// Js Function to show delete object (facture,user,client,...) modal 
+function EnterPwdToDeletePopup(action) {
+    console.log('am in')
+    document.getElementById('deleteform').action = action
+    $(document).ready(function () {
+        $("#DeleteModal").modal({ backdrop: true });
+    });
+};

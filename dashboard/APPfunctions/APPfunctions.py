@@ -73,8 +73,8 @@ def generate_table_of_clients(showaction=True, allclients=''):
             D['City'] = City
             D['Action'] = f"""<a class='btn btn-info  btn-sm' href='#' onclick='EditClient(\"/settings/manage-clients/edit/{id}\")' title='Edit' data-toggle='tooltip'>
                                                 <i class='fas fa-pencil-alt'></i>\n</a>
-                                    <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='DleteClient(\"/settings/manage-clients/delete/{id}\");' data-toggle='tooltip'>
-                                                <i class='fas fa-trash'></i></a>\n"""
+                            <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/manage-clients/delete/{id}\");' data-toggle='tooltip'>
+                                        <i class='fas fa-trash'></i></a>\n"""
         else:
             D['name'] = name
             D['ICE'] = ICE
@@ -96,7 +96,7 @@ def generate_table_of_products(showaction=True, Products=''):
             D['id'] = id
             D['Action'] = f"""<a class='btn btn-info  btn-sm' href='#' onclick='EditProduct(\"/settings/manage-products/edit/{id}\")' title='Edit' data-toggle='tooltip'>
                                                 <i class='fas fa-pencil-alt'></i>\n</a>
-                                    <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='DleteProduct(\"/settings/manage-products/delete/{id}\");' data-toggle='tooltip'>
+                                    <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/manage-products/delete/{id}\");' data-toggle='tooltip'>
                                                 <i class='fas fa-trash'></i></a>\n"""
         tablebody.append(D)
     return tablebody
@@ -122,7 +122,7 @@ def generate_table_of_created_factures(showaction='all', factures=''):
             D['Paiment_Mathod'] = Paiment_Mathod
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" data-toggle="tooltip">
                                     <i class="fas fa-pencil-alt"></i>\n</a> 
-                                <a class="btn btn-danger btn-sm" href="#" onclick="LoginPopup(\'/list-all-facturs/delete/{facture.id}\');" title="Delete" data-toggle="tooltip">
+                                <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-facturs/delete/{facture.id}\');" title="Delete" data-toggle="tooltip">
                                     <i class="fas fa-trash"></i></a>\n
                                 <a href="/list-all-facturs/detail/open/{facture.id}" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
                                 '''
