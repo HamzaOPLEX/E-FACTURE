@@ -92,7 +92,9 @@
 
                         <form action="/deletemyacount/" method="POST">
                             {% csrf_token %}
-                            <button type="button" onclick="LoginPopup();" class="btn btn-primary btn-block"><b>Supprimé mon compte</b></a></button>
+                            <center>
+                                <button type="button" onclick="LoginPopup();" class="btn btn-primary btn-block"><b>Supprimé mon compte</b></a></button>
+                            </center>
                             <div class="modal fade" id="DeleteMyAccountModal" role="dialog">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -174,8 +176,10 @@
                                     <div class="alert alert-success alert-dismissible" role="alert" id='message'>
                                         <br />
                                     </div>
-                                    <div class="card-footer bg-white">
-                                        <button type="submit" id='submitbttn' class="btn btn-primary" disabled>Changez le mot de passe</button>
+                                    <div class="card-footer bg-white" style="margin: auto;">
+                                        <center>
+                                            <button type="submit" id='submitbttn' class="btn btn-primary" disabled>Changez le mot de passe</button>
+                                        </center>
                                     </div>
                                 </form>
                             </div>

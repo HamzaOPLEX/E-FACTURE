@@ -43,3 +43,39 @@ function EnterPwdToDeletePopup(action) {
         $("#DeleteModal").modal({ backdrop: true });
     });
 };
+
+function EditProduct(action) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            ProductData = JSON.parse(this.responseText);
+            document.getElementById("ProductName").value = ProductData.ProductName;
+            document.getElementById("PU").value = ProductData.PU;
+        }
+    };
+    xhttp.open("GET", action, true);
+    xhttp.send();
+    document.getElementById('FormToEditProduct').action = action
+    $(document).ready(function () {
+        $("#EditProductModal").modal({ backdrop: true });
+    });
+};
+
+
+function EditClient(action) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            ClientData = JSON.parse(this.responseText);
+            document.getElementById("ClientName").value = ClientData.ClientName;
+            document.getElementById("ICE").value = ClientData.ICE;
+            document.getElementById("City").value = ClientData.City;
+        }
+    };
+    xhttp.open("GET", action, true);
+    xhttp.send();
+    document.getElementById('FormToEditClient').action = action
+    $(document).ready(function () {
+        $("#EditClientModal").modal({ backdrop: true });
+    });
+};

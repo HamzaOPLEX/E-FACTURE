@@ -79,3 +79,9 @@
     width: 100%   !important;
 
   }
+
+  .btn-primary {
+    background-color:#17a2b8 !important;
+    border-radius: 5px !important;
+    width: auto !important;
+  }

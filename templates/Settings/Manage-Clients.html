@@ -90,12 +90,11 @@
                         </div>
                         <div class="row">
                             <!-- /.col -->
-                            <div class="col-4">
+                            <div class="col-4" style="margin: auto;">
                                 <center>
-                                    <button type="submit" id='submitbttn' class="btn btn-primary btn-block" >
-                                        <i class="far fa-plus-square"></i> 
-                                        Ajouté
-                                    </button>
+                                    <button type="submit" class="btn btn-block btn-primary"
+                                        style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i class="fas fa-plus"></i>
+                                        <b> Ajouter</b></button>
                                 </center>
                             </div>
                             <!-- /.col -->
@@ -171,54 +170,4 @@
             </div>
         </div>
     </form>
-    <style>
-        .alert-primary {
-            color: #fff;
-            background-color: #89bff9;
-            border-color: #006fe6;
-            padding: 6px;
-        }
-    
-        .alert-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #d32535;
-            padding: 10px;
-        }
-    
-        .btn-primary {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            box-shadow: none;
-            padding: 6px;
-            width: 114px;
-        }
-    
-        .col-4 {
-            -ms-flex: 0 0 33.333333%;
-            flex: 0 0 33.333333%;
-            max-width: 33.333333%;
-            margin: auto;
-        }
-    </style>
-    <script>
-        function EditClient(action) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    ClientData = JSON.parse(this.responseText);
-                    document.getElementById("ClientName").value = ClientData.ClientName;
-                    document.getElementById("ICE").value = ClientData.ICE;
-                    document.getElementById("City").value = ClientData.City;
-                }
-            };
-            xhttp.open("GET", action, true);
-            xhttp.send();
-            document.getElementById('FormToEditClient').action = action
-            $(document).ready(function () {
-                $("#EditClientModal").modal({ backdrop: true });
-            });
-        };
-    </script>
 {% endblock content %}
