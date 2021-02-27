@@ -203,3 +203,9 @@ function SaveEdited(row) {
     table.rows[row_index].cells[2].innerText = document.getElementById('Edit_PU').value
     table.rows[row_index].cells[3].innerText = document.getElementById('Edit_PT').value
 }
+
+
+
+function ValidInputNotEmpty(list_of_inputs_id) {
+    
+}
