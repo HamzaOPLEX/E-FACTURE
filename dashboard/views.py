@@ -8,7 +8,6 @@ from django.http import FileResponse, JsonResponse
 from dashboard.models import *
 from .APPfunctions.APPfunctions import *
 from .pdf_templates.Invoice.Invoice import DrawNotechPdf
-from hurry.filesize import size
 from urllib.parse import unquote
 import json
 
