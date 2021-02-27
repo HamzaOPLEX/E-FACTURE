@@ -1,0 +1,325 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{pagetitle}} | NTFM</title>
+  <link rel="shortcut icon" type="image/ico" href="{% static 'img/favicon.ico' %}"/>
+  <link rel="stylesheet"href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href='{% static "plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/jqvmap/jqvmap.min.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/overlayScrollbars/css/OverlayScrollbars.min.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/daterangepicker/daterangepicker.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/summernote/summernote-bs4.min.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/fontawesome-free/css/all.min.css" %}'>
+  <link rel="stylesheet" href='{% static "css/adminlte.css" %}'>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <!-- DataTables -->
+  <link rel="stylesheet" href='{% static "plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/datatables-responsive/css/responsive.bootstrap4.min.css" %}'>
+  <link rel="stylesheet" href='{% static "plugins/datatables-buttons/css/buttons.bootstrap4.min.css" %}'>
+
+</head>
+<style>
+    .img-circle {
+        border-radius: 23%;
+    }
+  #circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 20;
+      transform: translate(-50%,-50%);
+    width: 150px;
+      height: 150px;  
+  }
+
+  .loader {
+    width: calc(100% - 0px);
+    height: calc(100% - 0px);
+    border: 8px solid #162534;
+    border-top: 8px solid #17a2b8;
+    border-radius: 50%;
+    animation: rotate 5s linear infinite;
+  }
+
+  @keyframes rotate {
+  100% {transform: rotate(360deg);}
+  } 
+  @media (min-width: 1000px){
+  body:not(.sidebar-mini-md) .content-wrapper, body:not(.sidebar-mini-md) .main-footer, body:not(.sidebar-mini-md) .main-header {
+      transition: margin-left 0.3s ease-in-out;
+      margin-left: 253px;
+  }}
+  i.fas.fa-angle-double-right {
+    font-size: 25px;
+  }
+  /* footer.main-footer {
+      margin-top: -18px;
+  } */
+  a.detail {
+    color: #3b38ec;
+  }
+
+  a.edit {
+    color: #0c8ce0;
+  }
+
+  a.delete {
+    color: #971d02;
+  }
+
+  body {
+    color: #404E67;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #4aa6b4; 
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #343a40;
+    border-radius: 7px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #404952;
+    border-radius: 7px;
+  }
+  .sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
+  .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: #17a2b8;
+    width: 100%;
+
+  }
+</style>
+
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse" lang="fr">
+    <div id="circle" style="display: initial;">
+      <div class="loader">
+        <div class="loader">
+          <div class="loader">
+            <div class="loader">
+    
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="padding: 13px;color: white;font-style: unset;font-size: 23px;margin: auto;text-align: center;width: 100%;" class="loadingmsg" >Loading ...</p>    
+    </div>
+  <div class="wrapper" style="visibility: hidden;">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+      </ul>
+
+      <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
+        <!-- Notifications Dropdown Menu -->
+        <a class="nav-link" href="/logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+        <li class="nav-item">
+          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+            <i class="fas fa-expand-arrows-alt"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="/" class="brand-link">
+        <img src='{% static "img/logo.png" %}' alt="NoTechnologie Facture Management App"
+          class="brand-image img-circle elevation-3">
+        <span class="brand-text font-weight-light"><b>NTFM</b></span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            {% if User.gender == 'homme' %}
+            <a href="/profile" class="d-block"><img src='{% static "img/defaultuserlogo.png" %}'
+                class="img-circle elevation-2" alt="User Image"></a>
+            {% elif User.gender == 'femme' %}
+            <a href="/profile" class="d-block"><img src='{% static "img/defaultfemmelogo.png" %}'
+                class="img-circle elevation-2" alt="User Image"></a>
+            {% endif %}
+          </div>
+          <div class="info">
+            <a href="/profile" class="d-block">{{User.username.title}}</a>
+          </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+            <li class="nav-item">
+              <a href="/dashboard"  {% if selecteditem == 'dashboard' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Tableau de bord
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/settings" {% if selecteditem == 'settings' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-cog"></i>
+                <p>
+                  Réglages
+                </p>
+              </a>
+            </li>
+            <li class="nav-header">Gestioner Des Factures</li>
+            <li class="nav-item">
+              <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-plus-circle"></i>
+                <p>
+                  Créer une facture
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>
+                  Toutes les Factures
+                </p>
+              </a>
+            </li>
+            <!-- logout sidebar bottun -->
+            <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
+              <a href="/logout" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>
+                  Se déconnecter
+                </p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      {% block content %}
+      
+      {% endblock %}
+    </div>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer" style="visibility: hidden;">
+      <strong>Nord Ouest Technologie Facture Management web App - Copyright &copy; 2021-2020 <a
+          href="https://github.com/HamzaOPLEX" target="_blank">hamzaoplex</a>.</strong>
+      All rights reserved.
+      <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 1.0
+      </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <script src='{% static "plugins/jquery/jquery.min.js" %}'></script>
+  <script>
+    $.widget.bridge('uibutton', $.ui.button)
+  </script>
+  <script src='{% static "plugins/bootstrap/js/bootstrap.bundle.min.js" %}'></script>
+  <script src='{% static "plugins/moment/moment.min.js" %}'></script>
+  <script src='{% static "plugins/daterangepicker/daterangepicker.js" %}'></script>
+  <script src='{% static "plugins/summernote/summernote-bs4.min.js" %}'></script>
+  <script src='{% static "plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" %}'></script>
+  <script src='{% static "plugins/jquery-ui/jquery-ui.min.js" %}'></script>
+  <script src='{% static "plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" %}'></script>
+  <script src='{% static "js/adminlte.js" %}'></script>
+  <script src='{% static "js/demo.js" %}'></script>
+  <script src='{% static "js/pages/dashboard.js" %}'></script>
+
+  <!-- DataTables  & Plugins -->
+  <script src='{% static "plugins/datatables/jquery.dataTables.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-responsive/js/dataTables.responsive.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-responsive/js/responsive.bootstrap4.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-buttons/js/dataTables.buttons.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-buttons/js/buttons.bootstrap4.min.js" %}'></script>
+  <script src='{% static "plugins/jszip/jszip.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-buttons/js/buttons.html5.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-buttons/js/buttons.print.min.js" %}'></script>
+  <script src='{% static "plugins/datatables-buttons/js/buttons.colVis.min.js" %}'></script>
+  <script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+    
+    const loader = document.querySelector(".loader");
+    const sidebar = document.querySelector(".main-sidebar");
+    sidebar.style.visibility = "initial"
+    const wrapper = document.querySelector(".wrapper");
+    const footer = document.querySelector(".main-footer");
+    const loadingmsg = document.querySelector(".loadingmsg");
+    window.onload = function(){
+        setTimeout(function () {
+          loader.style.opacity = "0";
+          loader.style.display = "none";
+          document.getElementById('circle').remove()
+          loadingmsg.style.display = "none";
+          wrapper.style.visibility = "visible"
+          footer.style.visibility = "visible"
+          sidebar.style.visibility = "visible"
+        }, 1000);
+    }
+  </script>
+
+</body>
+
+</html>

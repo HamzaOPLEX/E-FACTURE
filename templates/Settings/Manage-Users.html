@@ -1,0 +1,213 @@
+{% extends "main.html" %}
+{% load Filters %}
+
+{% block content %}
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{User.username.title}} bienvenue sur la page de gestion des Utilisateurs </h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- <div class="card"> -->
+                <div class="card-header">
+                    <h3 class="card-title">les utilisateurs créés</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 552px;">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Permission</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {{tablebody | CreateTableBody}}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Créer un Nouvel Utilisateur</h3>
+                </div>
+                <form action="/settings/adduser/" method="POST">
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="username" autocomplete="off"
+                                placeholder="Nom d'utilisateur" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id='pwd01' onkeyup="check();" name="fpwd"
+                                autocomplete="off" placeholder="mot de passe" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id='pwd02' name="spwd" onkeyup="check();"
+                                autocomplete="off" placeholder="Retaper le mot de passe" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-primary" id="message" role="alert">
+                            veuillez vous assurer que tous les mots de passe correspondant
+                        </div>
+                        <div class="form-group">
+                            <label>Genre :</label>
+                            <select class="form-control" name="gender">
+                                <option>homme</option>
+                                <option>femme</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Type de compte :</label>
+                            <select class="form-control" name="Type">
+                                <option>Normal</option>
+                                <option>Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Statut :</label>
+                            <select class="form-control" name="Status">
+                                <option>Suspendu</option>
+                                <option>Active</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <!-- /.col -->
+                            <div class="col-4">
+                                <center><button type="submit" id='submitbttn' class="btn btn-primary btn-block" disabled><i
+                                            class="far fa-plus-square"></i>Ajouté</button></center>
+
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+    <form action="" method="POST" id="deleteaccountform">
+        {% csrf_token %}
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">S'il vous plait entrez votre mot de passe : </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="modalpass" class="col-form-label">Mot de passe :</label>
+                            <input type="password" name="password" class="form-control" id="modalpass" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary">Supprimé</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <style>
+        .alert-primary {
+            color: #fff;
+            background-color: #89bff9;
+            border-color: #006fe6;
+            padding: 6px;
+        }
+    
+        .alert-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #d32535;
+            padding: 10px;
+        }
+    
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            box-shadow: none;
+            padding: 6px;
+            width: 114px;
+        }
+    
+        .col-4 {
+            -ms-flex: 0 0 33.333333%;
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+            margin: auto;
+        }
+    </style>
+    <script>
+        var check = function () {
+            if (document.getElementById('pwd01').value == document.getElementById('pwd02').value && document.getElementById('pwd01').value !== "" && document.getElementById('pwd02').value !== "") {
+                document.getElementById('message').style.color = 'green';
+                document.getElementById('message').innerHTML = 'matching';
+                document.getElementById('submitbttn').disabled = false;
+
+            } else {
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').innerHTML = 'not matching';
+                document.getElementById('submitbttn').disabled = true;
+            }
+        }
+        function LoginPopup(action) {
+            document.getElementById('deleteaccountform').action = action;
+            $(document).ready(function (e) {
+                $('#loginModal').modal('show');
+                $('#loginModal').on('hidden.bs.modal', function (e) {
+                    window.location.href = ''
+                });
+
+            });
+        }
+        </script>
+{% endblock content %}

@@ -1,0 +1,146 @@
+{% extends "main.html" %}
+{% load static %}
+{% load Filters %}
+
+{% block content %}
+<style>
+            tr {
+        text-align: center;
+    }
+</style>
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>vous êtes sur le profil {{UserTarget.username.title}}</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="row">
+            <div class="col-md-3">
+
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            {% if UserTarget.gender == 'homme' %}
+                            <a href="#" class="d-block"><img src='{% static "img/defaultuserlogo.png" %}' class="profile-user-img img-fluid img-circle" alt="UserTarget Image"></a>
+                            {% elif UserTarget.gender == 'femme' %}
+                            <a href="#" class="d-block"><img src='{% static "img/defaultfemmelogo.png" %}' class="profile-user-img img-fluid img-circle" alt="UserTarget Image"></a>
+                            {% endif %}
+                        </div>
+
+                        <h3 class="profile-username text-center">{{UserTarget.username.title}}</h3>
+
+                        <p class="text-muted text-center">Employé de Nord Ouest technologie </p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b></b>Type de compte:<a class="float-right"> {{UserTarget.userpermission}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="#allcreatedfacturebyme"data-toggle="tab">facture crée par {{UserTarget.username.title}}</a></li>
+                            </li>
+                        </ul>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="active tab-pane" id="allcreatedfacturebyme">
+                                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid"
+                                                aria-describedby="example2_info">
+                                                <thead>
+                                                    <tr>
+                                                        <th>N°</th>
+                                                        <th>Nom du client</th>
+                                                        <th>La Date</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{tablebody | CreateTableBody}}
+                                                </tbody>
+                                                <tfoot>
+                                                        <th>N°</th>
+                                                        <th>Nom du client</th>
+                                                        <th>La Date</th>
+                                                        <th>Action</th>
+                                                        </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<style>
+
+</style>
+
+
+
+
+<script>
+    var check = function () {
+        if (document.getElementById('pwd01').value == document.getElementById('pwd02').value && document.getElementById('pwd01').value !== "" && document.getElementById('pwd02').value !== "") {
+            document.getElementById('message').style.color = 'green';
+            document.getElementById('message').innerHTML = 'matching';
+            document.getElementById('submitbttn').disabled = false;
+
+        } else {
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'not matching';
+            document.getElementById('submitbttn').disabled = true;
+        }
+    }
+    function LoginPopup() {
+        $(document).ready(function (e) {
+            $('#loginModal').modal('show');
+            $('#loginModal').on('hidden.bs.modal', function (e) {
+                window.location.href = ''
+            });
+
+        });
+    }
+</script>
+
+
+
+{% endblock content %}

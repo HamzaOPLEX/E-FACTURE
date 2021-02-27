@@ -1,0 +1,270 @@
+{% extends "main.html" %}
+{% load Filters %}
+{% block content %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Tableau de bord</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>{{Lenghts.len_factures}}</h3>
+                        <p>Toutes les factures</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <a href="/list-all-facturs/" class="small-box-footer">
+                        Afficher <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>{{Lenghts.len_products}}</h3>
+                        <p>Gérez vos produits</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <a href="/settings/manage-products" class="small-box-footer">
+                        Gérer <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>{{Lenghts.len_clients}}</h3>
+                        <p>Gérez vos Clients</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <a href="/settings/manage-clients" class="small-box-footer">
+                        Gérer <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>{{Lenghts.len_users}}</h3>
+                        <p>Gérer vos utilisateurs</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a href="/settings/manage-users" class="small-box-footer">
+                        Gérer <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <section class="col-lg-7 connectedSortable ui-sortable">
+                <!-- Custom tabs (Charts with tabs)-->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">Toutes les factures crées ce mois-ci :</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                            <table class="table table-head-fixed text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Nom du client</th>
+                                        <th>La Date</th>
+                                        <th>Créé par</th>
+                                        <th>Payé:</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {{tablebody | CreateTableBody}}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <a href="/create-new-facture/" class="btn btn-sm btn-info float-left">Ajouter une nouvelle facture</a>
+                        <a href="/list-all-facturs/" class="btn btn-sm btn-secondary float-right">Voir toutes les factures</a>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+            </section>
+            {% if User.userpermission == 'Admin' %}
+                <section class="col-lg-5 connectedSortable ui-sortable ">
+                    <!-- Custom tabs (Charts with tabs)-->
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title">Tableau des historiques des dernières 24 heures:</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-head-fixed text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Acteur</th>
+                                            <th>L'action</th>
+                                            <th>moment</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {{History_table_body | CreateTableBody}}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a href="/All-Histories/" class="uppercase">Afficher toutes les historiques</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </section>
+            {% endif %}
+
+                <section class="col-lg-7 connectedSortable ui-sortable ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tous les clients ajoutés ce mois-ci :</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-head-fixed text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Nom de Client</th>
+                                        <th>ICE</th>
+                                        <th>Ville</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {{clienttablebody | CreateTableBody}}
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a href="/settings/manage-clients" class="uppercase">Voir toutes les Clients</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </section>
+                <section class="col-lg-5 connectedSortable ui-sortable">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tous les produits ajoutés ce mois-ci</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-head-fixed text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>Nom du Produit</th>
+                                        <th>P.U</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {{producttablebody | CreateTableBody}}
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a href="/settings/manage-products" class="uppercase">Voir toutes les Produits</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </section>
+        </div>
+    </div>
+</section>
+
+<style>
+    .btn-secondary{
+        background-color: #4b555fde;
+    }
+    .card-title {
+        margin-bottom: .75rem;
+        width: 83%;
+    }
+    span.badge.badge-warning.float-right {
+        font-size: 15px;
+    }
+    .bg-warning,
+    .bg-warning>a {
+        color: #ffffff !important;
+    }
+    .small-box.bg-setting {
+        background-color: #11626f;
+        color: white;
+    }
+    .card-body.p-0 {
+        max-height: 300px;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+    .card{
+        height: 400px;
+    }
+</style>
+<script>
+ 
+</script>
+
+{% endblock content %}

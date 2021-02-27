@@ -1,0 +1,502 @@
+{% extends "main.html" %}
+{% load Filters %}
+{% block content %}
+<!--suppress ALL -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{User.username.title}} bienvenue sur la page de Creation des Factures </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- <div class="card"> -->
+                <div class="card-header">
+                    <h3 class="card-title">Tableau des éléments de <b>Facture</b></h3>
+                    <button type="button" class="btn btn-info add-new" onclick="AddNewFactureItemModalHandler();"><i
+                            class="fa fa-plus"></i> Ajouter</button>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 552px;">
+                    <table id='Table' class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th id='smallth'>Qs</th>
+                                <th>DESIGNATION</th>
+                                <th id='smallth'>P.U</th>
+                                <th id='smallth'>P.T</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Saisir les informations de facturation</h3>
+                </div>
+                <div class="card-body">
+                    <form id='Form' action="/create-new-facture/" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="datatable" id="tableinput" value="" required>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Numéro de facture </label>
+                                    <input type="number" min="0" class="form-control" name='facture_number'
+                                        value='{{new_facture_number}}' placeholder="N°:" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group" style="height: 65px">
+                                    <label>Nom De Client</label>
+                                    <select id="ClientName" name="client_name" class="form-control"
+                                        onchange="GetSelectedThenSet();">
+                                        {{ selectbody | CreateHTMLSelectOptions }}
+                                    </select>
+                                    <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
+                                        class="form-control editOption"
+                                        onchange="GetInputAndSet2Select('ClientName',0);">
+                                    </input>
+                                </div>
+                                <script>
+                                    function GetSelectedThenSet() {
+                                        var clientname = document.getElementById("ClientName");
+                                        if (clientname.value !== '') {
+                                            document.getElementsByClassName('editOption')[0].value = clientname.value
+                                            var url = '/create-new-facture/getclientinfo/' + clientname.value
+                                            var xhttp = new XMLHttpRequest();
+                                            xhttp.onreadystatechange = function () {
+                                                if (this.readyState == 4 && this.status == 200) {
+                                                    ClientData = JSON.parse(this.responseText);
+                                                    document.getElementById("ICE").value = ClientData.ICE;
+                                                    document.getElementById("City").value = ClientData.City;
+                                                }
+                                            }
+                                            xhttp.open("GET", url, true);
+                                            xhttp.send();
+                                        }
+                                    }
+                                </script>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>ICE</label>
+                                    <input type="text" id='ICE' class="form-control" autocomplete="off" name='ICE'
+                                        value="" placeholder="ICE de Client..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Le Lieu</label>
+                                    <input type="text" id='City' autocomplete="off" class="form-control" name="place"
+                                        placeholder="Lieu..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>La Date</label>
+                                    <input type="date" class="form-control" autocomplete="off" name="date"
+                                        value="{{todaydate}}" placeholder="..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Cette facture est-elle payée?</label>
+                                    <select class="form-control" id='ispaid' name="ispaid"
+                                        onchange="disabled_or_enabled_paiementmethod();">
+                                        <option>Non</option>
+                                        <option>Oui</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Méthode de paiement</label>
+                                    <select class="form-control" id='paiementmethod' name="paiementmethod" disabled>
+                                        <option>Espèces</option>
+                                        <option>Chèque</option>
+                                        <option>Cart</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            function disabled_or_enabled_paiementmethod() {
+                                var ispaid = document.getElementById('ispaid').value
+                                if (ispaid == 'Non') {
+                                    document.getElementById('paiementmethod').disabled = true
+                                }
+                                else {
+                                    document.getElementById('paiementmethod').disabled = false
+                                }
+                            }
+                        </script>
+                        <div class="ButtnEnregister">
+                            <center>
+                                <button id="savebttn" type="button" onclick="LoadDatatableAndSubmit();"
+                                    class="btn btn-block btn-primary"
+                                    style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
+                                        class="fas fa-check"></i>
+                                    <b>ENREGISTRER</b></button>
+                            </center>
+                        </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<div class="modal fade" id="AddNewFactureItemModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Qs</label>
+                    <input type="number" min="0" class="form-control" id='Qs' name="Qs" autocomplete="off"
+                        onkeyup="CalculatePT();" placeholder="Qs" required>
+                </div>
+                <div class="form-group" style="height: 65px">
+                    <label>DESIGNATION</label>
+                    <select id="ProductName" class="form-control" onchange="GetSelectedProductThenSet();">
+                        {{selectproductbody | CreateHTMLSelectOptions}}
+                    </select>
+                    <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
+                        class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
+                    </input>
+                    <script>
+                        function GetSelectedProductThenSet() {
+                            var ProductName = document.getElementById("ProductName");
+                            document.getElementsByClassName('editOption')[1].value = ProductName.value
+                            var url = '/create-new-facture/getproductinfo/' + ProductName.value
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    let Qs = document.getElementById('Qs').value
+                                    let ProductData = JSON.parse(this.responseText);
+                                    document.getElementById("PU").value = ProductData.PU;
+                                    if (Qs.value !== null || Qs.value !== 0) {
+                                        document.getElementById('PT').value = document.getElementById("PU").value * Qs
+                                    }
+                                }
+                            };
+                            xhttp.open("GET", url, true);
+                            xhttp.send();
+                        }
+                        function CalculatePT() {
+                            document.getElementById('PT').value = document.getElementById('Qs').value * document.getElementById("PU").value
+                        }
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label>PU</label>
+                    <input type="number" class="form-control" id='PU' name="PU" onkeyup="CalculatePT();"
+                        autocomplete="off" placeholder="PU" required>
+                </div>
+                <div class="form-group">
+                    <label>PT</label>
+                    <input type="number" class="form-control" id='PT' name="PT" autocomplete="off" placeholder="PT"
+                        required readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-info" onclick="AddToTable();" data-dismiss="modal"><i
+                        class="fas fa-plus"></i> Ajouter</button>
+                <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="EditFactureItemModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id='SelectedRowNumber' value="">
+                <div class="form-group">
+                    <label>Qs</label>
+                    <input type="number" min="0" class="form-control" id='Edit_Qs' name="Qs" autocomplete="off"
+                        onkeyup="CalculatePTedit();" placeholder="Qs" required>
+                </div>
+                <div class="form-group" style="height: 65px">
+                    <label>DESIGNATION</label>
+                    <select id="Edit_ProductName" class="form-control" onchange="GetSelectedProductThenSetEdit();">
+                        {{selectproductbody | CreateHTMLSelectOptions}}
+                    </select>
+                    <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
+                        class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
+                    <script>
+                        function GetSelectedProductThenSetEdit() {
+                            var ProductName = document.getElementById("Edit_ProductName");
+                            document.getElementsByClassName('editOption')[2].value = ProductName.value
+
+                            var ProductName = document.getElementById("Edit_ProductName");
+                            var url = '/create-new-facture/getproductinfo/' + ProductName.value
+
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    let Qs = document.getElementById('Edit_Qs').value
+                                    let ProductData = JSON.parse(this.responseText);
+                                    document.getElementById("Edit_PU").value = ProductData.PU;
+                                    if (Qs.value !== null || Qs.value !== 0) {
+                                        document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
+                                    }
+                                }
+                            };
+                            xhttp.open("GET", url, true);
+                            xhttp.send();
+                        }
+                        function CalculatePTedit() {
+                            document.getElementById('Edit_PT').value = document.getElementById('Edit_Qs').value * document.getElementById("Edit_PU").value
+                        }
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label>PU</label>
+                    <input type="text" class="form-control" id='Edit_PU' name="PU" onkeyup="CalculatePTedit();"
+                        autocomplete="off" placeholder="PU" required>
+                </div>
+                <div class="form-group">
+                    <label>PT</label>
+                    <input type="number" class="form-control" id='Edit_PT' name="PT" autocomplete="off" placeholder="PT"
+                        required readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-info" onclick="SaveEdited();" data-dismiss="modal"><i
+                        class="fas fa-plus"></i>Edit</button>
+                <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    option {
+        height: calc(1.5em + .75rem + 2px);
+        line-height: 30px;
+    }
+
+    .editOption {
+        width: 94%;
+        position: relative;
+        top: -38px;
+        border-bottom-right-radius: unset;
+        border-top-right-radius: unset;
+    }
+
+    .editOption:focus {
+        box-shadow: none;
+    }
+
+    td {
+        max-width: 70px;
+        overflow-x: scroll;
+        border: 1px solid #b5c0d2;
+
+    }
+
+    tr {
+        overflow: scroll;
+        border-bottom: solid 1px #b5c0d2;
+    }
+
+    .select2-container .select2-selection--single {
+        padding: 5px;
+        height: 0%;
+    }
+
+    .select2-container {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    button.btn.btn-info.add-new {
+        padding: 5px;
+        float: right;
+    }
+
+    button.btn.btn-default.btn-danger {
+        background-color: #ffffff;
+        padding: 0px;
+        border: none;
+        margin-right: 17px;
+    }
+
+    i.fas.fa-trash {
+        font-size: 15px;
+        color: red;
+    }
+
+    i.fas.fa-edit {
+        color: #ffa600;
+    }
+
+    #editrow {
+        background-color: white;
+        border: none;
+        padding: 0px;
+    }
+</style>
+<script>
+    function check_if_inputval_is_already_in_select(selec, data2check) {
+        // true : option exist
+        // false : option does not exist
+        if ($("#" + selec + " option[value='" + data2check + "']").length !== 0) { return true };
+        if ($("#" + selec + " option[value='" + data2check + "]'").length == 0) { return false };
+    }
+    function GetInputAndSet2Select(Idselect, editOptionIndex) {
+        var editText = document.getElementsByClassName('editOption')[editOptionIndex].value
+        let select = document.getElementById(Idselect);
+        if (editText !== '') {
+            statuss = check_if_inputval_is_already_in_select(Idselect, editText)
+            if (statuss == false) {
+                var option = document.createElement("option");
+                option.value = editText;
+                option.text = editText;
+                select.add(option);
+                select.value = editText
+                select.onchange()
+            }
+            if (statuss == true) {
+                select.value = editText
+                select.onchange()
+            }
+        }
+    }
+
+    function AddNewFactureItemModalHandler() {
+        document.getElementById('Qs').value = 1
+        document.getElementById('ProductName').value = "-"
+        document.getElementsByClassName('editOption')[1].value = null
+        document.getElementById('PU').value = 0
+        document.getElementById('PT').value = 0
+        $(document).ready(function () {
+            $("#AddNewFactureItemModal").modal({ backdrop: true });
+        });
+    };
+    function AddToTable() {
+        var Qs = document.getElementById('Qs').value;
+        var DESIGNATION = document.getElementById('ProductName').value;
+        var PU = document.getElementById('PU').value;
+        var PT = document.getElementById('PT').value;
+        var Action = '<button type="button"  class="btn btn-default btn-danger" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button><button type="button" id="editrow" class="btn btn-default btn-info"  onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>'
+        var table = document.getElementById('Table').getElementsByTagName('tbody')[0];
+        var new_row = table.insertRow(-1)
+        var cell_qs = new_row.insertCell(0)
+        cell_qs.innerHTML = Qs
+        var cell_DESIGNATION = new_row.insertCell(1)
+        cell_DESIGNATION.innerHTML = DESIGNATION
+        cell_DESIGNATION.id = 'ds'
+        var cell_PU = new_row.insertCell(2)
+        cell_PU.innerHTML = PU
+        var cell_PT = new_row.insertCell(3)
+        cell_PT.innerHTML = PT
+        var cell_action = new_row.insertCell(4)
+        cell_action.innerHTML = Action
+    };
+    function DeleteSelectedRow(row) {
+        var p = row.parentNode.parentNode;
+        p.parentNode.removeChild(p);
+    };
+    function EditSelectedRow(row) {
+        var p = row.parentNode.parentNode;
+        var row_data = p.innerText
+        var row_data = row_data.split('	').slice(0, 4)
+        document.getElementById('SelectedRowNumber').value = p.rowIndex
+        document.getElementById('Edit_Qs').value = row_data[0]
+        document.getElementById('Edit_ProductName').value = row_data[1]
+        document.getElementsByClassName('editOption')[2].value = row_data[1]
+        document.getElementById('Edit_PU').value = row_data[2]
+        document.getElementById('Edit_PT').value = row_data[3]
+
+        // if product name not in select as option add new one
+        var data = {
+            val: row_data[1],
+            text: row_data[1]
+        };
+        var newOption = new Option(data.text, data.val, false, false);
+        if ($('#Edit_ProductName').find("option[value='" + data.val + "']").length) {
+            $('#Edit_ProductName').val(data.val).trigger('change');
+        } else {
+            var newOption = new Option(data.text, data.val, true, true);
+            $('#Edit_ProductName').append(newOption).trigger('change');
+        }
+
+        $(document).ready(function () {
+            $("#EditFactureItemModal").modal({ backdrop: true });
+        });
+    }
+    function tableToJSON() {
+        var myRows = [];
+        var pass = 'pass'
+        var $headers = $("th");
+        var $rows = $("tbody tr").each(function (index) {
+            $cells = $(this).find("td");
+            myRows[index] = {};
+            $cells.each(function (cellIndex) {
+                if ($headers[cellIndex].innerText == "Action") {
+                    pass
+                }
+                else {
+                    myRows[index][$($headers[cellIndex]).html()] = $(this).html();
+                }
+            });
+        });
+        var myObj = {};
+        myObj.myrows = myRows;
+        return JSON.stringify(myObj)
+    }
+    function LoadDatatableAndSubmit() {
+        var JsonTable = tableToJSON()
+        document.getElementById('tableinput').value = JsonTable
+        document.getElementById("Form").submit();
+    }
+    function SaveEdited(row) {
+        var row_index = document.getElementById('SelectedRowNumber').value;
+        var table = document.getElementById('Table');
+        table.rows[row_index].cells[0].innerText = document.getElementById('Edit_Qs').value
+        table.rows[row_index].cells[1].innerText = document.getElementById('Edit_ProductName').value
+        table.rows[row_index].cells[2].innerText = document.getElementById('Edit_PU').value
+        table.rows[row_index].cells[3].innerText = document.getElementById('Edit_PT').value
+    }
+
+</script>
+{% endblock content %}

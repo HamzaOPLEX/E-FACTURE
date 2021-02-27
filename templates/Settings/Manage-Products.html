@@ -1,0 +1,211 @@
+{% extends "main.html" %}
+{% load Filters %}
+{% block content %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{User.username.title}} bienvenue sur la page de gestion des Produit </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- <div class="card"> -->
+                <div class="card-header">
+                    <h3 class="card-title">List de Tous Les Produits</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 552px;">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom du Produit</th>
+                                <th>P.U</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {{tablebody | CreateTableBody}}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Ajouté un Nouvelle Produit</h3>
+                </div>
+                <form action="/settings/manage-products" method="POST">
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="ProductName" autocomplete="off"
+                                placeholder="Nom du produit" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-tags"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="number" class="form-control" name="PU" autocomplete="off"
+                                placeholder="P.U de Produit" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-dollar-sign"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- /.col -->
+                            <div class="col-4">
+                                <center>
+                                    <button type="submit" id='submitbttn' class="btn btn-primary btn-block">
+                                        <i class="far fa-plus-square"></i>
+                                        Ajouté
+                                    </button>
+                                </center>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<form action="" method="POST" id='FormToDeleteProduct'>
+    {% csrf_token %}
+    <div class="modal fade" id="DeleteProductModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">S'il vous plait entrez votre mot de passe : </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <label for="modalpass" class="col-form-label">Mot de passe :</label>
+                    <input type="password" name="password" class="form-control" id="modalpass" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-danger"><i class="fas fa-trash"></i>
+                        Supprimer</button>
+                    <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form action="" method="POST" id='FormToEditProduct'>
+    {% csrf_token %}
+    <div class="modal fade" id="EditProductModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id='ProductName' name="ProductName" autocomplete="off"
+                            placeholder="Nom de Produit" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-tags"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id='PU' name="PU" autocomplete="off"
+                            placeholder="P.U De Produit" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-dollar-sign"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-info"><i class="fas fa-edit"></i>Edité</button>
+                    <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style>
+    .alert-primary {
+        color: #fff;
+        background-color: #89bff9;
+        border-color: #006fe6;
+        padding: 6px;
+    }
+
+    .alert-danger {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #d32535;
+        padding: 10px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+        box-shadow: none;
+        padding: 6px;
+        width: 114px;
+    }
+
+    .col-4 {
+        -ms-flex: 0 0 33.333333%;
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+        margin: auto;
+    }
+</style>
+<script>
+    function DleteProduct(action) {
+        document.getElementById('FormToDeleteProduct').action = action
+        $(document).ready(function () {
+            $("#DeleteProductModal").modal({ backdrop: true });
+        });
+    };
+    function EditProduct(action) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                ProductData = JSON.parse(this.responseText);
+                document.getElementById("ProductName").value = ProductData.ProductName;
+                document.getElementById("PU").value = ProductData.PU;
+            }
+        };
+        xhttp.open("GET", action, true);
+        xhttp.send();
+        document.getElementById('FormToEditProduct').action = action
+        $(document).ready(function () {
+            $("#EditProductModal").modal({ backdrop: true });
+        });
+    };
+</script>
+{% endblock content %}
