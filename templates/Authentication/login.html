@@ -1,46 +1,32 @@
-{% load static %}
-<!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Login | NTFM </title>
-        <link rel="shortcut icon" type="image/ico" href="{% static 'img/favicon.ico' %}" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <link rel="stylesheet" href='{% static "plugins/fontawesome-free/css/all.min.css" %}'>
-        <link rel="stylesheet" href='{% static "plugins/icheck-bootstrap/icheck-bootstrap.min.css" %}'>
-        <link rel="stylesheet" href='{% static "css/adminlte.css" %}'>
-    </head>
-    <style>
-        .alert-danger {
-            color: #fff;
-            background-color: #dc3545;
-            border-color: #d32535;
-        }
-        .btn-primary {
-            color: #fff;
-            background-color: #007bff;
-            border-color: #007bff;
-            box-shadow: none;
-            padding: 6px;
-            width: 114px;
-        }
-        .col-4 {
-            -ms-flex: 0 0 33.333333%;
-            flex: 0 0 33.333333%;
-            max-width: 33.333333%;
-            margin: auto;
-        }   
-    </style>
-    <body class="hold-transition login-page">
-        <div class="login-box">
-            <div class="login-logo">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | NTFM </title>
+    <link rel="shortcut icon" type="image/ico" href="/static/img/favicon.ico">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">
+    <link rel="stylesheet" href="/static/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/static/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/adminlte.css">
+
+</head>
+
+<body class="login-page" style="min-height: 474px;">
+    <div class="login-box">
+        <div class="login-logo" style="">
+            <p
+                style="color: black;padding: 8px;background-color: #ffffff78;width: 100% !important;border-top-left-radius: 14px;border-top-right-radius: 14px;    text-shadow: 1px 1px 2px #0000004d;">
                 <b>NoTech </b><br>Gestionere Des Factures
-            </div>
-            <!-- /.login-logo -->
-            <div class="card">
-                <div class="card-body login-card-body">
+            </p>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card" style="background: none;">
+            <div class="card-body login-card-body" style="background-color: #ffffff78;border-bottom-right-radius: 14px;border-bottom-left-radius: 14px;">
+
+
+                <div>
                     {% if messages %}
                     {% for message in messages %}
                     <div class="alert alert-danger alert-dismissible" role="alert">
@@ -53,36 +39,106 @@
                     {% endif %}
                     <form action="/login/" method="post">
                         {% csrf_token %}
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" name='username'  autocomplete="off" placeholder="Nom d'utilisateur" required>
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-user-tie"></span>
-                                </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="username" autocomplete="off"
+                            placeholder="Nom d'utilisateur" required="">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user-tie"></span>
                             </div>
                         </div>
-                        <div class="input-group mb-3">
-                            <input type="password" class="form-control" name='password' autocomplete="off" placeholder="Mot de passe">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" name="password" autocomplete="off"
+                            placeholder="Mot de passe">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-unlock-alt"></i> S'identifier</button>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-unlock-alt"></i>
+                                S'identifier</button>
                         </div>
-                    </form>
+                    </div>
+                </form>
             </div>
         </div>
         <!-- /.login-box -->
 
-        <script src='{% static "plugins/jquery/jquery.min.js" %}'></script>
-        <script src='{% static "js/adminlte.js" %}'></script>
-        <script src='{% static "plugins/bootstrap/js/bootstrap.bundle.min.js" %}'></script>
+        <script src="/static/plugins/jquery/jquery.min.js"></script>
+        <script src="/static/js/adminlte.js"></script>
+        <script src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    </div>
 
-    </body>
 
+</body>
+    <style>
+        body {
+            min-height: 300.391px;
+            background-image: url(/static/img/loginbackound.jpg);
+            background-size: cover;
+        }
+    
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+            box-shadow: none;
+            padding: 6px;
+            width: 114px;
+        }
+    
+        .col-4 {
+            -ms-flex: 0 0 33.333333%;
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+            margin: auto;
+        }
+    
+        .card {
+            box-shadow: 4px 7px 7px rgb(0 0 0 / 0%), 0px 20px 20px 0px rgb(13 128 146);
+            margin-bottom: 1rem;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+        }
+    
+        .input-group {
+            background-color: white;
+            border-radius: 7px;
+        }
+    
+        .login-box,
+        .register-box {
+            width: 400px;
+        }
+    
+        .login-logo,
+        .register-logo {
+            box-shadow: 4px 7px 7px rgb(0 0 0 / 0%), 0px 20px 20px 0px rgb(13 128 146);
+        }
+    
+        .alert-danger {
+            color: #fff;
+            background-color: #253557ad;
+            border-color: #007bff45;
+        }
+    
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #0d8092;
+            border-color: #ffffff;
+        }
+    
+        .btn-primary {
+            color: #fff;
+            background-color: #0d8092;
+            border-color: #06627194;
+            box-shadow: none;
+            padding: 6px;
+            width: 114px;
+        }
+    </style>
 </html>
