@@ -40,7 +40,7 @@ function EnterPwdToDeletePopup(action) {
     console.log('am in')
     document.getElementById('deleteform').action = action
     $(document).ready(function () {
-        $("#DeleteModal").modal({ backdrop: true });
+        $("#DeleteModal").modal({ backdrop: false });
     });
 };
 
@@ -57,7 +57,7 @@ function EditProduct(action) {
     xhttp.send();
     document.getElementById('FormToEditProduct').action = action
     $(document).ready(function () {
-        $("#EditProductModal").modal({ backdrop: true });
+        $("#EditProductModal").modal({ backdrop: false });
     });
 };
 
@@ -76,7 +76,7 @@ function EditClient(action) {
     xhttp.send();
     document.getElementById('FormToEditClient').action = action
     $(document).ready(function () {
-        $("#EditClientModal").modal({ backdrop: true });
+        $("#EditClientModal").modal({ backdrop: false });
     });
 };
 
@@ -114,7 +114,7 @@ function AddNewFactureItemModalHandler() {
     document.getElementById('PU').value = 0
     document.getElementById('PT').value = 0
     $(document).ready(function () {
-        $("#AddNewFactureItemModal").modal({ backdrop: true });
+        $("#AddNewFactureItemModal").modal({ backdrop: false });
     });
 };
 function AddToTable() {
@@ -205,7 +205,41 @@ function SaveEdited(row) {
 }
 
 
+function ValidInputNotEmpty() {
+    var Qs = document.getElementById('Qs')
+    var ProductName = document.getElementById('ProductName')
+    var PU = document.getElementById('PU')
+    var PT = document.getElementById('PT')
+    var list_of_inputs = [Qs, ProductName, PU, PT]
+    let InvalidInputs = []
+    for (let index = 0; index < list_of_inputs.length; index++) {
+        var theinput = list_of_inputs[index]
+        if (theinput.value == '') {
+            InvalidInputs.push(theinput)
+        }; 
+        if (theinput.value !== '') {
+            RemoveInvalidClass([theinput]);
+        };
+    }
+    if (InvalidInputs.length == 0){
+        AddToTable();
+    }
+    if (InvalidInputs.length > 0) {
+        for (let index = 0; index < InvalidInputs.length; index++) {
+            var theInvalidInput = InvalidInputs[index]
+            AddInvalidClass([theInvalidInput]);
+        }
+    }
+}
 
-function ValidInputNotEmpty(list_of_inputs_id) {
-    
+
+function RemoveInvalidClass(list_of_inputs) {
+    for (let index = 0; index < list_of_inputs.length; index++) {
+        var theinput = list_of_inputs[index].classList.remove('is-invalid')
+    }
+}
+function AddInvalidClass(list_of_inputs) {
+    for (let index = 0; index < list_of_inputs.length; index++) {
+        var theinput = list_of_inputs[index].classList.add('is-invalid')
+    }
 }
