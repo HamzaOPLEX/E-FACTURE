@@ -200,7 +200,7 @@ function LoadDatatableAndSubmit() {
         document.getElementById("Form").submit();
     }
     if (tabledata.myrows.length == 0) {
-        toastr.error('Le tableau des éléments de facture est vide', "s'il vous plaît ajouter un élément à votre facture");
+        toastr.error('Le tableau des éléments de facture est vide', "S'il Vous Plaît Ajouter Un Élément à Votre Facture");
     }
 
 }
@@ -214,6 +214,27 @@ function SaveEdited(row) {
     $('#EditFactureItemModal').modal('hide')
 }
 
+
+
+/* --> Start Function To Valid All Inputs <-- */
+
+
+        /* 
+            1 - Find a way to push input into InvalidInputs Array
+            2 - Find a way to get for every Select here Input :)
+        */
+function ValidSelectXinput(select,input) {
+    if (select.value.trim() == '-' || input.value.trim() == '') {
+        clearSelected(select)
+        InvalidInputs.push(input)
+    }
+    if (select.value.trim() !== '-' || input.value.trim() !== '') {
+        RemoveInvalidClass([input]);
+    }
+}
+
+
+
 function ValidInputNotEmpty(modaltype) {
     function valid(list_of_inputs,modaltype) {
         let InvalidInputs = []
@@ -225,6 +246,7 @@ function ValidInputNotEmpty(modaltype) {
             if (theinput.value.trim() !== '') {
                 RemoveInvalidClass([theinput]);
             };
+
         }
         if (InvalidInputs.length == 0) {
             if (modaltype == 'addnew') {
@@ -271,6 +293,16 @@ function ValidInputNotEmpty(modaltype) {
     }
 }
 
+
+
+
+
+function clearSelected(select) {
+    var elements = select.selectedOptions;
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].selected = false;
+    }
+}
 function RemoveInvalidClass(list_of_inputs) {
     for (let index = 0; index < list_of_inputs.length; index++) {
         var theinput = list_of_inputs[index].classList.remove('is-invalid')
@@ -281,3 +313,7 @@ function AddInvalidClass(list_of_inputs) {
         var theinput = list_of_inputs[index].classList.add('is-invalid')
     }
 }
+
+
+
+/* --> End Function To Valid All Inputs <-- */
