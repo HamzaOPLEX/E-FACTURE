@@ -62,7 +62,7 @@ def Login(requests):
     context = {}
     if requests.method == "GET":
         if requests.session.session_key and requests.session.exists(requests.session.session_key):
-            return redirect('/dashboard/')
+            return redirect('/')
         else:
             return render(requests, 'Authentication/login.html', context)
     elif requests.method == "POST":
