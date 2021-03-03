@@ -137,6 +137,8 @@ function AddToTable() {
     var cell_action = new_row.insertCell(4)
     cell_action.innerHTML = Action
     cell_action.style = 'text-align:center;'
+    $('#AddNewFactureItemModal').modal('hide')
+
 };
 function DeleteSelectedRow(row) {
     var p = row.parentNode.parentNode;
@@ -192,8 +194,15 @@ function tableToJSON() {
 }
 function LoadDatatableAndSubmit() {
     var JsonTable = tableToJSON()
-    document.getElementById('tableinput').value = JsonTable
-    document.getElementById("Form").submit();
+    let tabledata = JSON.parse(JsonTable)
+    if (tabledata.myrows.length > 0){
+        document.getElementById('tableinput').value = JsonTable
+        document.getElementById("Form").submit();
+    }
+    if (tabledata.myrows.length == 0) {
+        toastr.error('Le tableau des éléments de facture est vide', "s'il vous plaît ajouter un élément à votre facture");
+    }
+
 }
 function SaveEdited(row) {
     var row_index = document.getElementById('SelectedRowNumber').value;
@@ -202,36 +211,65 @@ function SaveEdited(row) {
     table.rows[row_index].cells[1].innerText = document.getElementById('Edit_ProductName').value
     table.rows[row_index].cells[2].innerText = document.getElementById('Edit_PU').value
     table.rows[row_index].cells[3].innerText = document.getElementById('Edit_PT').value
+    $('#EditFactureItemModal').modal('hide')
 }
 
-
-function ValidInputNotEmpty() {
-    var Qs = document.getElementById('Qs')
-    var ProductName = document.getElementById('ProductName')
-    var PU = document.getElementById('PU')
-    var PT = document.getElementById('PT')
-    var list_of_inputs = [Qs, ProductName, PU, PT]
-    let InvalidInputs = []
-    for (let index = 0; index < list_of_inputs.length; index++) {
-        var theinput = list_of_inputs[index]
-        if (theinput.value == '') {
-            InvalidInputs.push(theinput)
-        }; 
-        if (theinput.value !== '') {
-            RemoveInvalidClass([theinput]);
-        };
-    }
-    if (InvalidInputs.length == 0){
-        AddToTable();
-    }
-    if (InvalidInputs.length > 0) {
-        for (let index = 0; index < InvalidInputs.length; index++) {
-            var theInvalidInput = InvalidInputs[index]
-            AddInvalidClass([theInvalidInput]);
+function ValidInputNotEmpty(modaltype) {
+    function valid(list_of_inputs,modaltype) {
+        let InvalidInputs = []
+        for (let index = 0; index < list_of_inputs.length; index++) {
+            var theinput = list_of_inputs[index]
+            if (theinput.value.trim() == '') {
+                InvalidInputs.push(theinput)
+            };
+            if (theinput.value.trim() !== '') {
+                RemoveInvalidClass([theinput]);
+            };
+        }
+        if (InvalidInputs.length == 0) {
+            if (modaltype == 'addnew') {
+                AddToTable();
+            };
+            if (modaltype == 'edit') {
+                SaveEdited();
+            };
+            if (modaltype == 'clientside') {
+                LoadDatatableAndSubmit();
+            };
+        }
+        if (InvalidInputs.length > 0) {
+            for (let index = 0; index < InvalidInputs.length; index++) {
+                var theInvalidInput = InvalidInputs[index]
+                AddInvalidClass([theInvalidInput]);
+            }
         }
     }
+    if (modaltype == 'addnew'){
+        var Qs = document.getElementById('Qs')
+        var ProductName = document.getElementById('ProductName')
+        var PU = document.getElementById('PU')
+        var PT = document.getElementById('PT')
+        var list_of_inputs = [Qs, ProductName, PU, PT]
+        valid(list_of_inputs,modaltype);
+    }
+    if (modaltype == 'edit') {
+        var Qs = document.getElementById('Edit_Qs')
+        var ProductName = document.getElementById('Edit_ProductName')
+        var PU = document.getElementById('Edit_PU')
+        var PT = document.getElementById('Edit_PT')
+        var list_of_inputs = [Qs, ProductName, PU, PT]
+        valid(list_of_inputs,modaltype);
+    }
+    if (modaltype == 'clientside') {
+        var F = document.getElementById('facture_number')
+        var C = document.getElementById('ClientName')
+        var I = document.getElementById('ICE')
+        var CI = document.getElementById('City')
+        var D = document.getElementById('Date')
+        var list_of_inputs = [F, C, I, CI,D]
+        valid(list_of_inputs,modaltype);
+    }
 }
-
 
 function RemoveInvalidClass(list_of_inputs) {
     for (let index = 0; index < list_of_inputs.length; index++) {

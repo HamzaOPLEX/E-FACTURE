@@ -68,7 +68,7 @@
                                 <div class="form-group">
                                     <label>Numéro de facture </label>
                                     <input type="number" class="form-control" name='facture_number'
-                                        value='{{facture.facture_number}}' placeholder="N°:" required>
+                                        value='{{new_facture_number}}' id="facture_number" placeholder="N°:" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -127,8 +127,9 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>La Date</label>
-                                    <input type="date" class="form-control" autocomplete="off" name="date"
-                                        value="{{Date}}" placeholder="..." required>
+                                    <input type="date" class="form-control" id="Date" autocomplete="off" name="date" value="{{todaydate}}" placeholder="..."
+                                        required>
+
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -173,7 +174,7 @@
 
                         </script>
                         <div class="ButtnEnregister">
-                            <center><button id="savebttn" type="button" onclick="LoadDatatableAndSubmit();"
+                                <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
                                     class="btn btn-block btn-primary"
                                     style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
                                         class="fas fa-check"></i>
@@ -244,9 +245,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-info" onclick="AddToTable();" data-dismiss="modal"><i
+                <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('addnew');"><i
                         class="fas fa-plus"></i> Ajouter</button>
-                <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-default btn-success" id="closeeditmodal" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -312,7 +313,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-info" onclick="SaveEdited();" data-dismiss="modal"><i
+                <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('edit');"><i
                         class="fas fa-plus"></i>Edit</button>
                 <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Fermer</button>
             </div>
