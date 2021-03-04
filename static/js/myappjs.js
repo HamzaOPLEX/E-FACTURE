@@ -37,7 +37,6 @@ window.onload = function () {
 
 // Js Function to show delete object (facture,user,client,...) modal 
 function EnterPwdToDeletePopup(action) {
-    console.log('am in')
     document.getElementById('deleteform').action = action
     $(document).ready(function () {
         $("#DeleteModal").modal({ backdrop: false });
@@ -223,15 +222,15 @@ function SaveEdited(row) {
             1 - Find a way to push input into InvalidInputs Array
             2 - Find a way to get for every Select here Input :)
         */
-function ValidSelectXinput(select,input) {
-    if (select.value.trim() == '-' || input.value.trim() == '') {
-        clearSelected(select)
-        InvalidInputs.push(input)
-    }
-    if (select.value.trim() !== '-' || input.value.trim() !== '') {
-        RemoveInvalidClass([input]);
-    }
-}
+// function ValidSelectXinput(select,input) {
+//     if (select.value.trim() == '-' || input.value.trim() == '') {
+//         clearSelected(select)
+//         InvalidInputs.push(input)
+//     }
+//     if (select.value.trim() !== '-' || input.value.trim() !== '') {
+//         RemoveInvalidClass([input]);
+//     }
+// }
 
 
 
@@ -240,13 +239,24 @@ function ValidInputNotEmpty(modaltype) {
         let InvalidInputs = []
         for (let index = 0; index < list_of_inputs.length; index++) {
             var theinput = list_of_inputs[index]
-            if (theinput.value.trim() == '') {
-                InvalidInputs.push(theinput)
-            };
-            if (theinput.value.trim() !== '') {
-                RemoveInvalidClass([theinput]);
-            };
 
+            if (theinput.id == 'ClientName'){
+                if (theinput.id == 'ClientName' && theinput.value.trim() == '-' || document.getElementById('ClientNameInput').value.trim() == '') {
+                    clearSelected(document.getElementById('ClientName'))
+                    InvalidInputs.push(document.getElementById('ClientNameInput'))
+                }
+                if (theinput.id == 'ClientName' && theinput.value.trim() !== '-' || document.getElementById('ClientNameInput').value.trim() !== '') {
+                    RemoveInvalidClass([document.getElementById('ClientNameInput')]);
+                }  
+            }
+            else{
+                if (theinput.value.trim() == '') {
+                    InvalidInputs.push(theinput)
+                };
+                if (theinput.value.trim() !== '') {
+                    RemoveInvalidClass([theinput]);
+                };
+            }      
         }
         if (InvalidInputs.length == 0) {
             if (modaltype == 'addnew') {
