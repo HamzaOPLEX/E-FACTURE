@@ -141,15 +141,51 @@
                 </p>
               </a>
             </li>
+            <li class="nav-header">Gestioner Des Devis</li>
+            <li class="nav-item">
+              <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-plus-circle"></i>
+                <p>
+                  Créer un Devis
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %}
+                class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>
+                  Toutes les Devis
+                </p>
+              </a>
+            </li>
+            <li class="nav-header">Gestioner Des BL</li>
+            <li class="nav-item">
+              <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-plus-circle"></i>
+                <p>
+                  Créer un BL
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %}
+                class="nav-link" {% endif %}>
+                <i class="nav-icon fas fa-file-invoice"></i>
+                <p>
+                  Toutes les BL's
+                </p>
+              </a>
+            </li>
             <!-- logout sidebar bottun -->
-            <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
+            <!-- <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
               <a href="/logout" class="nav-link">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
                 <p>
                   Se déconnecter
                 </p>
               </a>
-            </li>
+            </li> -->
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
