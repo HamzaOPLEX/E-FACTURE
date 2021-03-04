@@ -124,59 +124,89 @@
                 </p>
               </a>
             </li>
-            <li class="nav-header">Gestioner Des Factures</li>
-            <li class="nav-item">
-              <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-plus-circle"></i>
-                <p>
-                  Créer une facture
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-file-invoice"></i>
-                <p>
-                  Toutes les Factures
-                </p>
-              </a>
-            </li>
-            <li class="nav-header">Gestioner Des Devis</li>
-            <li class="nav-item">
-              <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-plus-circle"></i>
-                <p>
-                  Créer un Devis
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %}
-                class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-file-invoice"></i>
-                <p>
-                  Toutes les Devis
-                </p>
-              </a>
-            </li>
-            <li class="nav-header">Gestioner Des BL</li>
-            <li class="nav-item">
-              <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-plus-circle"></i>
-                <p>
-                  Créer un BL
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %}
-                class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-file-invoice"></i>
-                <p>
-                  Toutes les BL's
-                </p>
-              </a>
-            </li>
+                <li class="nav-item has-treeview">
+                  <a href="#" {% if selecteditem == 'facture' or selecteditem == 'list-all-factures' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                    <i class="nav-icon fas fa-F"></i>
+                    <p>
+                    Gestioner Des Factures <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview" id="sub-tree">
+                    <li class="nav-item">
+                      <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>
+                          Créer une facture
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else %}
+                        class="nav-link" {% endif %}>
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                          Toutes les Factures
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                  <a href="#" {% if selecteditem == 'devis' or selecteditem == 'list-all-devis' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                    <i class="nav-icon fas fa-D"></i>
+                    <p>
+                      Gestioner Des Devis <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview" id="sub-tree">
+                    <li class="nav-item">
+                      <a href="/create-new-facture" {% if selecteditem == 'devis' %} class="nav-link active" {% else %} class="nav-link"
+                        {% endif %}>
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>
+                          Créer un Devis
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/list-all-facturs" {% if selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
+                        class="nav-link" {% endif %}>
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                          Toutes les Devis
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                  <a href="#" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                    <i class="nav-icon fas fa-B"></i>
+                    <p>
+                      Gestioner Des BL <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview" id="sub-tree">
+                    <li class="nav-item">
+                      <a href="/create-new-facture" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link"
+                        {% endif %}>
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>
+                          Créer un BL
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/list-all-facturs" {% if selecteditem == 'list-all-BL' %} class="nav-link active" {% else %}
+                        class="nav-link" {% endif %}>
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                          Toutes les BL
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
             <!-- logout sidebar bottun -->
             <!-- <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
               <a href="/logout" class="nav-link">

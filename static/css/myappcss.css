@@ -120,3 +120,32 @@
         padding: 5px !important;
         float: right !important;
     }
+
+
+
+
+    ul#sub-tree {
+      padding-left: 10px !important;
+    }
+  .nav-sidebar > .nav-item .nav-icon {
+      margin-left: .05rem !important;
+      font-size: 1.2rem !important;
+      margin-right: .2rem !important;
+      text-align: center !important;
+      width: 1.0rem !important;
+  }
+  .fa-B:before {
+    font-family: Arial; /* your font family here! */
+    font-weight: bold;
+    content: 'B';
+  }  
+  .fa-D:before {
+    font-family: Arial; /* your font family here! */
+    font-weight: bold;
+    content: 'D';
+  }  
+  .fa-F:before {
+    font-family: Arial; /* your font family here! */
+    font-weight: bold;
+    content: 'F';
+  }
