@@ -1,0 +1,6 @@
+
+*.pyc
+NTFM/settings.py
+NTFM/wsgi.py
+*.pdf
+NTFM/settings.py

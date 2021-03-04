@@ -1,16 +1,19 @@
+import json
 import os
 import shutil
 from datetime import datetime, timedelta
+from urllib.parse import unquote
+
+from dashboard.APPfunctions.APPfunctions import *
+from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
+from dashboard.Handlers.ERROR_Handlers import *
+from dashboard.models import *
+from dashboard.pdf_templates.Invoice.Invoice import DrawNotechPdf
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
-from django.shortcuts import HttpResponse, redirect, render, get_object_or_404
 from django.http import FileResponse, JsonResponse
-from dashboard.models import *
-from dashboard.APPfunctions.APPfunctions import *
-from dashboard.pdf_templates.Invoice.Invoice import DrawNotechPdf
-from urllib.parse import unquote
-import json
-from dashboard.Handlers.AUTH_Handler import RequireLogin,RequirePermission
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
+
 
 @RequireLogin
 def H_Create_New_Facture(requests):
@@ -106,7 +109,7 @@ def H_Create_New_Facture(requests):
             return redirect('/create-new-facture/')
 
 @RequireLogin
-def Delete_Facture(requests, id):
+def H_Delete_Facture(requests, id):
     context = {'pagetitle': f'Supprimer une facture'}
     # remove delete/<id> from URL
     redirect_after_done = '/'.join(str(requests.get_full_path()
