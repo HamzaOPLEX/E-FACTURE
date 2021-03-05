@@ -152,7 +152,8 @@
                   </ul>
                 </li>
                 <li class="nav-item has-treeview">
-                  <a href="#" {% if selecteditem == 'devis' or selecteditem == 'list-all-devis' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+                  <a href="#" {% if selecteditem == 'devis' or selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
+                    class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-D"></i>
                     <p>
                       Gestioner Des Devis <i class="fas fa-angle-left right"></i>
@@ -160,8 +161,7 @@
                   </a>
                   <ul class="nav nav-treeview" id="sub-tree">
                     <li class="nav-item">
-                      <a href="/create-new-facture" {% if selecteditem == 'devis' %} class="nav-link active" {% else %} class="nav-link"
-                        {% endif %}>
+                      <a href="/create-new-Devis" {% if selecteditem == 'devis' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                         <i class="nav-icon fas fa-plus-circle"></i>
                         <p>
                           Créer un Devis
@@ -169,7 +169,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="/list-all-facturs" {% if selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
+                      <a href="/list-all-Devis" {% if selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
                         class="nav-link" {% endif %}>
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
@@ -188,7 +188,7 @@
                   </a>
                   <ul class="nav nav-treeview" id="sub-tree">
                     <li class="nav-item">
-                      <a href="/create-new-facture" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link"
+                      <a href="/create-new-BL" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link"
                         {% endif %}>
                         <i class="nav-icon fas fa-plus-circle"></i>
                         <p>
@@ -197,7 +197,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="/list-all-facturs" {% if selecteditem == 'list-all-BL' %} class="nav-link active" {% else %}
+                      <a href="/list-all-BL" {% if selecteditem == 'list-all-BL' %} class="nav-link active" {% else %}
                         class="nav-link" {% endif %}>
                         <i class="nav-icon fas fa-file-invoice"></i>
                         <p>
@@ -208,14 +208,14 @@
                   </ul>
                 </li>
             <!-- logout sidebar bottun -->
-            <!-- <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
-              <a href="/logout" class="nav-link">
-                <i class="nav-icon fas fa-sign-out-alt"></i>
-                <p>
-                  Se déconnecter
-                </p>
-              </a>
-            </li> -->
+                <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
+                  <a href="/logout" class="nav-link">
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <p>
+                      Se déconnecter
+                    </p>
+                  </a>
+                </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->

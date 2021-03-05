@@ -25,9 +25,6 @@ class APP_User(models.Model):
     def __str__(self):
         return str(self.username)
 
-
-
-
 # Facture Tables
 ########################################
 class APP_Created_Facture(models.Model):
@@ -65,8 +62,62 @@ class APP_Facture_items(models.Model):
 
     def __str__(self):
         return self.DESIGNATION
-
 ########################################
+
+
+# Devis Tables
+########################################
+class APP_Created_Devis(models.Model):
+    Devis_number = models.IntegerField(unique=True)
+    Client_Name = models.TextField()
+    ICE = models.CharField(max_length=255)
+    Date = models.DateField(max_length=255)
+    Place = models.CharField(max_length=255)
+    CreatedBy = models.ForeignKey(
+        APP_User, on_delete=models.SET_NULL, null=True, editable=False)
+
+    def __str__(self):
+        return str(self.Devis_number)+'-'+self.Client_Name
+
+
+class APP_Devis_items(models.Model):
+    Qs = models.IntegerField(default=0)
+    DESIGNATION = models.TextField(default=None)
+    PU = models.IntegerField(default=0)
+    PT = models.BigIntegerField(default=0)
+    BelongToDevis = models.ForeignKey(APP_Created_Devis, on_delete=models.CASCADE, editable=False)
+
+    def __str__(self):
+        return self.DESIGNATION
+########################################
+
+
+# BL Tables
+########################################
+class APP_Created_BL(models.Model):
+    BL_number = models.IntegerField(unique=True)
+    Client_Name = models.TextField()
+    ICE = models.CharField(max_length=255)
+    Date = models.DateField(max_length=255)
+    Place = models.CharField(max_length=255)
+    CreatedBy = models.ForeignKey(APP_User, on_delete=models.SET_NULL, null=True, editable=False)
+    def __str__(self):
+        return str(self.BL_number)+'-'+self.Client_Name
+
+
+class APP_BL_items(models.Model):
+    Qs = models.IntegerField(default=0)
+    DESIGNATION = models.TextField(default=None)
+    PU = models.IntegerField(default=0)
+    PT = models.BigIntegerField(default=0)
+    BelongToBL = models.ForeignKey(
+        APP_Created_BL, on_delete=models.CASCADE, editable=False)
+
+    def __str__(self):
+        return self.DESIGNATION
+########################################
+
+
 
 # Settings Tables
 ########################################

@@ -1,0 +1,324 @@
+{% extends "main.html" %}
+{% load Filters %}
+{% block content %}
+<!--suppress ALL -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{User.username.title}} bienvenue sur la page de Creation des Devis </h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- <div class="card"> -->
+                <div class="card-header">
+                    <h3 class="card-title">Tableau des éléments de <b>Devis</b></h3>
+                    <button type="button" class="btn btn-info add-new" onclick="AddNewFactureItemModalHandler();"><i
+                            class="fa fa-plus"></i> Ajouter</button>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 552px;">
+                    <table id='Table' class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th id='smallth'>Qs</th>
+                                <th>DESIGNATION</th>
+                                <th id='smallth'>P.U</th>
+                                <th id='smallth'>P.T</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Saisir les informations de devis</h3>
+                </div>
+                <div class="card-body">
+                    <form id='Form' action="/create-new-Devis/" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="datatable" id="tableinput" value="" required>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Numéro de Devis </label>
+                                    <input type="number" min="0" class="form-control" name='Devis_number'
+                                        value='{{new_Devis_number}}' id="Devis_number" placeholder="N°:" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group" style="height: 65px">
+                                    <label>Nom De Client</label>
+                                    <select id="ClientName" name="client_name" class="form-control"
+                                        onchange="GetSelectedThenSet();">
+                                        {{ selectbody | CreateHTMLSelectOptions }}
+                                    </select>
+                                    <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
+                                        class="form-control editOption" id="ClientNameInput"
+                                        onchange="GetInputAndSet2Select('ClientName',0);">
+                                    </input>
+                                </div>
+                                <script>
+                                    function GetSelectedThenSet() {
+                                        var clientname = document.getElementById("ClientName");
+                                        if (clientname.value !== '') {
+                                            document.getElementsByClassName('editOption')[0].value = clientname.value
+                                            var url = '/create-new-Devis/getclientinfo/' + clientname.value
+                                            var xhttp = new XMLHttpRequest();
+                                            xhttp.onreadystatechange = function () {
+                                                if (this.readyState == 4 && this.status == 200) {
+                                                    ClientData = JSON.parse(this.responseText);
+                                                    document.getElementById("ICE").value = ClientData.ICE;
+                                                    document.getElementById("City").value = ClientData.City;
+                                                }
+                                            }
+                                            xhttp.open("GET", url, true);
+                                            xhttp.send();
+                                        }
+                                    }
+                                </script>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>ICE</label>
+                                    <input type="text" id='ICE' class="form-control" autocomplete="off" name='ICE'
+                                        value="" placeholder="ICE de Client..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Le Lieu</label>
+                                    <input type="text" id='City' autocomplete="off" class="form-control" name="place"
+                                        placeholder="Lieu..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>La Date</label>
+                                    <input type="date" class="form-control" id="Date" autocomplete="off" name="date"
+                                        value="{{todaydate}}" placeholder="..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Cette Devis est-elle payée?</label>
+                                    <select class="form-control" id='ispaid' name="ispaid"
+                                        onchange="disabled_or_enabled_paiementmethod();">
+                                        <option>Non</option>
+                                        <option>Oui</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Méthode de paiement</label>
+                                    <select class="form-control" id='paiementmethod' name="paiementmethod" disabled>
+                                        <option>Espèces</option>
+                                        <option>Chèque</option>
+                                        <option>Cart</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            function disabled_or_enabled_paiementmethod() {
+                                var ispaid = document.getElementById('ispaid').value
+                                if (ispaid == 'Non') {
+                                    document.getElementById('paiementmethod').disabled = true
+                                }
+                                else {
+                                    document.getElementById('paiementmethod').disabled = false
+                                }
+                            }
+                        </script>
+                        <div class="ButtnEnregister">
+                            <center>
+                                <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
+                                    class="btn btn-block btn-primary"
+                                    style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
+                                        class="fas fa-check"></i>
+                                    <b>ENREGISTRER</b></button>
+                            </center>
+                        </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+<div class="modal fade" id="AddNewFactureItemModal" role="dialog">
+    <div class="modal-dialog card card-default">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Qs</label>
+                    <input type="number" min="0" class="form-control" id='Qs' name="Qs" autocomplete="off"
+                        onkeyup="CalculatePT();" placeholder="Qs" required>
+                </div>
+                <div class="form-group" style="height: 65px">
+                    <label>DESIGNATION</label>
+                    <select id="ProductName" class="form-control" onchange="GetSelectedProductThenSet();">
+                        {{selectproductbody | CreateHTMLSelectOptions}}
+                    </select>
+                    <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
+                        class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
+                    </input>
+                    <script>
+                        function GetSelectedProductThenSet() {
+                            var ProductName = document.getElementById("ProductName");
+                            document.getElementsByClassName('editOption')[1].value = ProductName.value
+                            var url = '/create-new-Devis/getproductinfo/' + ProductName.value
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    let Qs = document.getElementById('Qs').value
+                                    let ProductData = JSON.parse(this.responseText);
+                                    document.getElementById("PU").value = ProductData.PU;
+                                    if (Qs.value !== null || Qs.value !== 0) {
+                                        document.getElementById('PT').value = document.getElementById("PU").value * Qs
+                                    }
+                                }
+                            };
+                            xhttp.open("GET", url, true);
+                            xhttp.send();
+                        }
+                        function CalculatePT() {
+                            document.getElementById('PT').value = document.getElementById('Qs').value * document.getElementById("PU").value
+                        }
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label>PU</label>
+                    <input type="text" class="form-control" id='PU' name="PU" onkeyup="CalculatePT();"
+                        autocomplete="off" placeholder="PU" required>
+                </div>
+                <div class="form-group">
+                    <label>PT</label>
+                    <input type="number" class="form-control" id='PT' name="PT" autocomplete="off" placeholder="PT"
+                        required readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('addnew');"><i
+                        class="fas fa-plus"></i> Ajouter</button>
+                <button type="button" class="btn btn-default btn-success" id="closeeditmodal"
+                    data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="EditFactureItemModal" role="dialog">
+    <div class="modal-dialog  card card-default">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Entrez toutes les informations ici : </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id='SelectedRowNumber' value="">
+                <div class="form-group">
+                    <label>Qs</label>
+                    <input type="number" min="0" class="form-control" id='Edit_Qs' name="Qs" autocomplete="off"
+                        onkeyup="CalculatePTedit();" placeholder="Qs" required>
+                </div>
+                <div class="form-group" style="height: 65px">
+                    <label>DESIGNATION</label>
+                    <select id="Edit_ProductName" class="form-control" onchange="GetSelectedProductThenSetEdit();">
+                        {{selectproductbody | CreateHTMLSelectOptions}}
+                    </select>
+                    <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
+                        class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
+                    <script>
+                        function GetSelectedProductThenSetEdit() {
+                            var ProductName = document.getElementById("Edit_ProductName");
+                            document.getElementsByClassName('editOption')[2].value = ProductName.value
+
+                            var ProductName = document.getElementById("Edit_ProductName");
+                            var url = '/create-new-Devis/getproductinfo/' + ProductName.value
+
+                            var xhttp = new XMLHttpRequest();
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    let Qs = document.getElementById('Edit_Qs').value
+                                    let ProductData = JSON.parse(this.responseText);
+                                    document.getElementById("Edit_PU").value = ProductData.PU;
+                                    if (Qs.value !== null || Qs.value !== 0) {
+                                        document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
+                                    }
+                                }
+                            };
+                            xhttp.open("GET", url, true);
+                            xhttp.send();
+                        }
+                        function CalculatePTedit() {
+                            document.getElementById('Edit_PT').value = document.getElementById('Edit_Qs').value * document.getElementById("Edit_PU").value
+                        }
+                    </script>
+                </div>
+                <div class="form-group">
+                    <label>PU</label>
+                    <input type="text" class="form-control" id='Edit_PU' name="PU" onkeyup="CalculatePTedit();"
+                        autocomplete="off" placeholder="PU" required>
+                </div>
+                <div class="form-group">
+                    <label>PT</label>
+                    <input type="number" class="form-control" id='Edit_PT' name="PT" autocomplete="off" placeholder="PT"
+                        required readonly>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('edit');"><i
+                        class="fas fa-plus"></i>Edit</button>
+                <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal {
+        background-color: #000000a8;
+    }
+
+    .modal-dialog {
+        float: right;
+        height: 439px !important;
+        width: 476px !important;
+        top: 107px !important;
+    }
+</style>
+
+{% endblock content %}

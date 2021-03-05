@@ -8,23 +8,77 @@ from dashboard.Handlers import (
                                     Products_Handler,
                                     Profile_Handler,
                                     AUTH_Handler,
+                                    Devis_Handler,
+                                    BL_Handler
                                 )
 urlpatterns = [
     # Auth Urls 
     path('login/', AUTH_Handler.Login, name='Login'),
     path('logout/', AUTH_Handler.Logout, name='Logout'),
 
+     # Facture URL Handlers :
+     ###########################################################################
+          # List All Facture Urls
+     path('list-all-facturs/', Facture_Handler.H_List_All_Factures,
+          name='Create New Facture'),
+     path('list-all-facturs/delete/<int:id>',
+          Facture_Handler.H_Delete_Facture, name='Delete Facture By Id'),
+     path('list-all-facturs/edit/<int:facture_id>',
+          Facture_Handler.H_Edit_Facture, name='Edit Facture By Id'),
+     path('list-all-facturs/detail/open/<int:facture_id>',
+          Facture_Handler.H_OpenPdf, name='Open  PDFFacture By Id'),
+
+          # Create Facture Urls
+    path('create-new-facture/', Facture_Handler.H_Create_New_Facture,
+         name='Create New Facture'),
+     ###########################################################################
+
+
+     # Devis URL Handlers :
+     ###########################################################################
+          # List All Devis Urls
+     path('list-all-Devis/', Devis_Handler.H_List_All_Devis,
+          name='Create New Devis'),
+     path('list-all-Devis/delete/<int:id>',
+          Devis_Handler.H_Delete_Devis, name='Delete Devis By Id'),
+     path('list-all-Devis/edit/<int:Devis_id>',
+          Devis_Handler.H_Edit_Devis, name='Edit Devis By Id'),
+     path('list-all-Devis/detail/open/<int:Devis_id>',
+          Devis_Handler.H_OpenPdf, name='Open  PDFDevis By Id'),
+
+          # Create Devis Urls
+     path('create-new-Devis/', Devis_Handler.H_Create_New_Devis,
+          name='Create New Devis'),
+     ###########################################################################
+
+     # BL URL Handlers :
+     ###########################################################################
+    # List All BL Urls
+     path('list-all-BL/', BL_Handler.H_List_All_BL,
+          name='Create New BL'),
+     path('list-all-BL/delete/<int:id>',
+          BL_Handler.H_Delete_BL, name='Delete BL By Id'),
+     path('list-all-BL/edit/<int:BL_id>',
+          BL_Handler.H_Edit_BL, name='Edit BL By Id'),
+     path('list-all-BL/detail/open/<int:BL_id>',
+          BL_Handler.H_OpenPdf, name='Open  PDFBL By Id'),
+
+    # Create BL Urls
+     path('create-new-BL/', BL_Handler.H_Create_New_BL,
+          name='Create New BL'),
+     ###########################################################################
+
+     # Get Obj Info :
+     ###########################################################################
+     path('create-new-facture/getclientinfo/<str:clientname>',
+          GETJsonINFO_Handler.GetClientInfoByName, name='Get Client Jsoninfo By Name'),
+     path('create-new-facture/getproductinfo/<str:productname>',
+          GETJsonINFO_Handler.GetProductInfoByName, name='Get Product Json-info By Name'),
+     ###########################################################################
+
     # Dashboard Urls
     path('', views.Dashboard, name='Dashboard'),
     path('dashboard/', views.Dashboard, name='Dashboard'),
-
-    # List All Facture Urls
-    path('list-all-facturs/', Facture_Handler.H_List_All_Factures,
-         name='Create New Facture'),
-    path('list-all-facturs/delete/<int:id>',Facture_Handler.H_Delete_Facture, name='Delete Facture By Id'),
-    path('list-all-facturs/edit/<int:facture_id>',
-         Facture_Handler.H_Edit_Facture, name='Edit Facture By Id'),
-    path('list-all-facturs/detail/open/<int:facture_id>',Facture_Handler.H_OpenPdf, name='Open  PDFFacture By Id'),
 
     # profile Urls
     path('profile/', Profile_Handler.Profile, name='Profile'),
@@ -39,7 +93,6 @@ urlpatterns = [
         # Globale Settings
     path('settings/global-settings', views.GlobaleSettings, name='Globale Settings'),
         # Manage Products
-            # Facture Product
     path('settings/manage-products',Products_Handler.ManageProducts, name='Manage Products'),
     path('settings/manage-products/edit/<int:id>', Products_Handler.EditProduct, name='Manage Products'),
     path('settings/manage-products/delete/<int:id>',Products_Handler.DeleteProduct, name='Manage Products'),
@@ -63,10 +116,7 @@ urlpatterns = [
     path('settings/adduser/', Users_Handler.AddUser, name='Add new User'),
 
 
-    # Create Facture Urls
-    path('create-new-facture/', Facture_Handler.H_Create_New_Facture,name='Create New Facture'),
-    path('create-new-facture/getclientinfo/<str:clientname>',GETJsonINFO_Handler.GetClientInfoByName, name='Get Client Jsoninfo By Name'),
-    path('create-new-facture/getproductinfo/<str:productname>',GETJsonINFO_Handler.GetProductInfoByName, name='Get Product Json-info By Name'),
+
 
 
     # List ALL Events (History & Warnning) : 
