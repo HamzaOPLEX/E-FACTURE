@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from dashboard.APPfunctions.APPfunctions import Fix_Date,generate_table_of_clients
 from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
 from dashboard.Handlers.ERROR_Handlers import *
-from dashboard.models import APP_Clients, APP_History, APP_User
+from dashboard.models import APP_Clients, APP_History, APP_User,APP_Created_Facture,APP_Created_Devis,APP_Created_BL
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse

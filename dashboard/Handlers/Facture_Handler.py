@@ -67,7 +67,7 @@ def H_Create_New_Facture(requests):
                 paid_method = 'aucun'
                 isPaid = 'Non'
             # Check if facture_number already Exist
-            all_facture_numbers = [n.facture_number for n in All_Factures]
+            all_facture_numbers = [n.number for n in All_Factures]
             if int(facture_number) in all_facture_numbers:
                 messages.error(
                     requests, f"Une facture avec le même numéro ({facture_number}) existe déjà")
@@ -75,7 +75,7 @@ def H_Create_New_Facture(requests):
             if int(facture_number) not in all_facture_numbers:
                 # Created Facture With POST data if facture_number not found
                 facture = APP_Created_Facture.objects.create(
-                    facture_number=facture_number,
+                    number=facture_number,
                     Client_Name=client_name,
                     ICE=ICE,
                     Place=place,
@@ -271,15 +271,14 @@ def H_OpenPdf(requests, facture_id):
         if requests.method == "GET":
             Facture_item = APP_Facture_items.objects.filter(
                 BelongToFacture=Facture)
-            try:
-                CalculedTOTAL = Calcule_TVA_TOTAL_TTC(Facture_item)
-                Company_TVATAUX = APP_Settings.objects.all().first().Company_TVATAUX
-                Company_ICE = APP_Settings.objects.all().first().Company_ICE
-                Company_City = APP_Settings.objects.all().first().Company_Place
-                filepath = DrawNotechPdf(
-                    Facture, Facture_item, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City)
-            except AttributeError:
-                return render(requests, 'ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
+            # try:
+            CalculedTOTAL = Calcule_TVA_TOTAL_TTC(Facture_item)
+            Company_TVATAUX = APP_Settings.objects.all().first().Company_TVATAUX
+            Company_ICE = APP_Settings.objects.all().first().Company_ICE
+            Company_City = APP_Settings.objects.all().first().Company_Place
+            filepath = DrawNotechPdf(Facture, Facture_item, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City)
+            # except AttributeError:
+            #     return render(requests, 'ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
             return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
         else:
             return HTTP_404(requests, context)

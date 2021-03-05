@@ -102,11 +102,10 @@ def generate_table_of_products(showaction=True, Products=''):
     return tablebody
 
 def generate_table_of_created_factures(showaction='all', factures=''):
-    # factures = list(APP_Created_Facture.objects.all())
     factures = list(factures)[::-1]
     tablebody = []
     for facture in factures:
-        facture_number = facture.facture_number
+        facture_number = facture.number
         client = facture.Client_Name
         date = facture.Date
         CreatedBy = facture.CreatedBy
@@ -150,6 +149,30 @@ def generate_table_of_history(histories, simpletable=False):
             D['action_detail'] = action_detail
         tablebody.append(D)
     return tablebody
+
+def generate_table_of_devis(devis=''):
+    devis = list(devis)[::-1]
+    tablebody = []
+    for dv in devis:
+        Devis_number = dv.number
+        client = dv.Client_Name
+        date = dv.Date
+        CreatedBy = dv.CreatedBy
+        D = {}
+        D['N'] = Devis_number
+        D['client'] = client
+        D['date'] = date
+        D['CreatedBy'] = CreatedBy
+        D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-devis/edit/{dv.id}" title="Edit" data-toggle="tooltip">
+                                <i class="fas fa-pencil-alt"></i>\n</a> 
+                            <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-devis/delete/{dv.id}\');" title="Delete" data-toggle="tooltip">
+                                <i class="fas fa-trash"></i></a>\n
+                            <a href="/list-all-devis/detail/open/{dv.id}" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                            '''
+        tablebody.append(D)
+    return tablebody
+
+
 
 def Calcule_TVA_TOTAL_TTC(factureitemsobj):
     TOTAL = 0

@@ -10,7 +10,7 @@ from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
 
-def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City):
+def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City):
     def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
         if len(text) > length:
             wraps = textwrap.wrap(text, length)
@@ -24,8 +24,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
-    Date = FactureObj.Date.strftime('%Y-%m-%d')
-    Year = FactureObj.Date.strftime('%Y')
+    Date = DevisObj.Date.strftime('%Y-%m-%d')
+    Year = DevisObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
     tabledata.append(header)
@@ -106,11 +106,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     # - Start TOTAL,TVA,TTC Table Handler - ##################################################
     TOTALint, TVA, TTC_int = CalculedTOTAL
     TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
-    TVA_TAUX = Company_TVATAUX
-    TVA = ['', f'TVA {TVA_TAUX}%', round(TVA, 2)]
-    TTC = ['', 'TOTAL TTC', round(TTC_int, 2)]
-    TOTALtableData = [TOTAL, TVA, TTC]
-    TOTALletter = Number2Letter(str(TTC_int))
+    TOTALtableData = [TOTAL]
 
     def Info_Table(tabledata):
         colwidths = (200, 90, 200)
@@ -141,9 +137,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
         canvas.drawImage(str(BASE_DIR)+"/header.png", 50, 780, 500, 60)
         canvas.drawImage(str(BASE_DIR)+"/logo-watermark.png", 30, 300, 500, 300)
         canvas.setFont('Helvetica', 10)
-        Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
         footer_msg = "18 RES DALA Jirari 5R Magasin 1 - Tanger - 0660055110 - 0531777771 info@notechnologie.com - ICE : 00006665600026".strip()
-        draw_wrapped_line(canvas, Money_msg, 100, 290, 75, 10)
         canvas.setLineWidth(2)
         canvas.line(50, 50, 530, 50)
 
@@ -175,12 +169,12 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     ClientSide = styles['ClientSide']
     CompanySide = styles['CompanySide']
     company_side = f"""
-                <b>Nom du client:</b> {str(FactureObj.Client_Name).title()}<br/>
-                <b>ICE de Client:</b> {str(FactureObj.ICE).title()}<br/>
+                <b>Nom du client:</b> {str(DevisObj.Client_Name).title()}<br/>
+                <b>ICE de Client:</b> {str(DevisObj.ICE).title()}<br/>
                 """
     client_side = f"""
-                    <b>Numéro de Facture:</b> {FactureObj.number}/{Year}<br/>
-                    <b>{Company_City} le:</b> {FactureObj.Date}"""
+                    <b>Numéro de Devis:</b> {DevisObj.number}/{Year}<br/>
+                    <b>{Company_City} le:</b> {DevisObj.Date}"""
 
     client_company_table_data = [
         [Paragraph(client_side, ClientSide), '',
@@ -193,8 +187,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
 
     def colr(x, y, z):
         return (x/255, y/255, z/255)
-    # change this to for item in facture items , tabledata.append(item)
-    for item in FactureItemsObj:
+    # change this to for item in Devis items , tabledata.append(item)
+    for item in DevisItemsObj:
         row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),
                str(item.PU).strip(), str(item.PT).strip()]
         tabledata.append(row)
@@ -210,7 +204,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     story.append(Spacer(1, .25*inch))
     # story.append(Paragraph(, FooterMessage))
 
-    filename = f'{FactureObj.Client_Name}-{FactureObj.number}-{Date}'
+    filename = f'{DevisObj.Client_Name}-{DevisObj.number}-{Date}'
     filepath = os.path.join(BASE_DIR.parent.parent,
                             'all_facturs')+f"/{filename}.pdf"
     doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',

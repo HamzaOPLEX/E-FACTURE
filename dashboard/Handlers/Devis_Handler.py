@@ -8,7 +8,7 @@ from dashboard.APPfunctions.APPfunctions import *
 from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
 from dashboard.Handlers.ERROR_Handlers import *
 from dashboard.models import *
-from dashboard.pdf_templates.Invoice.Invoice import DrawNotechPdf
+from dashboard.pdf_templates.devis.devis import DrawNotechPdf
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
@@ -43,7 +43,6 @@ def H_Create_New_Devis(requests):
         ICE = requests.POST['ICE']
         place = requests.POST['place']
         date = requests.POST['date']
-        isPaid = requests.POST['ispaid']
 
         # check if len(datatable)!=0 and all len() rows in that table != 4
         if len(datatable) != 0:
@@ -58,14 +57,7 @@ def H_Create_New_Devis(requests):
             datatable_status = 'not valid'
         # Check All Required POST Data
         if datatable and Devis_number and client_name and client_name != '-' and ICE and place and date and datatable_status == 'valid':
-            if isPaid == 'Oui':
-                paid_method = requests.POST['paiementmethod']
-                if paid_method not in ['Cart', 'Espèces', 'Chèque']:
-                    messages.error(requests, "paid method erreur")
-                    return redirect('/create-new-Devis/')
-            else:
-                paid_method = 'aucun'
-                isPaid = 'Non'
+
             # Check if Devis_number already Exist
             all_Devis_numbers = [n.Devis_number for n in All_Deviss]
             if int(Devis_number) in all_Devis_numbers:
@@ -81,8 +73,6 @@ def H_Create_New_Devis(requests):
                     Place=place,
                     Date=date,
                     CreatedBy=User,
-                    isPaid=isPaid,
-                    Paiment_Mathod=paid_method
                 )
                 # Create a History
                 actiondetail = f'{User.username} crée un nouvelle Devis avec le numéro {Devis_number} en {Fix_Date(str(datetime.today()))}'
@@ -175,7 +165,7 @@ def H_Edit_Devis(requests, Devis_id):
             Devis_item = APP_Devis_items.objects.filter(
                 BelongToDevis=Devis)
             # generate table of Devis items and pass him in context
-            table = generate_table_of_Devis_items(Devis_item)
+            table = generate_table_of_created_items(Devis_item)
             context['tablebody'] = table
             # pass client name
             context['client'] = Devis.Client_Name
@@ -258,9 +248,9 @@ def H_List_All_Devis(requests):
     if requests.method == "GET":
         # Generate HTML Table and Pass it in context
         Deviss = list(APP_Created_Devis.objects.all())
-        tablebody = generate_table_of_created_Deviss(Deviss=Deviss)
+        tablebody = generate_table_of_devis(devis=Deviss)
         context['tablebody'] = tablebody
-        return render(requests, 'List-All-Deviss/Created-Devis.html', context)
+        return render(requests, 'List-All-Factures/Created-Devis.html', context)
 
 
 @RequireLogin

@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.title}} bienvenue sur la page de Creation des BL </h1>
+                <h1>{{User.username.upper}} bienvenue sur la page pour Créer un Bon De Livraison </h1>
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
             <div class="card card-default">
                 <!-- <div class="card"> -->
                 <div class="card-header">
-                    <h3 class="card-title">Tableau des éléments de <b>BL</b></h3>
+                    <h3 class="card-title">Tableau des éléments de <b>Bon De Livraison</b></h3>
                     <button type="button" class="btn btn-info add-new" onclick="AddNewFactureItemModalHandler();"><i
                             class="fa fa-plus"></i> Ajouter</button>
                 </div>
@@ -55,7 +55,7 @@
         <div class="col-md-6">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">Saisir les informations de BL</h3>
+                    <h3 class="card-title">Saisir les informations de <b>Bon De Livraison</b></h3>
                 </div>
                 <div class="card-body">
                     <form id='Form' action="/create-new-BL/" method="post">

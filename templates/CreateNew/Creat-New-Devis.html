@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.title}} bienvenue sur la page de Creation des Devis </h1>
+                <h1>{{User.username.upper}} bienvenue sur la page pour Créer un Devis </h1>
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
         <div class="col-md-6">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">Saisir les informations de devis</h3>
+                    <h3 class="card-title">Saisir les informations de <b>Devis</b></h3>
                 </div>
                 <div class="card-body">
                     <form id='Form' action="/create-new-Devis/" method="post">
@@ -66,7 +66,7 @@
                                 <div class="form-group">
                                     <label>Numéro de Devis </label>
                                     <input type="number" min="0" class="form-control" name='Devis_number'
-                                        value='{{new_Devis_number}}' id="Devis_number" placeholder="N°:" required>
+                                        value='{{new_Devis_number}}' id="facture_number" placeholder="N°:" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -78,7 +78,7 @@
                                     </select>
                                     <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
                                         class="form-control editOption" id="ClientNameInput"
-                                        onchange="GetInputAndSet2Select('ClientName',0);">
+                                        onchange="GetInputAndSet2Select('ClientName',0);" autocomplete="off" onclick="document.getElementById('ClientName').click();">
                                     </input>
                                 </div>
                                 <script>
@@ -126,43 +126,11 @@
                                 <div class="form-group">
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Cette Devis est-elle payée?</label>
-                                    <select class="form-control" id='ispaid' name="ispaid"
-                                        onchange="disabled_or_enabled_paiementmethod();">
-                                        <option>Non</option>
-                                        <option>Oui</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Méthode de paiement</label>
-                                    <select class="form-control" id='paiementmethod' name="paiementmethod" disabled>
-                                        <option>Espèces</option>
-                                        <option>Chèque</option>
-                                        <option>Cart</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <script>
-                            function disabled_or_enabled_paiementmethod() {
-                                var ispaid = document.getElementById('ispaid').value
-                                if (ispaid == 'Non') {
-                                    document.getElementById('paiementmethod').disabled = true
-                                }
-                                else {
-                                    document.getElementById('paiementmethod').disabled = false
-                                }
-                            }
-                        </script>
-                        <div class="ButtnEnregister">
+                        <div class="ButtnEnregister" style="margin: auto;">
                             <center>
                                 <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
                                     class="btn btn-block btn-primary"
-                                    style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
+                                    style="background-color:#17a2b8 !important;border-radius: 5px !important;width: auto !important;"><i
                                         class="fas fa-check"></i>
                                     <b>ENREGISTRER</b></button>
                             </center>
