@@ -94,7 +94,11 @@
                                                     document.getElementById("ICE").value = ClientData.ICE;
                                                     document.getElementById("City").value = ClientData.City;
                                                 }
+                                                document.getElementById('circle-01').style.display = 'none'
+                                                document.getElementById('circle-02').style.display = 'none'
                                             }
+                                            document.getElementById('circle-01').style.display = 'block'
+                                            document.getElementById('circle-02').style.display = 'block'
                                             xhttp.open("GET", url, true);
                                             xhttp.send();
                                         }
@@ -106,6 +110,13 @@
                                     <label>ICE</label>
                                     <input type="text" id='ICE' class="form-control" autocomplete="off" name='ICE'
                                         value="" placeholder="ICE de Client..." required>
+                                    <div id="circle-01"
+                                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -113,6 +124,13 @@
                                     <label>Le Lieu</label>
                                     <input type="text" id='City' autocomplete="off" class="form-control" name="place"
                                         placeholder="Lieu..." required>
+                                    <div id="circle-02"
+                                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
