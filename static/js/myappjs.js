@@ -1,4 +1,29 @@
 
+function GetSelectedThenSet() {
+    var clientname = document.getElementById("ClientName");
+    if (clientname.value !== '') {
+        document.getElementsByClassName('editOption')[0].value = clientname.value
+        var url = '/create-new-facture/getclientinfo/' + clientname.value
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('circle01').style.display = 'none'
+                document.getElementById('circle02').style.display = 'none'
+                ClientData = JSON.parse(this.responseText);
+                document.getElementById("ICE").value = ClientData.ICE;
+                document.getElementById("City").value = ClientData.City;
+            }
+
+        }
+        document.getElementById('circle01').style.display = 'block'
+        document.getElementById('circle02').style.display = 'block'
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+}
+
+
+
 
 // datatable javascipt config code
 $(function () {

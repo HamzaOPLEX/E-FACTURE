@@ -84,23 +84,6 @@
                                     </input>
                                 </div>
                                 <script>
-                                    function GetSelectedThenSet() {
-                                        var clientname = document.getElementById("ClientName");
-                                        if (clientname.value !== '') {
-                                            document.getElementsByClassName('editOption')[0].value = clientname.value
-                                            var url = '/create-new-facture/getclientinfo/' + clientname.value
-                                            var xhttp = new XMLHttpRequest();
-                                            xhttp.onreadystatechange = function () {
-                                                if (this.readyState == 4 && this.status == 200) {
-                                                    ClientData = JSON.parse(this.responseText);
-                                                    document.getElementById("ICE").value = ClientData.ICE;
-                                                    document.getElementById("City").value = ClientData.City;
-                                                }
-                                            };
-                                            xhttp.open("GET", url, true);
-                                            xhttp.send();
-                                        }
-                                    }
                                     var client = '{{client}}'.replaceAll('&amp;', '&')
                                     var client = client.replaceAll('&#x27;', "'")
                                     var client = client.replaceAll('&gt;', ">")
@@ -115,6 +98,13 @@
                                     <label>ICE</label>
                                     <input type="text" id='ICE' class="form-control" autocomplete="off" name='ICE'
                                         value="{{facture.ICE}}" placeholder="ICE de Client..." required>
+                                    <div id="circle01"
+                                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -122,6 +112,13 @@
                                     <label>Le Lieu</label>
                                     <input type="text" id='City' autocomplete="off" value="{{facture.Place}}"
                                         class="form-control" name="place" placeholder="Lieu..." required>
+                                    <div id="circle02"
+                                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
