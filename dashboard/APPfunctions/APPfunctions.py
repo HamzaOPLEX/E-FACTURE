@@ -172,7 +172,25 @@ def generate_table_of_devis(devis=''):
         tablebody.append(D)
     return tablebody
 
-
+def generate_table_of_devis_items(Devis_items=''):
+    tablebody = []
+    for item in Devis_items:
+        Qs = str(item.Qs).strip()
+        DESIGNATION = str(item.DESIGNATION).strip()
+        PU = str(item.PU).strip()
+        PT = str(item.PT).strip()
+        D = {}
+        D['Qs'] = Qs
+        D['DT'] = DESIGNATION
+        D['PU'] = PU
+        D['PT'] = PT
+        action = """
+                    <button type="button" class="btn btn-danger btn-sm" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button>\n
+                    <button type="button" id="editrow" class="btn btn-info btn-sm" style="margin-left: 12px;padding-right: 6px;" onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>
+                """
+        D['Action'] = action
+        tablebody.append(D)
+    return tablebody
 
 def Calcule_TVA_TOTAL_TTC(factureitemsobj):
     TOTAL = 0

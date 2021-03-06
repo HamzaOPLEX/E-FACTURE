@@ -57,17 +57,16 @@ def H_Create_New_Devis(requests):
             datatable_status = 'not valid'
         # Check All Required POST Data
         if datatable and Devis_number and client_name and client_name != '-' and ICE and place and date and datatable_status == 'valid':
-
             # Check if Devis_number already Exist
-            all_Devis_numbers = [n.Devis_number for n in All_Deviss]
+            all_Devis_numbers = [n.number for n in All_Deviss]
             if int(Devis_number) in all_Devis_numbers:
-                messages.error(
-                    requests, f"un Devis avec le même numéro ({Devis_number}) existe déjà")
+
+                messages.error(requests, f"un Devis avec le même numéro ({Devis_number}) existe déjà")
                 return redirect('/create-new-Devis/')
             if int(Devis_number) not in all_Devis_numbers:
                 # Created Devis With POST data if Devis_number not found
                 Devis = APP_Created_Devis.objects.create(
-                    Devis_number=Devis_number,
+                    number=Devis_number,
                     Client_Name=client_name,
                     ICE=ICE,
                     Place=place,
@@ -93,18 +92,17 @@ def H_Create_New_Devis(requests):
                     )
                 messages.info(
                     requests, f"Le Devis {Devis_number} a été crée avec succès")
-                return redirect(f'/list-all-Devis/')
+                return redirect(f'/list-all-devis/')
         else:
             messages.error(requests, "Veuillez remplir toutes les données")
-            return redirect('/create-new-Devis/')
+            return redirect('/create-new-devis/')
 
 
 @RequireLogin
 def H_Delete_Devis(requests, id):
     context = {'pagetitle': f'Supprimer un Devis'}
     # remove delete/<id> from URL
-    redirect_after_done = '/'.join(str(requests.get_full_path()
-                                       ).split('/')[0:-2])
+    redirect_after_done = '/list-all-Devis/'
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
@@ -118,7 +116,7 @@ def H_Delete_Devis(requests, id):
                     BelongToDevis=Devis)
                 Devis_items.delete()
                 Devis.delete()
-                actionmsg = f'{User.username} Supprimer Le Devis {Devis.Devis_number}'
+                actionmsg = f'{User.username} Supprimer Le Devis {Devis.number}'
                 APP_History.objects.create(
                     CreatedBy=User, action='Supprimer un Devis', action_detail=actionmsg)
                 messages.info(
@@ -165,7 +163,7 @@ def H_Edit_Devis(requests, Devis_id):
             Devis_item = APP_Devis_items.objects.filter(
                 BelongToDevis=Devis)
             # generate table of Devis items and pass him in context
-            table = generate_table_of_created_items(Devis_item)
+            table = generate_table_of_devis_items(Devis_items=Devis_item)
             context['tablebody'] = table
             # pass client name
             context['client'] = Devis.Client_Name
@@ -179,7 +177,6 @@ def H_Edit_Devis(requests, Devis_id):
             ICE = requests.POST['ICE']
             place = requests.POST['place']
             date = requests.POST['date']
-            isPaid = requests.POST['ispaid']
             # check if len(datatable)!=0 and all len() rows in that table != 4
             if len(datatable) != 0:
                 datatable_status = 'not valid'
@@ -193,21 +190,10 @@ def H_Edit_Devis(requests, Devis_id):
                 datatable_status = 'not valid'
             # Check if all required values are in POST
             if datatable and Devis_number and client_name and ICE and place and date and datatable_status == 'valid':
-                if isPaid == 'Oui':
-                    paid_method = requests.POST['paiementmethod']
-                    if paid_method not in ['Cart', 'Espèces', 'Chèque']:
-                        messages.error(
-                            requests, "Veuillez remplir toutes les données")
-                        return redirect('/create-new-Devis/')
-                else:
-                    paid_method = "aucun"
-                    isPaid = 'Non'
                 Devis.Client_Name = client_name
                 Devis.ICE = ICE
                 Devis.Place = place
                 Devis.Date = date
-                Devis.isPaid = isPaid
-                Devis.Paiment_Mathod = paid_method
                 actiondetail = f'{User.username} editer un Devis avec le numéro {Devis_number} en {Fix_Date(str(datetime.today()))}'
                 APP_History.objects.create(
                     CreatedBy=User,
@@ -215,10 +201,7 @@ def H_Edit_Devis(requests, Devis_id):
                     action_detail=actiondetail,
                     DateTime=str(datetime.today())
                 )
-                APP_Devis_items.objects.filter(
-                    BelongToDevis=Devis).delete()
-                DevisFilePath = APP_Devis_File_Path.objects.filter(
-                    BelongTo=Devis)
+                APP_Devis_items.objects.filter(BelongToDevis=Devis).delete()
                 for data in datatable:
                     try:
                         APP_Devis_items.objects.create(

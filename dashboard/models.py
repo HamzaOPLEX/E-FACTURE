@@ -76,8 +76,8 @@ class APP_Created_Devis(models.Model):
     CreatedBy = models.ForeignKey(
         APP_User, on_delete=models.SET_NULL, null=True, editable=False)
 
-    def __str__(self):
-        return str(self.Devis_number)+'-'+self.Client_Name
+    # def __str__(self):
+    #     return str(self.number)+'-'+self.Client_Name
 
 class APP_Devis_items(models.Model):
     Qs = models.IntegerField(default=0)

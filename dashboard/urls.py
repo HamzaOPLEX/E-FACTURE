@@ -38,12 +38,12 @@ urlpatterns = [
      ###########################################################################
           # List All Devis Urls
      path('list-all-Devis/', Devis_Handler.H_List_All_Devis,
-          name='Create New Devis'),
-     path('list-all-Devis/delete/<int:id>',
+          name='list all Devis'),
+     path('list-all-devis/delete/<int:id>',
           Devis_Handler.H_Delete_Devis, name='Delete Devis By Id'),
-     path('list-all-Devis/edit/<int:Devis_id>',
+     path('list-all-devis/edit/<int:Devis_id>',
           Devis_Handler.H_Edit_Devis, name='Edit Devis By Id'),
-     path('list-all-Devis/detail/open/<int:Devis_id>',
+     path('list-all-devis/detail/open/<int:Devis_id>',
           Devis_Handler.H_OpenPdf, name='Open  PDFDevis By Id'),
 
           # Create Devis Urls
