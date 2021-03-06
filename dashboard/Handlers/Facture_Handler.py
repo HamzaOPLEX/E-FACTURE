@@ -225,8 +225,6 @@ def H_Edit_Facture(requests, facture_id):
                 )
                 APP_Facture_items.objects.filter(
                     BelongToFacture=Facture).delete()
-                FactureFilePath = APP_Facture_File_Path.objects.filter(
-                    BelongTo=Facture)
                 for data in datatable:
                     try:
                         APP_Facture_items.objects.create(

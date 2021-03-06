@@ -78,7 +78,7 @@
                                         onchange="GetSelectedThenSet();">
                                         {{ selectbody | CreateHTMLSelectOptions }}
                                     </select>
-                                    <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
+                                    <input type='text' id="ClientNameInput" placeholder="choisissez le nom du client ou entrez-en un nouveau"
                                         class="form-control editOption"
                                         onchange="GetInputAndSet2Select('ClientName',0);">
                                     </input>
@@ -106,7 +106,7 @@
                                     var client = client.replaceAll('&gt;', ">")
                                     var client = client.replaceAll('&lt;', "<")
                                     var client = client.replaceAll('&quot;', '"')
-                                    document.getElementById('SelectClient').value = client
+                                    document.getElementById('ClientName').value = client
                                     document.getElementsByClassName('editOption')[0].value = client
                                 </script>
                             </div>
