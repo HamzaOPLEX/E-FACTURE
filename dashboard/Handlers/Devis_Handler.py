@@ -102,7 +102,7 @@ def H_Create_New_Devis(requests):
 def H_Delete_Devis(requests, id):
     context = {'pagetitle': f'Supprimer un Devis'}
     # remove delete/<id> from URL
-    redirect_after_done = '/list-all-Devis/'
+    redirect_after_done = '/list-all-devis/'
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
@@ -211,10 +211,10 @@ def H_Edit_Devis(requests, Devis_id):
                 Devis.save()
                 messages.info(
                     requests, f"Le Devis {Devis_number} a été éditer avec succès")
-                return redirect(f'/list-all-Devis/')
+                return redirect(f'/list-all-devis/')
             else:
                 messages.error(requests, "Veuillez remplir toutes les données")
-                return redirect(f'/list-all-Devis/edit/{Devis_id}')
+                return redirect(f'/list-all-devis/edit/{Devis_id}')
     else:
         return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer Le Devis avec le nombre {Devis.Devis_number}', User.username, context, templatepath)
 

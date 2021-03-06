@@ -37,7 +37,7 @@ urlpatterns = [
      # Devis URL Handlers :
      ###########################################################################
           # List All Devis Urls
-     path('list-all-Devis/', Devis_Handler.H_List_All_Devis,
+     path('list-all-devis/', Devis_Handler.H_List_All_Devis,
           name='list all Devis'),
      path('list-all-devis/delete/<int:id>',
           Devis_Handler.H_Delete_Devis, name='Delete Devis By Id'),
@@ -47,7 +47,7 @@ urlpatterns = [
           Devis_Handler.H_OpenPdf, name='Open  PDFDevis By Id'),
 
           # Create Devis Urls
-     path('create-new-Devis/', Devis_Handler.H_Create_New_Devis,
+     path('create-new-devis/', Devis_Handler.H_Create_New_Devis,
           name='Create New Devis'),
      ###########################################################################
 
