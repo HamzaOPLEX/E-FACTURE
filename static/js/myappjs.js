@@ -15,11 +15,58 @@ function GetSelectedThenSet() {
             }
 
         }
-        document.getElementById('circle01').style.display = 'block'
-        document.getElementById('circle02').style.display = 'block'
+        if (clientname.value !== '-'){
+            document.getElementById('circle01').style.display = 'block'
+            document.getElementById('circle02').style.display = 'block'
+        }
         xhttp.open("GET", url, true);
         xhttp.send();
     }
+}
+function GetSelectedProductThenSet() {
+    var ProductName = document.getElementById("ProductName");
+    document.getElementsByClassName('editOption')[1].value = ProductName.value
+    var url = '/create-new-facture/getproductinfo/' + ProductName.value
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let Qs = document.getElementById('Qs').value
+            let ProductData = JSON.parse(this.responseText);
+            document.getElementById("PU").value = ProductData.PU;
+            document.getElementById('circle_addnew').style.display = 'none'
+            if (Qs.value !== null || Qs.value !== 0) {
+                document.getElementById('PT').value = document.getElementById("PU").value * Qs
+            }
+        }
+    };
+    if (ProductName.value !== '-') {
+        document.getElementById('circle_addnew').style.display = 'block'
+    }
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
+function GetSelectedProductThenSetEdit() {
+    var ProductName = document.getElementById("Edit_ProductName");
+    document.getElementsByClassName('editOption')[2].value = ProductName.value
+    var ProductName = document.getElementById("Edit_ProductName");
+    var url = '/create-new-facture/getproductinfo/' + ProductName.value
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let Qs = document.getElementById('Edit_Qs').value
+            let ProductData = JSON.parse(this.responseText);
+            document.getElementById("Edit_PU").value = ProductData.PU;
+            document.getElementById('circle_edit').style.display = 'none'
+            if (Qs.value !== null || Qs.value !== 0) {
+                document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
+            }
+        }
+    };
+    if (ProductName.value !== '-') {
+        document.getElementById('circle_edit').style.display = 'block'
+    }
+    xhttp.open("GET", url, true);
+    xhttp.send();
 }
 
 

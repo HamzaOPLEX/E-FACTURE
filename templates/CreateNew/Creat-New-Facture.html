@@ -190,24 +190,6 @@
                         class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
                     </input>
                     <script>
-                        function GetSelectedProductThenSet() {
-                            var ProductName = document.getElementById("ProductName");
-                            document.getElementsByClassName('editOption')[1].value = ProductName.value
-                            var url = '/create-new-facture/getproductinfo/' + ProductName.value
-                            var xhttp = new XMLHttpRequest();
-                            xhttp.onreadystatechange = function () {
-                                if (this.readyState == 4 && this.status == 200) {
-                                    let Qs = document.getElementById('Qs').value
-                                    let ProductData = JSON.parse(this.responseText);
-                                    document.getElementById("PU").value = ProductData.PU;
-                                    if (Qs.value !== null || Qs.value !== 0) {
-                                        document.getElementById('PT').value = document.getElementById("PU").value * Qs
-                                    }
-                                }
-                            };
-                            xhttp.open("GET", url, true);
-                            xhttp.send();
-                        }
                         function CalculatePT() {
                             document.getElementById('PT').value = document.getElementById('Qs').value * document.getElementById("PU").value
                         }
@@ -217,6 +199,13 @@
                     <label>PU</label>
                     <input type="text" class="form-control" id='PU' name="PU" onkeyup="CalculatePT();"
                         autocomplete="off" placeholder="PU" required>
+                    <div id="circle_addnew"
+                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>PT</label>
@@ -255,27 +244,6 @@
                     <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
                         class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
                     <script>
-                        function GetSelectedProductThenSetEdit() {
-                            var ProductName = document.getElementById("Edit_ProductName");
-                            document.getElementsByClassName('editOption')[2].value = ProductName.value
-
-                            var ProductName = document.getElementById("Edit_ProductName");
-                            var url = '/create-new-facture/getproductinfo/' + ProductName.value
-
-                            var xhttp = new XMLHttpRequest();
-                            xhttp.onreadystatechange = function () {
-                                if (this.readyState == 4 && this.status == 200) {
-                                    let Qs = document.getElementById('Edit_Qs').value
-                                    let ProductData = JSON.parse(this.responseText);
-                                    document.getElementById("Edit_PU").value = ProductData.PU;
-                                    if (Qs.value !== null || Qs.value !== 0) {
-                                        document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
-                                    }
-                                }
-                            };
-                            xhttp.open("GET", url, true);
-                            xhttp.send();
-                        }
                         function CalculatePTedit() {
                             document.getElementById('Edit_PT').value = document.getElementById('Edit_Qs').value * document.getElementById("Edit_PU").value
                         }
@@ -285,6 +253,13 @@
                     <label>PU</label>
                     <input type="text" class="form-control" id='Edit_PU' name="PU" onkeyup="CalculatePTedit();"
                         autocomplete="off" placeholder="PU" required>
+                    <div id="circle_addnew"
+                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>PT</label>
