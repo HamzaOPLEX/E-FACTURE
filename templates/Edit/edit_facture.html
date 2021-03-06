@@ -74,18 +74,18 @@
                             <div class="col-sm-6">
                                 <div class="form-group" style="height : 60px;">
                                     <label>DESIGNATION</label>
-                                    <select id="SelectClient" name="client_name" class="form-control"
+                                    <select id="ClientName" name="client_name" class="form-control"
                                         onchange="GetSelectedThenSet();">
                                         {{ selectbody | CreateHTMLSelectOptions }}
                                     </select>
                                     <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
                                         class="form-control editOption"
-                                        onchange="GetInputAndSet2Select('SelectClient',0);">
+                                        onchange="GetInputAndSet2Select('ClientName',0);">
                                     </input>
                                 </div>
                                 <script>
                                     function GetSelectedThenSet() {
-                                        var clientname = document.getElementById("SelectClient");
+                                        var clientname = document.getElementById("ClientName");
                                         if (clientname.value !== '') {
                                             document.getElementsByClassName('editOption')[0].value = clientname.value
                                             var url = '/create-new-facture/getclientinfo/' + clientname.value
