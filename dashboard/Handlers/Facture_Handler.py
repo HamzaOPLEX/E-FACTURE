@@ -127,7 +127,7 @@ def H_Delete_Facture(requests, id):
                     BelongToFacture=facture)
                 facture_items.delete()
                 facture.delete()
-                actionmsg = f'{User.username} Supprimer la facture {facture.facture_number}'
+                actionmsg = f'{User.username} Supprimer la facture {facture.number}'
                 APP_History.objects.create(
                     CreatedBy=User, action='Supprimer une facture', action_detail=actionmsg)
                 messages.info(
@@ -140,7 +140,7 @@ def H_Delete_Facture(requests, id):
             return HTTP_404(requests)
     else:
         APP_Warning.objects.create(
-            what='supprimer', what_detail=f'{User.username} essayez de supprimer la facture avec le nombre {facture.facture_number}', Who=User.username)
+            what='supprimer', what_detail=f'{User.username} essayez de supprimer la facture avec le nombre {facture.number}', Who=User.username)
         return HTTP_403(request=requests, context=context)
 
 @RequireLogin
@@ -241,7 +241,7 @@ def H_Edit_Facture(requests, facture_id):
                 messages.error(requests, "Veuillez remplir toutes les données")
                 return redirect(f'/list-all-facturs/edit/{facture_id}')
     else:
-        return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer la facture avec le nombre {Facture.facture_number}', User.username, context, templatepath)
+        return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer la facture avec le nombre {Facture.number}', User.username, context, templatepath)
 
 @RequireLogin
 # All Factures Table
