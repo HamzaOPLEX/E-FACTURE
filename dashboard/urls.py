@@ -54,17 +54,17 @@ urlpatterns = [
      # BL URL Handlers :
      ###########################################################################
     # List All BL Urls
-     path('list-all-BL/', BL_Handler.H_List_All_BL,
+     path('list-all-bl/', BL_Handler.H_List_All_BL,
           name='Create New BL'),
-     path('list-all-BL/delete/<int:id>',
+     path('list-all-bl/delete/<int:id>',
           BL_Handler.H_Delete_BL, name='Delete BL By Id'),
-     path('list-all-BL/edit/<int:BL_id>',
+     path('list-all-bl/edit/<int:BL_id>',
           BL_Handler.H_Edit_BL, name='Edit BL By Id'),
-     path('list-all-BL/detail/open/<int:BL_id>',
+     path('list-all-bl/detail/open/<int:BL_id>',
           BL_Handler.H_OpenPdf, name='Open  PDFBL By Id'),
 
     # Create BL Urls
-     path('create-new-BL/', BL_Handler.H_Create_New_BL,
+     path('create-new-bl/', BL_Handler.H_Create_New_BL,
           name='Create New BL'),
      ###########################################################################
 

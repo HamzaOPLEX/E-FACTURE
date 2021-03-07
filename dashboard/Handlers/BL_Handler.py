@@ -8,7 +8,7 @@ from dashboard.APPfunctions.APPfunctions import *
 from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
 from dashboard.Handlers.ERROR_Handlers import *
 from dashboard.models import *
-from dashboard.pdf_templates.Invoice.Invoice import DrawNotechPdf
+from dashboard.pdf_templates.BL.bl import DrawNotechPdf
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
@@ -43,7 +43,6 @@ def H_Create_New_BL(requests):
         ICE = requests.POST['ICE']
         place = requests.POST['place']
         date = requests.POST['date']
-        isPaid = requests.POST['ispaid']
 
         # check if len(datatable)!=0 and all len() rows in that table != 4
         if len(datatable) != 0:
@@ -58,31 +57,22 @@ def H_Create_New_BL(requests):
             datatable_status = 'not valid'
         # Check All Required POST Data
         if datatable and BL_number and client_name and client_name != '-' and ICE and place and date and datatable_status == 'valid':
-            if isPaid == 'Oui':
-                paid_method = requests.POST['paiementmethod']
-                if paid_method not in ['Cart', 'Espèces', 'Chèque']:
-                    messages.error(requests, "paid method erreur")
-                    return redirect('/create-new-BL/')
-            else:
-                paid_method = 'aucun'
-                isPaid = 'Non'
             # Check if BL_number already Exist
-            all_BL_numbers = [n.BL_number for n in All_BLs]
+            all_BL_numbers = [n.number for n in All_BLs]
             if int(BL_number) in all_BL_numbers:
+
                 messages.error(
                     requests, f"un BL avec le même numéro ({BL_number}) existe déjà")
-                return redirect('/create-new-BL/')
+                return redirect('/create-new-bl/')
             if int(BL_number) not in all_BL_numbers:
                 # Created BL With POST data if BL_number not found
                 BL = APP_Created_BL.objects.create(
-                    BL_number=BL_number,
+                    number=BL_number,
                     Client_Name=client_name,
                     ICE=ICE,
                     Place=place,
                     Date=date,
                     CreatedBy=User,
-                    isPaid=isPaid,
-                    Paiment_Mathod=paid_method
                 )
                 # Create a History
                 actiondetail = f'{User.username} crée un nouvelle BL avec le numéro {BL_number} en {Fix_Date(str(datetime.today()))}'
@@ -103,18 +93,17 @@ def H_Create_New_BL(requests):
                     )
                 messages.info(
                     requests, f"Le BL {BL_number} a été crée avec succès")
-                return redirect(f'/list-all-BL/')
+                return redirect(f'/list-all-bl/')
         else:
             messages.error(requests, "Veuillez remplir toutes les données")
-            return redirect('/create-new-BL/')
+            return redirect('/create-new-bl/')
 
 
 @RequireLogin
 def H_Delete_BL(requests, id):
     context = {'pagetitle': f'Supprimer un BL'}
     # remove delete/<id> from URL
-    redirect_after_done = '/'.join(str(requests.get_full_path()
-                                       ).split('/')[0:-2])
+    redirect_after_done = '/list-all-bl/'
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
@@ -128,7 +117,7 @@ def H_Delete_BL(requests, id):
                     BelongToBL=BL)
                 BL_items.delete()
                 BL.delete()
-                actionmsg = f'{User.username} Supprimer Le BL {BL.BL_number}'
+                actionmsg = f'{User.username} Supprimer Le BL {BL.number}'
                 APP_History.objects.create(
                     CreatedBy=User, action='Supprimer un BL', action_detail=actionmsg)
                 messages.info(
@@ -175,7 +164,7 @@ def H_Edit_BL(requests, BL_id):
             BL_item = APP_BL_items.objects.filter(
                 BelongToBL=BL)
             # generate table of BL items and pass him in context
-            table = generate_table_of_BL_items(BL_item)
+            table = generate_table_of_BL_items(BL_items=BL_item)
             context['tablebody'] = table
             # pass client name
             context['client'] = BL.Client_Name
@@ -189,7 +178,6 @@ def H_Edit_BL(requests, BL_id):
             ICE = requests.POST['ICE']
             place = requests.POST['place']
             date = requests.POST['date']
-            isPaid = requests.POST['ispaid']
             # check if len(datatable)!=0 and all len() rows in that table != 4
             if len(datatable) != 0:
                 datatable_status = 'not valid'
@@ -203,21 +191,10 @@ def H_Edit_BL(requests, BL_id):
                 datatable_status = 'not valid'
             # Check if all required values are in POST
             if datatable and BL_number and client_name and ICE and place and date and datatable_status == 'valid':
-                if isPaid == 'Oui':
-                    paid_method = requests.POST['paiementmethod']
-                    if paid_method not in ['Cart', 'Espèces', 'Chèque']:
-                        messages.error(
-                            requests, "Veuillez remplir toutes les données")
-                        return redirect('/create-new-BL/')
-                else:
-                    paid_method = "aucun"
-                    isPaid = 'Non'
                 BL.Client_Name = client_name
                 BL.ICE = ICE
                 BL.Place = place
                 BL.Date = date
-                BL.isPaid = isPaid
-                BL.Paiment_Mathod = paid_method
                 actiondetail = f'{User.username} editer un BL avec le numéro {BL_number} en {Fix_Date(str(datetime.today()))}'
                 APP_History.objects.create(
                     CreatedBy=User,
@@ -225,10 +202,7 @@ def H_Edit_BL(requests, BL_id):
                     action_detail=actiondetail,
                     DateTime=str(datetime.today())
                 )
-                APP_BL_items.objects.filter(
-                    BelongToBL=BL).delete()
-                BLFilePath = APP_BL_File_Path.objects.filter(
-                    BelongTo=BL)
+                APP_BL_items.objects.filter(BelongToBL=BL).delete()
                 for data in datatable:
                     try:
                         APP_BL_items.objects.create(
@@ -238,10 +212,10 @@ def H_Edit_BL(requests, BL_id):
                 BL.save()
                 messages.info(
                     requests, f"Le BL {BL_number} a été éditer avec succès")
-                return redirect(f'/list-all-BL/')
+                return redirect(f'/list-all-bl/')
             else:
                 messages.error(requests, "Veuillez remplir toutes les données")
-                return redirect(f'/list-all-BL/edit/{BL_id}')
+                return redirect(f'/list-all-bl/edit/{BL_id}')
     else:
         return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer Le BL avec le nombre {BL.BL_number}', User.username, context, templatepath)
 
@@ -258,9 +232,9 @@ def H_List_All_BL(requests):
     if requests.method == "GET":
         # Generate HTML Table and Pass it in context
         BLs = list(APP_Created_BL.objects.all())
-        tablebody = generate_table_of_created_BLs(BLs=BLs)
+        tablebody = generate_table_of_BL(BL=BLs)
         context['tablebody'] = tablebody
-        return render(requests, 'List-All-BLs/Created-BL.html', context)
+        return render(requests, 'List-All-Factures/Created-BL.html', context)
 
 
 @RequireLogin
@@ -276,11 +250,8 @@ def H_OpenPdf(requests, BL_id):
             BL_item = APP_BL_items.objects.filter(BelongToBL=BL)
             try:
                 CalculedTOTAL = Calcule_TVA_TOTAL_TTC(BL_item)
-                Company_TVATAUX = APP_Settings.objects.all().first().Company_TVATAUX
-                Company_ICE = APP_Settings.objects.all().first().Company_ICE
                 Company_City = APP_Settings.objects.all().first().Company_Place
-                filepath = DrawNotechPdf(
-                    BL, BL_item, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City)
+                filepath = DrawNotechPdf(BL, BL_item, CalculedTOTAL, Company_City)
             except AttributeError:
                 return render(requests, 'ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
             return FileResponse(open(filepath, 'rb'), content_type='application/pdf')

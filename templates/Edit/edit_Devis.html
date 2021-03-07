@@ -1,12 +1,12 @@
 {% extends "main.html" %}
 {% load Filters %}
 {% block content %}
-{% if User.userpermission == 'Admin' or facture.CreatedBy.id == User.id %}
+{% if User.userpermission == 'Admin' or Devis.CreatedBy.id == User.id %}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.title}} bienvenue sur la page pour Éditer le Devis {{facture.facture_number}}
+                <h1>{{User.username.upper}} bienvenue sur la page pour Éditer le Devis {{Devis.number}}
                 </h1>
             </div>
         </div>
@@ -150,7 +150,7 @@
     </div>
 </section>
 <div class="modal fade" id="AddNewFactureItemModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog card card-default">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
@@ -159,7 +159,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Qs</label>
-                    <input type="number" class="form-control" id='Qs' name="Qs" autocomplete="off"
+                    <input type="number" min="0" class="form-control" id='Qs' name="Qs" autocomplete="off"
                         onkeyup="CalculatePT();" placeholder="Qs" required>
                 </div>
                 <div class="form-group" style="height: 65px">
@@ -171,24 +171,6 @@
                         class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
                     </input>
                     <script>
-                        function GetSelectedProductThenSet() {
-                            var ProductName = document.getElementById("ProductName");
-                            document.getElementsByClassName('editOption')[1].value = ProductName.value
-                            var url = '/create-new-facture/getproductinfo/' + ProductName.value
-                            var xhttp = new XMLHttpRequest();
-                            xhttp.onreadystatechange = function () {
-                                if (this.readyState == 4 && this.status == 200) {
-                                    let Qs = document.getElementById('Qs').value
-                                    let ProductData = JSON.parse(this.responseText);
-                                    document.getElementById("PU").value = ProductData.PU;
-                                    if (Qs.value !== null || Qs.value !== 0) {
-                                        document.getElementById('PT').value = document.getElementById("PU").value * Qs
-                                    }
-                                }
-                            };
-                            xhttp.open("GET", url, true);
-                            xhttp.send();
-                        }
                         function CalculatePT() {
                             document.getElementById('PT').value = document.getElementById('Qs').value * document.getElementById("PU").value
                         }
@@ -196,8 +178,15 @@
                 </div>
                 <div class="form-group">
                     <label>PU</label>
-                    <input type="number" class="form-control" id='PU' name="PU" onkeyup="CalculatePT();"
+                    <input type="text" class="form-control" id='PU' name="PU" onkeyup="CalculatePT();"
                         autocomplete="off" placeholder="PU" required>
+                    <div id="circle_addnew"
+                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>PT</label>
@@ -215,11 +204,12 @@
     </div>
 </div>
 
+
 <div class="modal fade" id="EditFactureItemModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog  card card-default">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
+                <h4 class="modal-title">Entrez toutes les informations ici : </h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -237,27 +227,6 @@
                     <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
                         class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
                     <script>
-                        function GetSelectedProductThenSetEdit() {
-                            var ProductName = document.getElementById("Edit_ProductName");
-                            document.getElementsByClassName('editOption')[2].value = ProductName.value
-
-                            var ProductName = document.getElementById("Edit_ProductName");
-                            var url = '/create-new-facture/getproductinfo/' + ProductName.value
-
-                            var xhttp = new XMLHttpRequest();
-                            xhttp.onreadystatechange = function () {
-                                if (this.readyState == 4 && this.status == 200) {
-                                    let Qs = document.getElementById('Edit_Qs').value
-                                    let ProductData = JSON.parse(this.responseText);
-                                    document.getElementById("Edit_PU").value = ProductData.PU;
-                                    if (Qs.value !== null || Qs.value !== 0) {
-                                        document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
-                                    }
-                                }
-                            };
-                            xhttp.open("GET", url, true);
-                            xhttp.send();
-                        }
                         function CalculatePTedit() {
                             document.getElementById('Edit_PT').value = document.getElementById('Edit_Qs').value * document.getElementById("Edit_PU").value
                         }
@@ -265,8 +234,15 @@
                 </div>
                 <div class="form-group">
                     <label>PU</label>
-                    <input type="number" class="form-control" id='Edit_PU' name="PU" onkeyup="CalculatePTedit();"
+                    <input type="text" class="form-control" id='Edit_PU' name="PU" onkeyup="CalculatePTedit();"
                         autocomplete="off" placeholder="PU" required>
+                    <div id="circle_addnew"
+                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
+                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            <div class="loader" style="animation: rotate 1.5s linear infinite !important">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>PT</label>
@@ -295,8 +271,7 @@
 
     <div class="card">
         <div class="card-header bg-white font-weight-bold">
-            Editer la facture {{facture.facture_number}}
-
+            Editer le Devis {{Devis.number}}
         </div>
         <div class="card-body">
             <center>{{PermissionMessage | safe}}</center>

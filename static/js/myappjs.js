@@ -7,12 +7,12 @@ function GetSelectedThenSet() {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById('circle01').style.display = 'none'
-                document.getElementById('circle02').style.display = 'none'
                 ClientData = JSON.parse(this.responseText);
                 document.getElementById("ICE").value = ClientData.ICE;
                 document.getElementById("City").value = ClientData.City;
             }
+            document.getElementById('circle01').style.display = 'none'
+            document.getElementById('circle02').style.display = 'none'
 
         }
         if (clientname.value !== '-'){
@@ -33,10 +33,10 @@ function GetSelectedProductThenSet() {
             let Qs = document.getElementById('Qs').value
             let ProductData = JSON.parse(this.responseText);
             document.getElementById("PU").value = ProductData.PU;
-            document.getElementById('circle_addnew').style.display = 'none'
             if (Qs.value !== null || Qs.value !== 0) {
                 document.getElementById('PT').value = document.getElementById("PU").value * Qs
             }
+            document.getElementById('circle_addnew').style.display = 'none'
         }
     };
     if (ProductName.value !== '-') {
@@ -56,10 +56,11 @@ function GetSelectedProductThenSetEdit() {
             let Qs = document.getElementById('Edit_Qs').value
             let ProductData = JSON.parse(this.responseText);
             document.getElementById("Edit_PU").value = ProductData.PU;
-            document.getElementById('circle_edit').style.display = 'none'
             if (Qs.value !== null || Qs.value !== 0) {
                 document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
             }
+            document.getElementById('circle_edit').style.display = 'none'
+
         }
     };
     if (ProductName.value !== '-') {

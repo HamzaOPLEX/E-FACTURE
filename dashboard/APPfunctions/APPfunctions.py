@@ -172,6 +172,30 @@ def generate_table_of_devis(devis=''):
         tablebody.append(D)
     return tablebody
 
+
+def generate_table_of_BL(BL=''):
+    BL = list(BL)[::-1]
+    tablebody = []
+    for bl in BL:
+        BL_number = bl.number
+        client = bl.Client_Name
+        date = bl.Date
+        CreatedBy = bl.CreatedBy
+        D = {}
+        D['N'] = BL_number
+        D['client'] = client
+        D['date'] = date
+        D['CreatedBy'] = CreatedBy
+        D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-bl/edit/{bl.id}" title="Edit" data-toggle="tooltip">
+                                <i class="fas fa-pencil-alt"></i>\n</a> 
+                            <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-bl/delete/{bl.id}\');" title="Delete" data-toggle="tooltip">
+                                <i class="fas fa-trash"></i></a>\n
+                            <a href="/list-all-bl/detail/open/{bl.id}" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                            '''
+        tablebody.append(D)
+    return tablebody
+
+
 def generate_table_of_devis_items(Devis_items=''):
     tablebody = []
     for item in Devis_items:
@@ -191,6 +215,44 @@ def generate_table_of_devis_items(Devis_items=''):
         D['Action'] = action
         tablebody.append(D)
     return tablebody
+
+
+def generate_table_of_BL_items(BL_items=''):
+    tablebody = []
+    for item in BL_items:
+        Qs = str(item.Qs).strip()
+        DESIGNATION = str(item.DESIGNATION).strip()
+        PU = str(item.PU).strip()
+        PT = str(item.PT).strip()
+        D = {}
+        D['Qs'] = Qs
+        D['DT'] = DESIGNATION
+        D['PU'] = PU
+        D['PT'] = PT
+        action = """
+                    <button type="button" class="btn btn-danger btn-sm" onclick="DeleteSelectedRow(this);"><i class="fas fa-trash"></i></button>\n
+                    <button type="button" id="editrow" class="btn btn-info btn-sm" style="margin-left: 12px;padding-right: 6px;" onclick="EditSelectedRow(this);"><i class="fas fa-edit"></i></button>
+                """
+        D['Action'] = action
+        tablebody.append(D)
+    return tablebody
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def Calcule_TVA_TOTAL_TTC(factureitemsobj):
     TOTAL = 0

@@ -46,7 +46,7 @@ class APP_Created_Facture(models.Model):
     isPaid = models.CharField(choices=choose_ispaid,max_length=5, default='Non')
     Paiment_Mathod = models.CharField(max_length=255,choices=choose_bywhatpaid, default='aucun', null=False)
     def __str__(self):
-        return str(self.facture_number)+'-'+self.Client_Name
+        return str(self.number)+'-'+self.Client_Name
 
     def clean(self):
         if self.isPaid == "Non":
@@ -101,15 +101,14 @@ class APP_Created_BL(models.Model):
     Place = models.CharField(max_length=255)
     CreatedBy = models.ForeignKey(APP_User, on_delete=models.SET_NULL, null=True, editable=False)
     def __str__(self):
-        return str(self.BL_number)+'-'+self.Client_Name
+        return str(self.number)+'-'+self.Client_Name
 
 class APP_BL_items(models.Model):
     Qs = models.IntegerField(default=0)
     DESIGNATION = models.TextField(default=None)
     PU = models.IntegerField(default=0)
     PT = models.BigIntegerField(default=0)
-    BelongToBL = models.ForeignKey(
-        APP_Created_BL, on_delete=models.CASCADE, editable=False)
+    BelongToBL = models.ForeignKey(APP_Created_BL, on_delete=models.CASCADE, editable=False)
 
     def __str__(self):
         return self.DESIGNATION
