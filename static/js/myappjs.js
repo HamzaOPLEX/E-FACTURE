@@ -10,10 +10,13 @@ function GetSelectedThenSet() {
                 ClientData = JSON.parse(this.responseText);
                 document.getElementById("ICE").value = ClientData.ICE;
                 document.getElementById("City").value = ClientData.City;
+                document.getElementById('circle01').style.display = 'none'
+                document.getElementById('circle02').style.display = 'none'
             }
-            document.getElementById('circle01').style.display = 'none'
-            document.getElementById('circle02').style.display = 'none'
-
+            if (this.status == 404){
+                document.getElementById('circle01').style.display = 'none'
+                document.getElementById('circle02').style.display = 'none'
+            }
         }
         if (clientname.value !== '-'){
             document.getElementById('circle01').style.display = 'block'
@@ -38,6 +41,10 @@ function GetSelectedProductThenSet() {
             }
             document.getElementById('circle_addnew').style.display = 'none'
         }
+        if (this.status == 404){
+            document.getElementById('circle_addnew').style.display = 'none'
+        }
+
     };
     if (ProductName.value !== '-') {
         document.getElementById('circle_addnew').style.display = 'block'
@@ -60,7 +67,9 @@ function GetSelectedProductThenSetEdit() {
                 document.getElementById('Edit_PT').value = document.getElementById("Edit_PU").value * Qs
             }
             document.getElementById('circle_edit').style.display = 'none'
-
+        }
+        if (this.status == 404) {
+            document.getElementById('circle_edit').style.display = 'none'
         }
     };
     if (ProductName.value !== '-') {
@@ -241,7 +250,7 @@ function EditSelectedRow(row) {
     }
 
     $(document).ready(function () {
-        $("#EditFactureItemModal").modal({ backdrop: true });
+        $("#EditFactureItemModal").modal({ backdrop: false });
     });
 }
 function tableToJSON() {
