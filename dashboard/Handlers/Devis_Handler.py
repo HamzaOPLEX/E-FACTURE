@@ -119,8 +119,7 @@ def H_Delete_Devis(requests, id):
                 actionmsg = f'{User.username} Supprimer Le Devis {Devis.number}'
                 APP_History.objects.create(
                     CreatedBy=User, action='Supprimer un Devis', action_detail=actionmsg)
-                messages.info(
-                    requests, "Le Devis a été supprimée avec succès")
+                messages.info(requests, "Le Devis a été supprimée avec succès")
                 return redirect(redirect_after_done)
             else:
                 messages.error(requests, "Oops, Mot de passe incorrect !")
@@ -260,3 +259,51 @@ def H_OpenPdf(requests, Devis_id):
             return HTTP_404(requests, context)
     except APP_Created_Devis.DoesNotExist:
         return HTTP_404(requests, context)
+
+
+
+
+
+
+
+@RequireLogin
+def H_Devis_To_Facture(requests,Devis_id):
+    userid = requests.session['session_id']
+    User = get_object_or_404(APP_User.objects, id=userid)
+    Devis = get_object_or_404(APP_Created_Devis,id=Devis_id)
+    Devis_items = APP_Devis_items.objects.filter(BelongToDevis=Devis)
+    isAlreadyConverted = APP_Created_Facture.objects.filter(ConvertedFrom=Devis)
+    if requests.method == 'GET':
+        if isAlreadyConverted :
+            messages.info(
+                requests, f"Ce Devis a été Déjà Convertir à une Facture  avec le nombre {isAlreadyConverted[0].number}")
+            return redirect('/list-all-facturs/')
+        elif not isAlreadyConverted :
+            facturen_nmbr = len(APP_Created_Facture.objects.all()) + 1
+            facture = APP_Created_Facture.objects.create(
+                        number=facturen_nmbr,
+                        Client_Name=Devis.Client_Name,
+                        ICE=Devis.ICE,
+                        Date=Devis.Date,
+                        Place=Devis.Place,
+                        CreatedBy=User,
+                        ConvertedFrom=Devis
+                    )
+            for item in Devis_items:
+                APP_Facture_items.objects.create(
+                    Qs=item.Qs,
+                    PU=item.PU,
+                    DESIGNATION=item.DESIGNATION,
+                    PT=item.PT,
+                    BelongToFacture=facture
+                )
+            actiondetail = f'{User.username} convertir le Devis avec le numéro {Devis.number} a une facture avec le numéro {facture.number} en {Fix_Date(str(datetime.today()))}'
+            APP_History.objects.create(
+                CreatedBy=User,
+                action='convertir un Devis',
+                action_detail=actiondetail,
+                DateTime=str(datetime.today())
+            )
+            return redirect('/list-all-facturs/')
+    else:
+        return HTTP_404(requests)

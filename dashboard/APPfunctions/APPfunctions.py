@@ -168,6 +168,7 @@ def generate_table_of_devis(devis=''):
                             <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-devis/delete/{dv.id}\');" title="Delete" data-toggle="tooltip">
                                 <i class="fas fa-trash"></i></a>\n
                             <a href="/list-all-devis/detail/open/{dv.id}" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                            <a href="/devis-to-facture/{dv.id}" target="_blank" class="btn btn-warning btn-sm"><i class="fas fa-sync-alt"></i></a>
                             '''
         tablebody.append(D)
     return tablebody

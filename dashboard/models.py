@@ -25,6 +25,35 @@ class APP_User(models.Model):
     def __str__(self):
         return str(self.username)
 
+# Devis Tables
+########################################
+
+
+class APP_Created_Devis(models.Model):
+    number = models.IntegerField(unique=True)
+    Client_Name = models.TextField()
+    ICE = models.CharField(max_length=255)
+    Date = models.DateField(max_length=255)
+    Place = models.CharField(max_length=255)
+    CreatedBy = models.ForeignKey(
+        APP_User, on_delete=models.SET_NULL, null=True, editable=False)
+
+    # def __str__(self):
+    #     return str(self.number)+'-'+self.Client_Name
+
+
+class APP_Devis_items(models.Model):
+    Qs = models.IntegerField(default=0)
+    DESIGNATION = models.TextField(default=None)
+    PU = models.IntegerField(default=0)
+    PT = models.BigIntegerField(default=0)
+    BelongToDevis = models.ForeignKey(
+        APP_Created_Devis, on_delete=models.CASCADE, editable=False)
+
+    def __str__(self):
+        return self.DESIGNATION
+########################################
+
 # Facture Tables
 ########################################
 class APP_Created_Facture(models.Model):
@@ -45,6 +74,7 @@ class APP_Created_Facture(models.Model):
     CreatedBy = models.ForeignKey(APP_User, on_delete=models.SET_NULL, null=True, editable=False)
     isPaid = models.CharField(choices=choose_ispaid,max_length=5, default='Non')
     Paiment_Mathod = models.CharField(max_length=255,choices=choose_bywhatpaid, default='aucun', null=False)
+    ConvertedFrom = models.ForeignKey(APP_Created_Devis, on_delete=models.SET_NULL, null=True, editable=False)
     def __str__(self):
         return str(self.number)+'-'+self.Client_Name
 
@@ -65,30 +95,7 @@ class APP_Facture_items(models.Model):
 ########################################
 
 
-# Devis Tables
-########################################
-class APP_Created_Devis(models.Model):
-    number = models.IntegerField(unique=True)
-    Client_Name = models.TextField()
-    ICE = models.CharField(max_length=255)
-    Date = models.DateField(max_length=255)
-    Place = models.CharField(max_length=255)
-    CreatedBy = models.ForeignKey(
-        APP_User, on_delete=models.SET_NULL, null=True, editable=False)
 
-    # def __str__(self):
-    #     return str(self.number)+'-'+self.Client_Name
-
-class APP_Devis_items(models.Model):
-    Qs = models.IntegerField(default=0)
-    DESIGNATION = models.TextField(default=None)
-    PU = models.IntegerField(default=0)
-    PT = models.BigIntegerField(default=0)
-    BelongToDevis = models.ForeignKey(APP_Created_Devis, on_delete=models.CASCADE, editable=False)
-
-    def __str__(self):
-        return self.DESIGNATION
-########################################
 
 
 # BL Tables
