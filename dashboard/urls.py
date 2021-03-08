@@ -46,6 +46,8 @@ urlpatterns = [
      path('list-all-devis/detail/open/<int:Devis_id>',
           Devis_Handler.H_OpenPdf, name='Open  PDFDevis By Id'),
 
+     path('devis-to-facture/<int:Devis_id>', Devis_Handler.H_Devis_To_Facture, name='Convert Devis To Facture'),
+
           # Create Devis Urls
      path('create-new-devis/', Devis_Handler.H_Create_New_Devis,
           name='Create New Devis'),
