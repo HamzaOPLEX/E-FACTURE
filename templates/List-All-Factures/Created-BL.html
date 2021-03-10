@@ -30,16 +30,16 @@
     <div id="accordion">
         {% for bl in all_stuff %}
         <div class="card">
-            <div class="card-header" id="heading{{bl.3.upper}}">
+            <div class="card-header" id="heading{{bl.2.upper}}">
                 <h5 class="mb-0">
                     <button class="btn btn-info" data-toggle="collapse" onclick="$(this).collapse('hide')"
-                        data-target="#collapse{{bl.3.upper}}" aria-expanded="true"
-                        aria-controls="collapse{{bl.3.upper}}">
+                        data-target="#collapse{{bl.2.upper}}" aria-expanded="true"
+                        aria-controls="collapse{{bl.2.upper}}">
                         <b>{{bl.1.upper}}</b>
                     </button>
                 </h5>
             </div>
-            <div id="collapse{{bl.3.upper}}" class="collapse hide" aria-labelledby="heading{{bl.3.upper}}"
+            <div id="collapse{{bl.2.upper}}" class="collapse hide" aria-labelledby="heading{{bl.2.upper}}"
                 data-parent="#accordion">
                 <div class="card-body">
                     <div class="text-center" style="margin-top: -19px;">
