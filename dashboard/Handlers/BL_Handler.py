@@ -230,8 +230,10 @@ def H_List_All_BL(requests):
     context = {'pagetitle': 'Lister Toutes Les BL',
                'User': User, 'selecteditem': 'list-all-BLs'}
     if requests.method == "GET":
-        # Generate HTML Table and Pass it in context
-
+        """
+            set() : remove duplicated clients
+            n : for increment by 1 for the colapss ID
+        """
         # For each client get his BL's :
         all_bl_clients = list(set([(clientobj.Client_Name,clientobj.ICE,clientobj.Place) for clientobj in  APP_Created_BL.objects.all()]))
         all_stuff = []
