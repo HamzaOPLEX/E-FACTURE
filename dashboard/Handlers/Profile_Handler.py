@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.shortcuts import HttpResponse, redirect, render, get_object_or_404
 from dashboard.APPfunctions.APPfunctions import Fix_Date
 
+
 @RequireLogin
 def Profile(requests):
     context = {'pagetitle': 'User Profile'}
@@ -16,7 +17,7 @@ def Profile(requests):
         factures = list(APP_Created_Facture.objects.filter(CreatedBy=User))
         tablebody = []
         for facture in factures:
-            facture_number = facture.facture_number
+            facture_number = facture.number
             client = facture.Client_Name
             date = facture.Date
             D = {}

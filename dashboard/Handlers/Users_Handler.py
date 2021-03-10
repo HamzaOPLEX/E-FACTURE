@@ -115,7 +115,7 @@ def ShowUserProfile(requests, id):
                 APP_Created_Facture.objects.filter(CreatedBy=UserTarget))
             tablebody = []
             for facture in factures:
-                facture_number = facture.facture_number
+                facture_number = facture.number
                 client = facture.Client_Name
                 date = facture.Date
                 D = {}

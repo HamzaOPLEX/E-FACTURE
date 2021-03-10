@@ -1,6 +1,5 @@
 {% extends "main.html" %}
 {% load Filters %}
-
 {% block content %}
 <style>
     tr {
@@ -14,7 +13,8 @@
                 <h1>Toutes les Bon de Laivrason crées</h1>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.container-fluid -->
 </section>
 <section class="content">
     {% if messages %}
@@ -27,34 +27,43 @@
     </div>
     {% endfor %}
     {% endif %}
-    <div class="card">
-        <!-- /.card-header -->
-        <div class="card-body">
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nom du client:</th>
-                        <th>La Date:</th>
-                        <th>Créé par:</th>
-                        <th>Les Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{tablebody | CreateTableBody}}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>N°</th>
-                        <th>Nom du client:</th>
-                        <th>La Date:</th>
-                        <th>Créé par:</th>
-                        <th>Les Actions</th>
-                    </tr>
-                </tfoot>
-            </table>
+    <div id="accordion">
+        {% for bl in all_stuff %}
+        <div class="card">
+            <div class="card-header" id="heading{{bl.1.upper}}">
+                <h5 class="mb-0">
+                    <button class="btn btn-info" data-toggle="collapse" onclick="$(this).collapse('hide')"
+                        data-target="#collapse{{bl.1.upper}}" aria-expanded="true"
+                        aria-controls="collapse{{bl.1.upper}}">
+                        <b>{{bl.1.upper}}</b>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapse{{bl.1.upper}}" class="collapse hide" aria-labelledby="heading{{bl.1.upper}}"
+                data-parent="#accordion">
+                <div class="card-body">
+                    <div class="text-center" style="margin-top: -19px;">
+                        <button class="btn btn-info" style="margin:auto;"><i>Convertir</i></button>
+                    </div>
+                    <table class="table table-head-fixed">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%;">choisir</th>
+                                <th>N°</th>
+                                <th>Nom du client:</th>
+                                <th>La Date:</th>
+                                <th>Créé par:</th>
+                                <th>Les Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{bl.0 | CreateTableBody}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <!-- /.card-body -->
+        {% endfor %}
     </div>
     <!-- /.card -->
     </div>
@@ -81,6 +90,4 @@
         </div>
     </form>
 </section>
-
-
 {% endblock content %}

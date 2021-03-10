@@ -231,9 +231,15 @@ def H_List_All_BL(requests):
                'User': User, 'selecteditem': 'list-all-BLs'}
     if requests.method == "GET":
         # Generate HTML Table and Pass it in context
-        BLs = list(APP_Created_BL.objects.all())
-        tablebody = generate_table_of_BL(BL=BLs)
-        context['tablebody'] = tablebody
+
+        # For each client get his BL's :
+        all_bl_clients = list(set([(clientobj.Client_Name,clientobj.ICE,clientobj.Place) for clientobj in  APP_Created_BL.objects.all()]))
+        all_stuff = []
+        for client in  all_bl_clients:
+            BLs = APP_Created_BL.objects.filter(Client_Name=client[0],ICE=client[1],Place=client[2])
+            tablebody = generate_table_of_BL(BL=BLs), client[0]
+            all_stuff.append(tablebody)
+        context['all_stuff'] = all_stuff
         return render(requests, 'List-All-Factures/Created-BL.html', context)
 
 
