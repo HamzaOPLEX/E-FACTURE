@@ -275,8 +275,7 @@ def H_Devis_To_Facture(requests,Devis_id):
     isAlreadyConverted = APP_Created_Facture.objects.filter(ConvertedFrom=Devis)
     if requests.method == 'GET':
         if isAlreadyConverted :
-            messages.info(
-                requests, f"Ce Devis a été Déjà Convertir à une Facture  avec le nombre {isAlreadyConverted[0].number}")
+            messages.info(requests, f"Ce Devis a été Déjà Convertir à une Facture  avec le nombre {isAlreadyConverted[0].number}")
             return redirect('/list-all-facturs/')
         elif not isAlreadyConverted :
             facturen_nmbr = len(APP_Created_Facture.objects.all()) + 1
@@ -304,6 +303,7 @@ def H_Devis_To_Facture(requests,Devis_id):
                 action_detail=actiondetail,
                 DateTime=str(datetime.today())
             )
+            messages.info(requests, f"ce devis a été converti en facture:{facture.number}  avec succès")
             return redirect('/list-all-facturs/')
     else:
         return HTTP_404(requests)
