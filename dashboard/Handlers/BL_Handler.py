@@ -235,10 +235,12 @@ def H_List_All_BL(requests):
         # For each client get his BL's :
         all_bl_clients = list(set([(clientobj.Client_Name,clientobj.ICE,clientobj.Place) for clientobj in  APP_Created_BL.objects.all()]))
         all_stuff = []
+        n = 0
         for client in  all_bl_clients:
             BLs = APP_Created_BL.objects.filter(Client_Name=client[0],ICE=client[1],Place=client[2])
-            tablebody = generate_table_of_BL(BL=BLs), client[0], (''.join([ i for i in client[0].split(' ') if  i ])).strip()
+            tablebody = generate_table_of_BL(BL=BLs), client[0], n
             all_stuff.append(tablebody)
+            n = n + 1
         context['all_stuff'] = all_stuff
         return render(requests, 'List-All-Factures/Created-BL.html', context)
 
