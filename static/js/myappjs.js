@@ -385,10 +385,6 @@ function ValidInputNotEmpty(modaltype) {
     }
 }
 
-
-
-
-
 function clearSelected(select) {
     var elements = select.selectedOptions;
     for (var i = 0; i < elements.length; i++) {
@@ -409,3 +405,14 @@ function AddInvalidClass(list_of_inputs) {
 
 
 /* --> End Function To Valid All Inputs <-- */
+
+
+
+/*
+    Select All BL then send POST to convert them
+*/
+
+function Selectallthengo(table_id) {
+    var theTable = document.getElementById(table_id)
+    console.log(theTable)
+}

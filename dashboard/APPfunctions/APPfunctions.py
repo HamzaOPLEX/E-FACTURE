@@ -183,7 +183,7 @@ def generate_table_of_BL(BL=''):
         date = bl.Date
         CreatedBy = bl.CreatedBy
         D = {}
-        D['choose'] = '<input class="form-check-input" type="checkbox">'
+        D['choose'] = '<input class="form-check-input check-box" type="checkbox">'
         D['N'] = BL_number
         D['client'] = client
         D['date'] = date
