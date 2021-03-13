@@ -269,3 +269,43 @@ def H_OpenPdf(requests, BL_id):
             return HTTP_404(requests, context)
     except APP_Created_BL.DoesNotExist:
         return HTTP_404(requests, context)
+
+
+
+@RequireLogin
+def BLsTOFacture(requests):
+    userid = requests.session['session_id']
+    User = get_object_or_404(APP_User.objects, id=userid)
+    if requests.method == 'POST':
+        selected_bls = requests.POST['SELECTEDBL']
+        selected_bls = selected_bls.split(',')
+        ALL_BLs_Items = [] 
+        for bl_id in selected_bls :
+            BL = get_object_or_404(APP_Created_BL, id=bl_id)
+            BL_items = APP_BL_items.objects.filter(BelongToBL=BL)
+            for bl_item in BL_items:
+                ALL_BLs_Items.append(bl_item)
+        facture = APP_Created_Facture.objects.create(
+                                    number=len(APP_Created_Facture.objects.all()) + 1 ,
+                                    Client_Name=BL.Client_Name,
+                                    ICE=BL.ICE,
+                                    Place=BL.Place,
+                                    CreatedBy=User,
+                                    Date=datetime.today()
+                                )
+        for bl_item in ALL_BLs_Items:
+            APP_Facture_items.objects.create(
+                Qs=bl_item.Qs,
+                DESIGNATION=bl_item.DESIGNATION,
+                PU=bl_item.PU,
+                PT=bl_item.PT,
+                BelongToFacture=facture
+            )
+        for bl_id in selected_bls :
+            BL = get_object_or_404(APP_Created_BL, id=bl_id)
+            BL.delete()
+        messages.info(requests, f"tous les Bon De Livraison ont été convertis avec succès en facture {facture.number}")
+        return redirect(f'/list-all-facturs/')
+        
+
+

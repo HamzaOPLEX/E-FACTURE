@@ -28,6 +28,10 @@
     {% endfor %}
     {% endif %}
     <div id="accordion">
+        <form id="FormSELECTEDBL" method="POST" action="/convert-bl/">
+            {% csrf_token %}
+            <input type="hidden" name="SELECTEDBL" id='SELECTEDBL' value="">
+        </form>
         {% for bl in all_stuff %}
         <div class="card">
             <div class="card-header" id="heading{{bl.2}}">
@@ -43,7 +47,7 @@
                 <div class="card-body">
                     <div class="text-center" style="margin-top: -19px;">
                         <button class="btn bg-gradient-success" style="margin:auto;color: white;" onclick="Selectallthengo('Table{{bl.2}}')">Sélectionner Tout et Convertir</button>
-                        <button class="btn bg-gradient-success" style="margin:auto;color: white;">Convertir Sélectionné</button>
+                        <button class="btn bg-gradient-success" style="margin:auto;color: white;" onclick="Selectthengo('Table{{bl.2}}')">Convertir Sélectionné</button>
                     </div>
                     <table class="table table-head-fixed" id="Table{{bl.2}}">
                         <thead>

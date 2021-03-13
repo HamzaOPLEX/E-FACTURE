@@ -409,10 +409,41 @@ function AddInvalidClass(list_of_inputs) {
 
 
 /*
-    Select All BL then send POST to convert them
+    Select ALL/Choose BL then send POST to convert them
 */
 
 function Selectallthengo(table_id) {
+    var ALL_BLs = []
     var theTable = document.getElementById(table_id)
-    console.log(theTable)
+    for (let rw = 1; rw < theTable.rows.length; rw++) {
+        // get BL id that stored in checkbox that come from APPfunctions :)
+        var BL_id = theTable.rows[rw].cells[0].firstChild.id
+        ALL_BLs.push(BL_id)
+    }
+    POSTselectedBL(ALL_BLs);
+}
+
+function Selectthengo(table_id) {
+    var ALL_BLs = []
+    var theTable = document.getElementById(table_id)
+    for (let rw = 1; rw < theTable.rows.length; rw++) {
+        // get BL id that stored in checkbox that come from APPfunctions :)
+        var BL = theTable.rows[rw].cells[0].firstChild
+        if (BL.checked){
+            ALL_BLs.push(BL.id)
+        }
+    }
+    if (ALL_BLs.length == 0){
+        toastr.error('Please Select At Least One BL', "No BL Selected");
+    }
+    if (ALL_BLs.length !== 0 ){
+        POSTselectedBL(ALL_BLs);
+    }
+}
+
+function POSTselectedBL(BLs) {
+    var frm = document.getElementById('FormSELECTEDBL')
+    var inpt = document.getElementById('SELECTEDBL')
+    inpt.value = BLs 
+    frm.submit()
 }
