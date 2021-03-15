@@ -82,11 +82,94 @@
   .card-body.p-0 {
       overflow-x: hidden !important;
   }
+  
+  /* Bttns background gradient*/
   .btn-primary {
-    background-color:#17a2b8 !important;
-    border-radius: 5px !important;
+    background: linear-gradient(311deg,
+          rgba(5,103,119,1) 41%, 
+          rgba(23,162,184,1) 91%, 
+          rgba(23,162,184,1) 100%);
+    border-radius: none;
     width: auto !important;
   }
+
+   .btn-success{
+    background: rgb(14,119,38);
+    background: linear-gradient(313deg,
+          rgba(14,119,38,1) 48%, 
+          rgba(40,167,69,1) 91%, 
+          rgba(40,167,69,1) 100%);
+    border-radius: none;
+    width: auto !important;
+  }
+
+
+    .btn.btn-info {background-image: linear-gradient(to right, #135386 0%, #26D0CE  51%, #135386  100%)}
+    .btn-success {background-image: linear-gradient(to right, rgba(14,119,38,1) 0%, #2dfd92  51%, rgba(14,119,38,1)  100%)}
+    .btn-danger {background-image: linear-gradient(to right, rgb(253 0 0) 0%, #d4a216 51%, rgb(255 0 0) 100%);}
+
+    .btn.btn-info {
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;            
+      box-shadow: 0 0 20px #eee;
+      border-radius: none;
+      width: auto !important;
+    }
+    .btn.btn-success {
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;            
+      box-shadow: 0 0 20px #eee;
+      border-radius: none;
+      width: auto !important;
+    }
+    .btn.btn-danger {
+      transition: 0.5s;
+      background-size: 200% auto;
+      color: white;            
+      box-shadow: 0 0 20px #eee;
+      border-radius: none;
+      width: auto !important;
+    }
+    .btn.btn-success:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+    }
+    .btn.btn-info:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+    }
+
+    .btn.btn-danger:hover {
+      background-position: right center; /* change the direction of the change here */
+      color: #fff;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       option {
         height: calc(1.5em + .75rem + 2px) !important;
@@ -155,3 +238,48 @@
   .modal {
         background-color: #0268b163 !important;
   }
+  
+    [class*="sidebar-dark-"] {
+        background: rgb(32,156,255);
+        background: linear-gradient(336deg, rgba(19,83,134,1) 0%, rgba(27,100,150,1) 0%, rgb(15 185 189) 0%, rgba(10,35,79,1) 100%);
+    }
+    [class*="sidebar-dark-"] .sidebar a {
+        color: #ffffff;
+    }
+    .layout-navbar-fixed .wrapper .sidebar-dark-primary .brand-link:not([class*="navbar"]) {
+        background: none !important;
+    }
+  
+.bg-danger {
+    background: rgb(156,55,55);
+    background: linear-gradient(
+            315deg, 
+            rgba(156,55,55,1) 37%, 
+            rgba(255,106,0,1) 91%, 
+            rgba(255,89,0,1) 100%
+          );
+}
+
+.bg-info {
+    background: rgb(5,103,119);
+    background: linear-gradient(311deg,
+          rgba(5,103,119,1) 41%, 
+          rgba(23,162,184,1) 91%, 
+          rgba(23,162,184,1) 100%);
+}
+
+.bg-success {
+    background: rgb(14,119,38);
+    background: linear-gradient(313deg,
+          rgba(14,119,38,1) 48%, 
+          rgba(40,167,69,1) 91%, 
+          rgba(40,167,69,1) 100%);
+}
+
+.bg-warning {
+    background: rgb(255,193,7);
+    background: linear-gradient(321deg,
+          rgba(255,193,7,1) 31%, 
+          rgba(255,193,7,1) 50%, 
+          rgba(236,255,7,1) 100%);
+}
