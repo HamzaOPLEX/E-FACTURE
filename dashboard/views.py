@@ -77,12 +77,18 @@ def Dashboard(requests):
         ####################################
 
         ################### Chart Handler ###################
-        all_paid_factures = list(APP_Created_Facture.objects.filter(isPaid='Oui', Date__year=this_year).values_list('Date__month'))
-        all_none_paid_factures = list(APP_Created_Facture.objects.filter(isPaid='Non', Date__year=this_year).values_list('Date__month'))
-        all_paid_factures = [i[0] for i in all_paid_factures]
-        all_none_paid_factures = [i[0] for i in all_none_paid_factures]
-        context['all_paid_factures'] = all_paid_factures
-        context['all_none_paid_factures'] = all_none_paid_factures
+        paid = []
+        non_paid = []
+        month = 1
+        for i in range(12):
+            all_paid_factures = len(APP_Created_Facture.objects.filter(isPaid='Oui', Date__year=this_year, Date__month=month))
+            all_none_paid_factures = len(APP_Created_Facture.objects.filter(isPaid='Non', Date__year=this_year, Date__month=month))
+            paid.append(all_paid_factures)
+            non_paid.append(all_none_paid_factures)
+            month = month + 1
+
+        context['all_paid_factures'] = paid
+        context['all_none_paid_factures'] = non_paid
         ################### End Chart Handler ###################
 
         ################### Chiffre D'affair Handler ###################
