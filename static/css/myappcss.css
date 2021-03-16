@@ -247,7 +247,7 @@
   
     [class*="sidebar-dark-"] {
         background: rgb(32,156,255);
-        background: linear-gradient(177deg, rgba(19,83,134,1) 0%, rgba(27,100,150,1) 0%, rgb(15 185 189) 0%, rgba(10,35,79,1) 100%);
+        background: linear-gradient(0deg, rgba(19,83,134,1) 0%, rgba(27,100,150,1) 0%, rgb(15 185 189) 0%, rgba(10,35,79,1) 100%);
     }
     [class*="sidebar-dark-"] .sidebar a {
         color: #ffffff;
