@@ -7,7 +7,7 @@ from .APPfunctions.APPfunctions import *
 from .Handlers import Facture_Handler
 from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
 from dashboard.Handlers.ERROR_Handlers import *
-
+from django.db.models import Sum
 
 @RequireLogin
 def Dashboard(requests):
@@ -22,9 +22,10 @@ def Dashboard(requests):
         len_clients = len(APP_Clients.objects.all())
         len_products = len(APP_Products.objects.all())
         len_factures = len(APP_Created_Facture.objects.all())
+        len_devis = len(APP_Created_Devis.objects.all())
         # Pass them to context
         context['Lenghts'] = {'len_users': len_users, 'len_clients': len_clients,
-                              'len_products': len_products, 'len_factures': len_factures}
+                              'len_products': len_products, 'len_factures': len_factures, 'len_devis': len_devis}
         ####################################
 
         ###### Dashboard Factures Table of this Month
@@ -75,14 +76,35 @@ def Dashboard(requests):
         context['clienttablebody'] = clienttablebody
         ####################################
 
-        if User.userpermission == 'Admin':
-            now = datetime.now()
-            this_time_yesterday = now - timedelta(hours=24)
-            Last24HoureHistory = APP_History.objects.filter(
-                DateTime__gte=this_time_yesterday, DateTime__lte=now)
-            History_table_body = generate_table_of_history(
-                Last24HoureHistory, simpletable=True)
-            context['History_table_body'] = History_table_body
+        ################### Chart Handler ###################
+        all_paid_factures = list(APP_Created_Facture.objects.filter(isPaid='Oui', Date__year=this_year).values_list('Date__month'))
+        all_none_paid_factures = list(APP_Created_Facture.objects.filter(isPaid='Non', Date__year=this_year).values_list('Date__month'))
+        all_paid_factures = [i[0] for i in all_paid_factures]
+        all_none_paid_factures = [i[0] for i in all_none_paid_factures]
+        context['all_paid_factures'] = all_paid_factures
+        context['all_none_paid_factures'] = all_none_paid_factures
+        ################### End Chart Handler ###################
+
+        ################### Chiffre D'affair Handler ###################
+        TVA_taux = int(APP_Settings.objects.all().first().Company_TVATAUX)
+        HT = APP_Facture_items.objects.filter(Date__year=this_year).aggregate(Sum('PT'))['PT__sum']
+        TVA = HT / 100 * TVA_taux
+        TTC = HT + TVA
+        context['HT'] = HT
+        context['TVA_taux'] = TVA_taux
+        context['TTC'] = TTC
+        ################### End Chiffre D'affair Handler ###################
+
+
+
+        # if User.userpermission == 'Admin':
+        #     now = datetime.now()
+        #     this_time_yesterday = now - timedelta(hours=24)
+        #     Last24HoureHistory = APP_History.objects.filter(
+        #         DateTime__gte=this_time_yesterday, DateTime__lte=now)
+        #     History_table_body = generate_table_of_history(
+        #         Last24HoureHistory, simpletable=True)
+        #     context['History_table_body'] = History_table_body
 
         return render(requests, 'Dashboard/dashboard.html', context)
 

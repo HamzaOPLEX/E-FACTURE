@@ -82,14 +82,14 @@ class APP_Created_Facture(models.Model):
         if self.isPaid == "Non":
             self.Paiment_Mathod = 'aucun'
 
+
 class APP_Facture_items(models.Model):
     Qs = models.IntegerField(default=0)
     DESIGNATION = models.TextField(default=None)
     PU = models.IntegerField(default=0)
     PT = models.BigIntegerField(default=0)
-    BelongToFacture = models.ForeignKey(
-        APP_Created_Facture, on_delete=models.CASCADE, editable=False)
-
+    BelongToFacture = models.ForeignKey(APP_Created_Facture, on_delete=models.CASCADE, editable=False)
+    Date = models.DateField(auto_now=True)
     def __str__(self):
         return self.DESIGNATION
 ########################################
@@ -142,7 +142,7 @@ class APP_Clients(models.Model):
 
 class APP_Settings(models.Model):
     Company_ICE = models.CharField(max_length=255,default='00000000000000')
-    Company_TVATAUX = models.IntegerField(default=20)
+    Company_TVATAUX = models.FloatField(default=20)
     Company_Place = models.CharField(max_length=255,default='Tanger')
 
     def __str__(self):
