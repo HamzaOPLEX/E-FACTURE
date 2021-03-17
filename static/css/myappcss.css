@@ -292,3 +292,8 @@
     color: #fff;
     background: linear-gradient( 333deg , rgb(27 71 107) 0%, rgb(27, 100, 150) 0%, rgb(23 159 181) 0%, rgb(33 72 95 / 78%) 100%);
 }
+
+.main-header .navbar-nav .nav-item {
+    margin: 0;
+    margin-right: 9px !important;
+}
