@@ -9,18 +9,12 @@ from pathlib import Path
 from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
-# from reportlab.lib.colors import HexColor
 
 def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City):
-    def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset,type=None):
-
+    def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
         if len(text) > length:
             wraps = textwrap.wrap(text, length)
             for x in range(len(wraps)):
-                if type == 'footer':
-                    canvas.setFont("Helvetica", 12)
-
-                    canvas.setFillColor(colors.white)
                 canvas.drawCentredString(x_pos, y_pos, wraps[x])
                 y_pos -= y_offset
             y_pos += y_offset  # add back offset after last wrapped line
@@ -40,24 +34,32 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                               alignment=TA_LEFT,
                               fontName='Helvetica',
                               fontSize=10,
-                              textColor=colors.white,
+                              textColor=colors.black,
                               leading=13,
                               wordWrap='LTR',
                               splitLongWords=True,
                               spaceShrinkage=0.05,
-                              
                               backColor=None,
+                              borderWidth=1,
+                              borderPadding=10,
+                              borderColor=colors.black,
+                              borderRadius=8
+
                               ))
     styles.add(ParagraphStyle(name='CompanySide',
                               alignment=TA_LEFT,
                               fontName='Helvetica',
                               fontSize=10,
-                              textColor=colors.white,
+                              textColor=colors.black,
                               leading=13,
                               wordWrap='LTR',
                               splitLongWords=True,
                               spaceShrinkage=0.05,
                               backColor=None,
+                              borderWidth=1,
+                              borderPadding=10,
+                              borderColor=colors.black,
+                              borderRadius=8
                               ))
     styles.add(ParagraphStyle(name='HeaderDataStyle',
                               alignment=TA_LEFT,
@@ -78,7 +80,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                               alignment=TA_CENTER,
                               fontName='Helvetica',
                               fontSize=11,
-                              textColor=colors.white,
+                              textColor=colors.black,
                               leading=13,
                               wordWrap='LTR',
                               splitLongWords=True,
@@ -111,7 +113,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     TOTALletter = Number2Letter(str(TTC_int))
 
     def Info_Table(tabledata):
-        colwidths = (200, 60, 230)
+        colwidths = (200, 90, 200)
         t = Table(tabledata, colwidths)
         t.hAlign = 'CENTER'
         GRID_STYLE = TableStyle(
@@ -127,12 +129,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
         t = Table(tabledata, colwidths)
         t.hAlign = 'RIGHT'
         GRID_STYLE = TableStyle(
-            [
-                ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'), 
-                ('BACKGROUND', (0, 0), (-1, 0), colr(26, 103, 165)),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-            ]
+            [('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+             ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ]
         )
         t.setStyle(GRID_STYLE)
         return t
@@ -140,18 +138,16 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
 
     def DrawPageImages(canvas, doc):
         canvas.saveState()
-        # canvas.drawImage(str(BASE_DIR)+"/header.png", 50, 780, 500, 60)
-        # canvas.drawImage(str(BASE_DIR)+"/logo-watermark.png", 30, 300, 500, 300)
-        canvas.drawImage(str(BASE_DIR)+"/invoice-bg.png", 0, 0, 600, 840)
-
+        canvas.drawImage(str(BASE_DIR)+"/header.png", 50, 780, 500, 60)
+        canvas.drawImage(str(BASE_DIR)+"/logo-watermark.png", 30, 300, 500, 300)
         canvas.setFont('Helvetica', 10)
         Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
         footer_msg = "18 RES DALA Jirari 5R Magasin 1 - Tanger - 0660055110 - 0531777771 info@notechnologie.com - ICE : 00006665600026".strip()
         draw_wrapped_line(canvas, Money_msg, 100, 290, 75, 10)
-        canvas.saveState()
-        draw_wrapped_line(canvas, footer_msg, 80, 290, 35, 15, type='footer')
-        canvas.restoreState()
+        canvas.setLineWidth(2)
+        canvas.line(50, 50, 530, 50)
 
+        draw_wrapped_line(canvas, footer_msg, 80, 290, 35, 10)
         canvas.saveState()
         canvas.rotate(90)
         canvas.drawCentredString(460, -580, 'Patente N°: 50466287 - I.F N°: 04909034 - R.C: 30209')
@@ -167,7 +163,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colr(26, 103, 165)),
+                ('BACKGROUND', (0, 0), (-1, 0), colr(248, 87, 52)),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ]
         )
@@ -179,8 +175,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     ClientSide = styles['ClientSide']
     CompanySide = styles['CompanySide']
     company_side = f"""
-                <b>Facturée à :<br/></b> {str(FactureObj.Client_Name).title()}<br/>
-                <b>ICE:</b> {str(FactureObj.ICE).upper()}<br/>
+                <b>Nom du client:</b> {str(FactureObj.Client_Name).title()}<br/>
+                <b>ICE de Client:</b> {str(FactureObj.ICE).title()}<br/>
                 """
     client_side = f"""
                     <b>Numéro de Facture:</b> {FactureObj.number}/{Year}<br/>
@@ -192,6 +188,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     ]
     client_company_table = Info_Table(client_company_table_data)
     story.append(client_company_table)
+    story.append(Spacer(1, .25*inch))
     story.append(Spacer(1, .25*inch))
 
     def colr(x, y, z):
