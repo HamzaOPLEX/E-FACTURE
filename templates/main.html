@@ -1,4 +1,5 @@
-{% load static %}
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -6,24 +7,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{pagetitle}} | NTFM</title>
+  <title>Tableau de bord | NTFM</title>
 
   <!-- My App Css-->
-  <link rel="stylesheet" href="{% static 'css/myappcss.css' %}" />
+  <link rel="stylesheet" href="/static/css/myappcss.css" />
 
   <!-- Toster -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
-  <link rel="shortcut icon" type="image/ico" href="{% static 'img/favicon.ico' %}" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="shortcut icon" type="image/ico" href="/static/img/favicon.ico"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href='{% static "plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/jqvmap/jqvmap.min.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/overlayScrollbars/css/OverlayScrollbars.min.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/daterangepicker/daterangepicker.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/summernote/summernote-bs4.min.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/fontawesome-free/css/all.min.css" %}'>
-  <link rel="stylesheet" href='{% static "css/adminlte.css" %}'>
+  <link rel="stylesheet" href='/static/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css'>
+  <link rel="stylesheet" href='/static/plugins/jqvmap/jqvmap.min.css'>
+  <link rel="stylesheet" href='/static/plugins/overlayScrollbars/css/OverlayScrollbars.min.css'>
+  <link rel="stylesheet" href='/static/plugins/daterangepicker/daterangepicker.css'>
+  <link rel="stylesheet" href='/static/plugins/summernote/summernote-bs4.min.css'>
+  <link rel="stylesheet" href='/static/plugins/fontawesome-free/css/all.min.css'>
+  <link rel="stylesheet" href='/static/css/adminlte.css'>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,25 +33,24 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
   <!-- DataTables -->
-  <link rel="stylesheet" href='{% static "plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/datatables-responsive/css/responsive.bootstrap4.min.css" %}'>
-  <link rel="stylesheet" href='{% static "plugins/datatables-buttons/css/buttons.bootstrap4.min.css" %}'>
+  <link rel="stylesheet" href='/static/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css'>
+  <link rel="stylesheet" href='/static/plugins/datatables-responsive/css/responsive.bootstrap4.min.css'>
+  <link rel="stylesheet" href='/static/plugins/datatables-buttons/css/buttons.bootstrap4.min.css'>
 
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse" lang="fr">
-  <div id="circle" style="display: initial;">
-    <div class="loader">
+    <div id="circle" style="display: initial;">
       <div class="loader">
         <div class="loader">
           <div class="loader">
+            <div class="loader">
+            </div>
           </div>
         </div>
       </div>
+      <p style="padding: 13px;color: white;font-style: unset;font-size: 23px;margin: auto;text-align: center;width: 100%;" class="loadingmsg" >Loading ...</p>    
     </div>
-    <p style="padding: 13px;color: white;font-style: unset;font-size: 23px;margin: auto;text-align: center;width: 100%;"
-      class="loadingmsg">Loading ...</p>
-  </div>
   <div class="wrapper" style="visibility: hidden;">
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -68,25 +67,19 @@
         <div id="RemoveOn650px" style="display: inherit;">
           <li class="nav-item">
             <a class="nav-link" href="/create-new-facture/">
-              <button type="button" class="btn btn-block btn-info"
-                style="font-size: 13px;background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer
-                Une Facture</button>
+              <button type="button" class="btn btn-block btn-info" style="font-size: 13px;background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer Une Facture</button>
             </a>
-          </li>
+            </li>
           <li class="nav-item">
             <a class="nav-link" href="/create-new-devis/">
-              <button type="button" class="btn btn-block btn-info"
-                style="font-size: 13px;background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer
-                Un Devis</button>
+              <button type="button" class="btn btn-block btn-info" style="font-size: 13px;background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer Un Devis</button>
             </a>
-          </li>
+            </li>
           <li class="nav-item">
             <a class="nav-link" href="/create-new-bl/">
-              <button type="button" class="btn btn-block btn-info"
-                style="font-size: 13px; background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer
-                Un Bon De Livraison</button>
+              <button type="button" class="btn btn-block btn-info" style="font-size: 13px; background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer Un Bon De Livraison</button>
             </a>
-          </li>
+            </li>
         </div>
         <a class="nav-link" href="/logout">
           <i class="fas fa-sign-out-alt"></i>
@@ -105,7 +98,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="/" class="brand-link">
-        <img src='{% static "img/logo.png" %}' alt="NoTechnologie Facture Management App"
+        <img src='/static/img/logo.png' alt="NoTechnologie Facture Management App"
           class="brand-image img-circle elevation-3">
         <span class="brand-text font-weight-light"><b>NTFM</b></span>
       </a>
@@ -115,16 +108,13 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            {% if User.gender  ==  'homme' %}
-            <a href="/profile" class="d-block"><img src='{% static "img/defaultuserlogo.png" %}'
+            
+            <a href="/profile" class="d-block"><img src='/static/img/defaultuserlogo.png'
                 class="img-circle elevation-2" alt="User Image"></a>
-            {% elif User.gender  ==  'femme' %}
-            <a href="/profile" class="d-block"><img src='{% static "img/defaultfemmelogo.png" %}'
-                class="img-circle elevation-2" alt="User Image"></a>
-            {% endif %}
+            
           </div>
           <div class="info">
-            <a href="/profile" class="d-block">{{User.username.title}}</a>
+            <a href="/profile" class="d-block">Demo</a>
           </div>
         </div>
 
@@ -134,118 +124,113 @@
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
             <li class="nav-item">
-              <a href="/dashboard" {% if selecteditem == 'dashboard' %} class="nav-link active" {% else %}
-                class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+              <a href="/dashboard"   class="nav-link active" >
+                <i class="nav-icon fas fa-tachometer-alt"></i> 
                 <p>
                   Tableau de bord
                 </p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/settings" {% if selecteditem  ==  'settings' %} class="nav-link active" {% else %} class="nav-link"
-                {% endif %}>
+              <a href="/settings"  class="nav-link" >
                 <i class="nav-icon fas fa-cog"></i>
                 <p>
                   Réglages
                 </p>
               </a>
             </li>
-            <li class="nav-item has-treeview">
-              <a href="#" {% if selecteditem == 'facture' or selecteditem == 'list-all-factures' %} class="nav-link active"
-                {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-F"></i>
-                <p>
-                  Gestioner Des Factures <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview" id="sub-tree">
-                <li class="nav-item">
-                  <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %}
-                    class="nav-link" {% endif %}>
-                    <i class="nav-icon fas fa-plus-circle"></i>
+                <li class="nav-item has-treeview">
+                  <a href="#"  class="nav-link" >
+                    <i class="nav-icon fas fa-F"></i>
                     <p>
-                      Créer une facture
+                    Gestioner Des Factures <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>
+                  <ul class="nav nav-treeview" id="sub-tree">
+                    <li class="nav-item">
+                      <a href="/create-new-facture"  class="nav-link" >
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>
+                          Créer une facture
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/list-all-facturs" 
+                        class="nav-link" >
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                          Toutes les Factures
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
-                <li class="nav-item">
-                  <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else
-                    %} class="nav-link" {% endif %}>
-                    <i class="nav-icon fas fa-file-invoice"></i>
+                <li class="nav-item has-treeview">
+                  <a href="#" 
+                    class="nav-link" >
+                    <i class="nav-icon fas fa-D"></i>
                     <p>
-                      Toutes les Factures
+                      Gestioner Des Devis <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>
+                  <ul class="nav nav-treeview" id="sub-tree">
+                    <li class="nav-item">
+                      <a href="/create-new-devis"  class="nav-link" >
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>
+                          Créer un Devis
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/list-all-devis" 
+                        class="nav-link" >
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                          Toutes les Devis
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" {% if selecteditem == 'devis' or selecteditem == 'list-all-devis' %} class="nav-link active" {%
-                else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-D"></i>
-                <p>
-                  Gestioner Des Devis <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview" id="sub-tree">
-                <li class="nav-item">
-                  <a href="/create-new-devis" {% if selecteditem == 'devis' %} class="nav-link active" {% else %}
-                    class="nav-link" {% endif %}>
-                    <i class="nav-icon fas fa-plus-circle"></i>
+                <li class="nav-item has-treeview">
+                  <a href="#"  class="nav-link" >
+                    <i class="nav-icon fas fa-B"></i>
                     <p>
-                      Créer un Devis
+                      Gestioner Des BL <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>
+                  <ul class="nav nav-treeview" id="sub-tree">
+                    <li class="nav-item">
+                      <a href="/create-new-bl/"  class="nav-link"
+                        >
+                        <i class="nav-icon fas fa-plus-circle"></i>
+                        <p>
+                          Créer un BL
+                        </p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/list-all-bl/" 
+                        class="nav-link" >
+                        <i class="nav-icon fas fa-file-invoice"></i>
+                        <p>
+                          Toutes les BL
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
-                <li class="nav-item">
-                  <a href="/list-all-devis" {% if selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
-                    class="nav-link" {% endif %}>
-                    <i class="nav-icon fas fa-file-invoice"></i>
-                    <p>
-                      Toutes les Devis
-                    </p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
-                <i class="nav-icon fas fa-B"></i>
-                <p>
-                  Gestioner Des BL <i class="fas fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview" id="sub-tree">
-                <li class="nav-item">
-                  <a href="/create-new-bl/" {% if selecteditem == 'BL' %} class="nav-link active" {% else %}
-                    class="nav-link" {% endif %}>
-                    <i class="nav-icon fas fa-plus-circle"></i>
-                    <p>
-                      Créer un BL
-                    </p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/list-all-bl/" {% if selecteditem == 'list-all-BL' %} class="nav-link active" {% else %}
-                    class="nav-link" {% endif %}>
-                    <i class="nav-icon fas fa-file-invoice"></i>
-                    <p>
-                      Toutes les BL
-                    </p>
-                  </a>
-                </li>
-              </ul>
-            </li>
             <!-- logout sidebar bottun -->
-            <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
-              <a href="/logout" class="nav-link" style='color:white;'>
-                <i class="nav-icon fas fa-sign-out-alt"></i>
-                <p>
-                  Se déconnecter
-                </p>
-              </a>
-            </li>
+                <li class="nav-item logout" style="bottom: 5px;position: fixed;width: 234px;">
+                  <a href="/logout" class="nav-link" style='color:white;'>
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <p>
+                      Se déconnecter
+                    </p>
+                  </a>
+                </li>
           </ul>
         </nav>
         <!-- /.sidebar-menu -->
@@ -255,9 +240,383 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-      {% block content %}
+      
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Tableau de bord</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>3</h3>
+                    <p>Toutes les factures</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <a href="/list-all-facturs/" class="small-box-footer">
+                    Afficher <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-info" style="background: rgb(5,103,119); background: linear-gradient( 311deg , rgb(12 24 33) -36%, rgb(14 108 123) 91%, rgb(24 117 132) 100%); }">
+                <div class="inner">
+                    <h3>0</h3>
+                    <p>Toutes les Devis</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-file-invoice"></i>
+                </div>
+                <a href="/list-all-facturs/" class="small-box-footer">
+                    Afficher <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>0</h3>
+                    <p>Gérez vos produits</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-shopping-basket"></i>
+                </div>
+                <a href="/settings/manage-products" class="small-box-footer">
+                    Gérer <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>0</h3>
+                    <p>Gérez vos Clients</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <a href="/settings/manage-clients" class="small-box-footer">
+                    Gérer <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
 
-      {% endblock %}
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box bg-danger">
+                <span class="info-box-icon"><i class="fas fa-suitcase"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Chiffre d'affaires (HT)</span>
+                    <span class="info-box-number">235999 DH</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box bg-danger">
+                <span class="info-box-icon"><i class="fas fa-suitcase"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Chiffre d'affaires (TTC - 20%)</span>
+                    <span class="info-box-number">283198.8 DH</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Statistiques des factures :</h3>
+        </div>
+        <div class="card-body">
+            <div class="chart">
+                <div class="chartjs-size-monitor">
+                    <div class="chartjs-size-monitor-expand">
+                        <div class=""></div>
+                    </div>
+                    <div class="chartjs-size-monitor-shrink">
+                        <div class=""></div>
+                    </div>
+                </div>
+                <canvas id="barChart" style="height: 230px; min-height: 230px; display: block; width: 764px;"
+                    width="764" height="230" class="chartjs-render-monitor"></canvas>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- <div class="container-fluid"> -->
+    <div class="row">
+        <section class="col-lg-7 connectedSortable ui-sortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card">
+                <div class="card-header border-transparent">
+                    <h3 class="card-title">Toutes les factures crées ce mois-ci :</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Nom du client</th>
+                                <th>La Date</th>
+                                <th>Créé par</th>
+                                <th>Payé:</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <tr><td>56</td>
+<td>univers contrôle technique</td>
+<td>2021-03-19</td>
+<td>demo</td>
+<td>Non</td>
+<td><a class="btn btn-info btn-sm" href="/list-all-facturs/edit/11" title="Edit" target='_blank' data-toggle="tooltip">
+                                    <i class="fas fa-pencil-alt"></i>
+</a> 
+                                <a href="/list-all-facturs/detail/open/11" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                            </td>
+</tr>
+<tr><td>3</td>
+<td>soconta</td>
+<td>2021-03-16</td>
+<td>demo</td>
+<td>Non</td>
+<td><a class="btn btn-info btn-sm" href="/list-all-facturs/edit/10" title="Edit" target='_blank' data-toggle="tooltip">
+                                    <i class="fas fa-pencil-alt"></i>
+</a> 
+                                <a href="/list-all-facturs/detail/open/10" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                            </td>
+</tr>
+<tr><td>2</td>
+<td>Fala7_02</td>
+<td>2021-03-15</td>
+<td>None</td>
+<td>Non</td>
+<td><a class="btn btn-info btn-sm" href="/list-all-facturs/edit/9" title="Edit" target='_blank' data-toggle="tooltip">
+                                    <i class="fas fa-pencil-alt"></i>
+</a> 
+                                <a href="/list-all-facturs/detail/open/9" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                            </td>
+</tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <a href="/list-all-facturs/" class="btn btn-sm btn-secondary float-right">Voir toutes les
+                        factures</a>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </section>
+        <section class="col-lg-7 connectedSortable ui-sortable ">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tous les clients ajoutés ce mois-ci :</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Nom de Client</th>
+                                <th>ICE</th>
+                                <th>Ville</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <a href="/settings/manage-clients" class="uppercase">Voir toutes les Clients</a>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </section>
+        <section class="col-lg-5 connectedSortable ui-sortable">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Tous les produits ajoutés ce mois-ci</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Nom du Produit</th>
+                                <th>P.U</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <a href="/settings/manage-products" class="uppercase">Voir toutes les Produits</a>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </section>
+    </div>
+    <!-- </div> -->
+</section>
+<style>
+    .btn-secondary {
+        background-color: #4b555fde;
+    }
+
+    .card-title {
+        margin-bottom: .75rem;
+        width: 83%;
+    }
+
+    span.badge.badge-warning.float-right {
+        font-size: 15px;
+    }
+
+    .bg-warning,
+    .bg-warning>a {
+        color: #ffffff !important;
+    }
+
+    .small-box.bg-setting {
+        background-color: #11626f;
+        color: white;
+    }
+
+    .card-body.p-0 {
+        max-height: 300px;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+    .card {
+        height: 400px;
+    }
+</style>
+<script>
+    $(function () {
+
+        var areaChartData = {
+            labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            datasets: [
+                {
+                    label: 'Facture Payéé',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                {
+                    label: 'Facture Non Payéé',
+                    backgroundColor: 'rgba(210, 214, 222, 1)',
+                    borderColor: 'rgba(210, 214, 222, 1)',
+                    pointRadius: false,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: [0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+            ]
+        }
+
+        var areaChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }]
+            }
+        }
+
+        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+        var barChartData = jQuery.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        var temp1 = areaChartData.datasets[1]
+        barChartData.datasets[0] = temp1
+        barChartData.datasets[1] = temp0
+
+        var barChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            datasetFill: false
+        }
+
+        var barChart = new Chart(barChartCanvas, {
+            type: 'bar',
+            data: barChartData,
+            options: barChartOptions
+        })
+
+
+    })
+</script>
+
     </div>
     <!-- /.content-wrapper -->
 
@@ -269,30 +628,30 @@
   </div>
   <!-- ./wrapper -->
 
-  <script src='{% static "plugins/jquery/jquery.min.js" %}'></script>
-  <script src='{% static "plugins/bootstrap/js/bootstrap.bundle.min.js" %}'></script>
-  <script src='{% static "plugins/moment/moment.min.js" %}'></script>
-  <script src='{% static "plugins/daterangepicker/daterangepicker.js" %}'></script>
-  <script src='{% static "plugins/summernote/summernote-bs4.min.js" %}'></script>
-  <script src='{% static "plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" %}'></script>
-  <script src='{% static "plugins/jquery-ui/jquery-ui.min.js" %}'></script>
-  <script src='{% static "plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" %}'></script>
-  <script src='{% static "js/adminlte.js" %}'></script>
-  <script src='{% static "js/pages/dashboard.js" %}'></script>
+  <script src='/static/plugins/jquery/jquery.min.js'></script>
+  <script src='/static/plugins/bootstrap/js/bootstrap.bundle.min.js'></script>
+  <script src='/static/plugins/moment/moment.min.js'></script>
+  <script src='/static/plugins/daterangepicker/daterangepicker.js'></script>
+  <script src='/static/plugins/summernote/summernote-bs4.min.js'></script>
+  <script src='/static/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js'></script>
+  <script src='/static/plugins/jquery-ui/jquery-ui.min.js'></script>
+  <script src='/static/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js'></script>
+  <script src='/static/js/adminlte.js'></script>
+  <script src='/static/js/pages/dashboard.js'></script>
 
   <!-- DataTables  & Plugins -->
-  <script src='{% static "plugins/datatables/jquery.dataTables.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-responsive/js/dataTables.responsive.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-responsive/js/responsive.bootstrap4.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-buttons/js/dataTables.buttons.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-buttons/js/buttons.bootstrap4.min.js" %}'></script>
-  <script src='{% static "plugins/jszip/jszip.min.js" %}'></script>
-  <script src='{% static "plugins/Chartjs/Chart.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-buttons/js/buttons.html5.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-buttons/js/buttons.print.min.js" %}'></script>
-  <script src='{% static "plugins/datatables-buttons/js/buttons.colVis.min.js" %}'></script>
-  <script src='{% static "js/myappjs.js" %}'></script>
+  <script src='/static/plugins/datatables/jquery.dataTables.min.js'></script>
+  <script src='/static/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js'></script>
+  <script src='/static/plugins/datatables-responsive/js/dataTables.responsive.min.js'></script>
+  <script src='/static/plugins/datatables-responsive/js/responsive.bootstrap4.min.js'></script>
+  <script src='/static/plugins/datatables-buttons/js/dataTables.buttons.min.js'></script>
+  <script src='/static/plugins/datatables-buttons/js/buttons.bootstrap4.min.js'></script>
+  <script src='/static/plugins/jszip/jszip.min.js'></script>
+  <script src='/static/plugins/Chartjs/Chart.min.js'></script>  
+  <script src='/static/plugins/datatables-buttons/js/buttons.html5.min.js'></script>
+  <script src='/static/plugins/datatables-buttons/js/buttons.print.min.js'></script>
+  <script src='/static/plugins/datatables-buttons/js/buttons.colVis.min.js'></script>
+  <script src='/static/js/myappjs.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
