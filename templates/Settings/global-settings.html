@@ -2,22 +2,31 @@
 {% load Filters %}
 
 {% block content %}
-
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>gérer les paramètres de votre application :</h1>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section class="content-header">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        {% endfor %}
-        {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
     <div class="card">
         <div class="card-header ui-sortable-handle" style="cursor: move;">
-            <b>gérer les paramètres généraux de l'application : (Tous les champs sont obligatoires)</b>
+            <b>vous devez configurer tous les paramètres ci-dessous pour utiliser votre application sans aucun problème
+                : (Tous les champs sont obligatoires)</b>
         </div>
         <div class="card-body">
             <form id="Form" action="/settings/global-settings" method="POST">
@@ -26,7 +35,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>ICE de votre société</label>
-                            <input type="text" class="form-control" autocomplete="off" name="ICE" value="{{setting.Company_ICE}}" placeholder="ICE ..." required>
+                            <input type="text" class="form-control" autocomplete="off" name="ICE"
+                                value="{{setting.Company_ICE}}" placeholder="ICE ..." required>
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -48,7 +58,8 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Le Lieu de Votre Société</label>
-                            <input type="text" class="form-control" autocomplete="off" value="{{setting.Company_Place}}" name="place" placeholder="Lieu ..." required>
+                            <input type="text" class="form-control" autocomplete="off" value="{{setting.Company_Place}}"
+                                name="place" placeholder="Lieu ..." required>
                         </div>
                     </div>
                 </div>
