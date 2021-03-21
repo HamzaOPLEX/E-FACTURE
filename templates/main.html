@@ -115,10 +115,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            {% if User.gender == 'homme' %}
+            {% if User.gender  ==  'homme' %}
             <a href="/profile" class="d-block"><img src='{% static "img/defaultuserlogo.png" %}'
                 class="img-circle elevation-2" alt="User Image"></a>
-            {% elif User.gender == 'femme' %}
+            {% elif User.gender  ==  'femme' %}
             <a href="/profile" class="d-block"><img src='{% static "img/defaultfemmelogo.png" %}'
                 class="img-circle elevation-2" alt="User Image"></a>
             {% endif %}
@@ -134,7 +134,7 @@
             <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
             <li class="nav-item">
-              <a href="/dashboard" {% if selecteditem=='dashboard' %} class="nav-link active" {% else %}
+              <a href="/dashboard" {% if selecteditem == 'dashboard' %} class="nav-link active" {% else %}
                 class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
@@ -143,7 +143,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/settings" {% if selecteditem=='settings' %} class="nav-link active" {% else %} class="nav-link"
+              <a href="/settings" {% if selecteditem  ==  'settings' %} class="nav-link active" {% else %} class="nav-link"
                 {% endif %}>
                 <i class="nav-icon fas fa-cog"></i>
                 <p>
@@ -152,7 +152,7 @@
               </a>
             </li>
             <li class="nav-item has-treeview">
-              <a href="#" {% if selecteditem=='facture' or selecteditem=='list-all-factures' %} class="nav-link active"
+              <a href="#" {% if selecteditem == 'facture' or selecteditem == 'list-all-factures' %} class="nav-link active"
                 {% else %} class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-F"></i>
                 <p>
@@ -161,7 +161,7 @@
               </a>
               <ul class="nav nav-treeview" id="sub-tree">
                 <li class="nav-item">
-                  <a href="/create-new-facture" {% if selecteditem=='facture' %} class="nav-link active" {% else %}
+                  <a href="/create-new-facture" {% if selecteditem == 'facture' %} class="nav-link active" {% else %}
                     class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-plus-circle"></i>
                     <p>
@@ -170,7 +170,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/list-all-facturs" {% if selecteditem=='list-all-factures' %} class="nav-link active" {% else
+                  <a href="/list-all-facturs" {% if selecteditem == 'list-all-factures' %} class="nav-link active" {% else
                     %} class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-file-invoice"></i>
                     <p>
@@ -181,7 +181,7 @@
               </ul>
             </li>
             <li class="nav-item has-treeview">
-              <a href="#" {% if selecteditem=='devis' or selecteditem=='list-all-devis' %} class="nav-link active" {%
+              <a href="#" {% if selecteditem == 'devis' or selecteditem == 'list-all-devis' %} class="nav-link active" {%
                 else %} class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-D"></i>
                 <p>
@@ -190,7 +190,7 @@
               </a>
               <ul class="nav nav-treeview" id="sub-tree">
                 <li class="nav-item">
-                  <a href="/create-new-devis" {% if selecteditem=='devis' %} class="nav-link active" {% else %}
+                  <a href="/create-new-devis" {% if selecteditem == 'devis' %} class="nav-link active" {% else %}
                     class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-plus-circle"></i>
                     <p>
@@ -199,7 +199,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/list-all-devis" {% if selecteditem=='list-all-devis' %} class="nav-link active" {% else %}
+                  <a href="/list-all-devis" {% if selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
                     class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-file-invoice"></i>
                     <p>
@@ -210,7 +210,7 @@
               </ul>
             </li>
             <li class="nav-item has-treeview">
-              <a href="#" {% if selecteditem=='BL' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
+              <a href="#" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                 <i class="nav-icon fas fa-B"></i>
                 <p>
                   Gestioner Des BL <i class="fas fa-angle-left right"></i>
@@ -218,7 +218,7 @@
               </a>
               <ul class="nav nav-treeview" id="sub-tree">
                 <li class="nav-item">
-                  <a href="/create-new-bl/" {% if selecteditem=='BL' %} class="nav-link active" {% else %}
+                  <a href="/create-new-bl/" {% if selecteditem == 'BL' %} class="nav-link active" {% else %}
                     class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-plus-circle"></i>
                     <p>
@@ -227,7 +227,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/list-all-bl/" {% if selecteditem=='list-all-BL' %} class="nav-link active" {% else %}
+                  <a href="/list-all-bl/" {% if selecteditem == 'list-all-BL' %} class="nav-link active" {% else %}
                     class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-file-invoice"></i>
                     <p>
