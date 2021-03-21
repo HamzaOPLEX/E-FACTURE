@@ -447,3 +447,21 @@ function POSTselectedBL(BLs) {
     inpt.value = BLs 
     frm.submit()
 }
+
+// Screen Width Handler
+jQuery(document).ready(function ($) {
+    var alterClass = function () {
+        var ww = document.body.clientWidth;
+        if (ww <= 640) {
+            // Remove 3 Buttns on top nav bar
+            document.getElementById('RemoveOn650px').style = 'display:none !important ;'
+        } else if (ww > 640) {
+            document.getElementById('RemoveOn650px').style = 'display:inherit !important ;'
+        };
+    };
+    $(window).resize(function () {
+        alterClass();
+    });
+    //Fire it when the page first loads:
+    alterClass();
+});
