@@ -7,7 +7,8 @@ class CheckCompanySettingMiddelWare:
     def __init__(self, get_response):
         self.get_response = get_response
     def __call__(self,request):
-        ALLOWED_URLS = ['/settings/','/settings/global-settings', '/login/', '/logout/']
+        ALLOWED_URLS = ['/settings/', '/settings/global-settings',
+                        '/login/', '/logout/', '/login', '/logout']
         if request.path in ALLOWED_URLS:
             response = self.get_response(request)
         if request.path not in ALLOWED_URLS:
