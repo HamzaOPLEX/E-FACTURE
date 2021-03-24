@@ -8,14 +8,14 @@ class CheckCompanySettingMiddelWare:
         self.get_response = get_response
     def __call__(self,request):
         ALLOWED_URLS = [
-                            '/settings', 
+                            '/settings',
                             '/login', 
                             '/logout',
                             '/admin'
                         ]
         for path in ALLOWED_URLS :
             # for each allowed url create a regex to match evry think that come after it
-            path = path + '.+'
+            path = path + '.*'
             regx = re.compile(path)
             try : 
                 regx = regx.search(request.path).group(0)
