@@ -2,3 +2,4 @@ Django==3.1.7
 mysqlclient
 num2words==0.5.10
 reportlab==3.5.59
+dj_static
