@@ -182,7 +182,6 @@ def H_Edit_Facture(requests, facture_id):
             # Get Post Data
             # get datatable and convert it from json to python dict and get data from myrows
             datatable = json.loads(requests.POST['datatable'])['myrows']
-            facture_number = requests.POST['facture_number']
             client_name = requests.POST['client_name']
             ICE = requests.POST['ICE']
             place = requests.POST['place']
@@ -200,7 +199,7 @@ def H_Edit_Facture(requests, facture_id):
             else:
                 datatable_status = 'not valid'
             # Check if all required values are in POST
-            if datatable and facture_number and client_name and ICE and place and date and datatable_status == 'valid':
+            if datatable and client_name and ICE and place and date and datatable_status == 'valid':
                 if isPaid == 'Oui':
                     paid_method = requests.POST['paiementmethod']
                     if paid_method not in ['Cart', 'Espèces', 'Chèque']:
@@ -216,7 +215,7 @@ def H_Edit_Facture(requests, facture_id):
                 Facture.Date = date
                 Facture.isPaid = isPaid
                 Facture.Paiment_Mathod = paid_method
-                actiondetail = f'{User.username} editer une facture avec le numéro {facture_number} en {Fix_Date(str(datetime.today()))}'
+                actiondetail = f'{User.username} editer une facture avec le numéro {Facture.number} en {Fix_Date(str(datetime.today()))}'
                 APP_History.objects.create(
                     CreatedBy=User,
                     action='editer une facture',
@@ -233,7 +232,7 @@ def H_Edit_Facture(requests, facture_id):
                         print(err)
                 Facture.save()
                 messages.info(
-                    requests, f"la facture {facture_number} a été éditer avec succès")
+                    requests, f"la facture {Facture.number} a été éditer avec succès")
                 return redirect(f'/list-all-facturs/')
             else:
                 messages.error(requests, "Veuillez remplir toutes les données")
@@ -282,5 +281,3 @@ def H_OpenPdf(requests, facture_id):
             return HTTP_404(requests, context)
     except APP_Created_Facture.DoesNotExist:
         return HTTP_404(requests, context)
-
-
