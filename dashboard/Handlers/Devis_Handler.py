@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 
+settings = APP_Settings.objects.all().first()
 
 @RequireLogin
 def H_Create_New_Devis(requests):
@@ -30,13 +31,12 @@ def H_Create_New_Devis(requests):
         'selecteditem': 'devis'
     }
     if requests.method == "GET":
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings
         context['selectbody'] = [
             clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
         context['selectproductbody'] = [
             product.DESIGNATION for product in list(APP_Products.objects.all())]
-        return render(requests, 'CreateNew/Creat-New-Devis.html', context)
+        return render(requests, str(settings.APP_lang)+'/CreateNew/Creat-New-Devis.html', context)
     elif requests.method == "POST":
         # Get Post Data
         datatable = json.loads(requests.POST['datatable'])['myrows']
@@ -99,7 +99,6 @@ def H_Create_New_Devis(requests):
             messages.error(requests, "Veuillez remplir toutes les données")
             return redirect('/create-new-devis/')
 
-
 @RequireLogin
 def H_Delete_Devis(requests, id):
     context = {'pagetitle': f'Supprimer un Devis'}
@@ -133,7 +132,6 @@ def H_Delete_Devis(requests, id):
             what='supprimer', what_detail=f'{User.username} essayez de supprimer Le Devis avec le nombre {Devis.Devis_number}', Who=User.username)
         return HTTP_403(request=requests, context=context)
 
-
 @RequireLogin
 # Require Login || Admin || author Permission
 def H_Edit_Devis(requests, Devis_id):
@@ -144,7 +142,7 @@ def H_Edit_Devis(requests, Devis_id):
     context = {'pagetitle': 'Edité Le Devis',
                'User': User, 'selecteditem': 'list-all-Deviss'}
     # template Path
-    templatepath = 'Edit/edit_Devis.html'
+    templatepath = str(settings.APP_lang)+'/Edit/edit_Devis.html'
     # Get requests Devis by id
     Devis = get_object_or_404(APP_Created_Devis, id=Devis_id)
     # Edit Devis Require Admin Account or The Creator of this Devis
@@ -221,7 +219,6 @@ def H_Edit_Devis(requests, Devis_id):
     else:
         return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer Le Devis avec le nombre {Devis.Devis_number}', User.username, context, templatepath)
 
-
 @RequireLogin
 # All Deviss Table
 def H_List_All_Devis(requests):
@@ -238,8 +235,7 @@ def H_List_All_Devis(requests):
         Deviss = list(APP_Created_Devis.objects.all())
         tablebody = generate_table_of_devis(devis=Deviss)
         context['tablebody'] = tablebody
-        return render(requests, 'List-All-Factures/Created-Devis.html', context)
-
+        return render(requests, str(settings.APP_lang)+'/List-All-Factures/Created-Devis.html', context)
 
 @RequireLogin
 def H_OpenPdf(requests, Devis_id):
@@ -261,18 +257,12 @@ def H_OpenPdf(requests, Devis_id):
                 Company_City = APP_Settings.objects.all().first().Company_Place
                 filepath = DrawNotechPdf(Devis, Devis_item, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City)
             except AttributeError:
-                return render(requests, 'ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
+                return render(requests, str(settings.APP_lang)+'/ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
             return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
         else:
             return HTTP_404(requests, context)
     except APP_Created_Devis.DoesNotExist:
         return HTTP_404(requests, context)
-
-
-
-
-
-
 
 @RequireLogin
 def H_Devis_To_Facture(requests,Devis_id):

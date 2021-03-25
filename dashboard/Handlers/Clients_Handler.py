@@ -3,11 +3,12 @@ from datetime import datetime, timedelta
 from dashboard.APPfunctions.APPfunctions import Fix_Date,generate_table_of_clients
 from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
 from dashboard.Handlers.ERROR_Handlers import *
-from dashboard.models import APP_Clients, APP_History, APP_User,APP_Created_Facture,APP_Created_Devis,APP_Created_BL
+from dashboard.models import *
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+settings = APP_Settings.objects.all().first()
 
 
 @RequirePermission
@@ -19,13 +20,12 @@ def ManageClients(requests):
     context = {'pagetitle': 'Gérer Vos Clients',
                'User': User, 'selecteditem': 'settings'}
     # path to Template
-    templatepath = 'Settings/Manage-Clients.html'
+    templatepath = str(settings.APP_lang)+'/Settings/Manage-Clients.html'
     if requests.method == "GET":
         # Generate Table Of Clients and pass the Table in the context
         allclients = APP_Clients.objects.all()
         tablebody = generate_table_of_clients(allclients=allclients)
         context['tablebody'] = tablebody
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings
         return render(requests, templatepath, context)
     elif requests.method == "POST":

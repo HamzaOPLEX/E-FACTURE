@@ -29,14 +29,15 @@ def H_Create_New_Facture(requests):
         'User': User,
         'selecteditem': 'facture'
     }
+    settings = APP_Settings.objects.all().first()
+    template_path = settings.APP_lang+'/CreateNew/Creat-New-Facture.html'
     if requests.method == "GET":
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings
         context['selectbody'] = [
             clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
         context['selectproductbody'] = [
             product.DESIGNATION for product in list(APP_Products.objects.all())]
-        return render(requests, 'CreateNew/Creat-New-Facture.html', context)
+        return render(requests, template_path, context)
     elif requests.method == "POST":
         # Get Post Data
         datatable = json.loads(requests.POST['datatable'])['myrows']
@@ -51,7 +52,7 @@ def H_Create_New_Facture(requests):
         if len(datatable) != 0:
             datatable_status = 'not valid'
             for row in datatable:
-                if row['DESIGNATION'] and row['P.T'] and row['P.U'] and row['Qs']:
+                if row[list(row.keys())[0]] and row[list(row.keys())[1]] and row[list(row.keys())[2]] and row[list(row.keys())[3]]:
                     datatable_status = 'valid'
                 else:
                     datatable_status = 'not valid'
@@ -97,10 +98,10 @@ def H_Create_New_Facture(requests):
                 for data in datatable:
                     # For item in DataTable Create item
                     APP_Facture_items.objects.create(
-                        Qs=data['Qs'],
-                        DESIGNATION=data['DESIGNATION'],
-                        PU=data['P.U'],
-                        PT=data['P.T'],
+                        Qs=data[list(data.keys())[0]],
+                        DESIGNATION=data[list(data.keys())[1]],
+                        PU=data[list(data.keys())[2]],
+                        PT=data[list(data.keys())[3]],
                         BelongToFacture=facture
                     )
                 messages.info(
@@ -255,12 +256,13 @@ def H_List_All_Factures(requests):
                'User': User, 'selecteditem': 'list-all-factures'}
     if requests.method == "GET":
         settings = APP_Settings.objects.all().first()
+        template_path = str(settings.APP_lang)+'/List-All-Factures/Created-Facturs.html'
         context['setting'] = settings
         # Generate HTML Table and Pass it in context
         factures = list(APP_Created_Facture.objects.all())
         tablebody = generate_table_of_created_factures(factures=factures)
         context['tablebody'] = tablebody
-        return render(requests, 'List-All-Factures/Created-Facturs.html', context)
+        return render(requests, template_path, context)
 
 @RequireLogin
 def H_OpenPdf(requests, facture_id):

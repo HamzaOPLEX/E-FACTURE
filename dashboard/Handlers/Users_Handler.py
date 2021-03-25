@@ -1,6 +1,6 @@
 from dashboard.Handlers.AUTH_Handler import RequireLogin, RequirePermission
 from dashboard.Handlers.ERROR_Handlers import *
-from dashboard.models import APP_User, APP_History, APP_Created_Facture
+from dashboard.models import APP_User, APP_History, APP_Created_Facture, APP_Settings
 from django.contrib.auth.hashers import check_password, make_password
 from datetime import datetime, timedelta
 from django.contrib import messages

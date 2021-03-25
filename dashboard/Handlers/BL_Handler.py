@@ -14,6 +14,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 
+settings = APP_Settings.objects.all().first()
 
 @RequireLogin
 def H_Create_New_BL(requests):
@@ -30,11 +31,10 @@ def H_Create_New_BL(requests):
         'selecteditem': 'BL'
     }
     if requests.method == "GET":
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings
         context['selectbody'] = [clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
         context['selectproductbody'] = [product.DESIGNATION for product in list(APP_Products.objects.all())]
-        return render(requests, 'CreateNew/Creat-New-BL.html', context)
+        return render(requests, str(settings.APP_lang)+'/CreateNew/Creat-New-BL.html', context)
     elif requests.method == "POST":
         # Get Post Data
         datatable = json.loads(requests.POST['datatable'])['myrows']
@@ -142,13 +142,12 @@ def H_Edit_BL(requests, BL_id):
     context = {'pagetitle': 'Edité Le BL',
                'User': User, 'selecteditem': 'list-all-BLs'}
     # template Path
-    templatepath = 'Edit/edit_BL.html'
+    templatepath = str(settings.APP_lang)+'/Edit/edit_BL.html'
     # Get requests BL by id
     BL = get_object_or_404(APP_Created_BL, id=BL_id)
     # Edit BL Require Admin Account or The Creator of this BL
     if User.userpermission == 'Admin' or BL.CreatedBy.id == userid:
         if requests.method == "GET":
-            settings = APP_Settings.objects.all().first()
             context['setting'] = settings
             # Pass All Clients name in context to show them in select2
             context['selectbody'] = [
@@ -245,9 +244,8 @@ def H_List_All_BL(requests):
             all_stuff.append(tablebody)
             n = n + 1
         context['all_stuff'] = all_stuff
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings
-        return render(requests, 'List-All-Factures/Created-BL.html', context)
+        return render(requests, str(settings.APP_lang)+'/List-All-Factures/Created-BL.html', context)
 
 
 @RequireLogin
@@ -268,7 +266,7 @@ def H_OpenPdf(requests, BL_id):
                 Company_City = APP_Settings.objects.all().first().Company_Place
                 filepath = DrawNotechPdf(BL, BL_item, CalculedTOTAL, Company_City)
             except AttributeError:
-                return render(requests, 'ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
+                return render(requests, str(settings.APP_lang)+'/ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
             return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
         else:
             return HTTP_404(requests, context)

@@ -1,15 +1,18 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="fr">
+<html dir="ltr" lang="fr">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title> {{pagetitle}} | E-FACTURES </title>
 
-  <!-- My App Css-->
-  <link rel="stylesheet" href="{% static 'css/myappcss.css' %}" />
+  {% if setting.APP_lang %}
+  <link rel="stylesheet" href="/static/css/fr/myappcss.css">
+  {% elif not setting.APP_lang %}
+  <link rel="stylesheet" href="/static/css/fr/myappcss.css">
+  {% endif %}
 
   <!-- Toster -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
@@ -22,8 +25,9 @@
   <link rel="stylesheet" href='{% static "plugins/daterangepicker/daterangepicker.css" %}'>
   <link rel="stylesheet" href='{% static "plugins/summernote/summernote-bs4.min.css" %}'>
   <link rel="stylesheet" href='{% static "plugins/fontawesome-free/css/all.min.css" %}'>
-  <link rel="stylesheet" href='{% static "css/adminlte.css" %}'>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/fr/adminlte.css">
+
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -38,7 +42,7 @@
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse" lang="fr">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse">
     <div id="circle" style="display: initial;">
       <div class="loader">
         <div class="loader">
@@ -108,8 +112,7 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
             {% if User.gender == 'homme' %}
-            <a href="/profile" class="d-block"><img src='{% static "img/defaultuserlogo.png" %}'
-                class="img-circle elevation-2" alt="User Image"></a>
+            <a href="/profile" class="d-block"><img src='{% static "img/defaultuserlogo.png" %}'class="img-circle elevation-2" alt="User Image"></a>
             {% elif User.gender == 'femme' %}
             <a href="/profile" class="d-block"><img src='{% static "img/defaultfemmelogo.png" %}'
                 class="img-circle elevation-2" alt="User Image"></a>

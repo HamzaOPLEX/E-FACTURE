@@ -6100,10 +6100,10 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   border-top-right-radius: calc(0.3rem - 1px);
 }
 
-.modal-header .close, .modal-header .mailbox-attachment-close {
+/* .modal-header .close, .modal-header .mailbox-attachment-close {
   padding: 1rem;
   margin: -1rem -1rem -1rem auto;
-}
+} */
 
 .modal-title {
   margin-bottom: 0;
@@ -11930,7 +11930,7 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
 .nav-sidebar .nav-link > .right,
 .nav-sidebar .nav-link > p > .right {
   position: absolute;
-  right: 1rem;
+  left: 1rem;
   top: .7rem;
 }
 
@@ -20565,7 +20565,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 .small-box .icon > i {
   font-size: 90px;
   position: absolute;
-  right: 15px;
+  left: 15px;
   top: 15px;
   transition: transform 0.3s linear;
 }

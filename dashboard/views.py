@@ -18,6 +18,7 @@ def Dashboard(requests):
     if requests.method == "GET":
         ###### Dashboard Header Handler
         # Get lenght of some objects from database
+
         len_users = len(APP_User.objects.all())
         len_clients = len(APP_Clients.objects.all())
         len_products = len(APP_Products.objects.all())
@@ -114,7 +115,9 @@ def Dashboard(requests):
         #         Last24HoureHistory, simpletable=True)
         #     context['History_table_body'] = History_table_body
 
-        return render(requests, 'Dashboard/dashboard.html', context)
+
+        settings = APP_Settings.objects.all().first()
+        return render(requests, str(settings.APP_lang)+'/Dashboard/dashboard.html', context)
 
 @RequirePermission
 def Settings(requests):
@@ -130,7 +133,8 @@ def Settings(requests):
     context['User'] = User
     if requests.method == "GET":
         context['selecteditem'] = 'settings'
-        return render(requests, 'Settings/settings.html', context)
+        settings = APP_Settings.objects.all().first()
+        return render(requests, str(settings.APP_lang)+'/Settings/settings.html', context)
 
 
 ########################################################
@@ -161,26 +165,29 @@ def GlobaleSettings(requests):
     User = get_object_or_404(APP_User.objects, id=userid)
     context['selecteditem'] = 'settings'
     context['User'] = User
+
     settings = APP_Settings.objects.all().first()
     if requests.method == 'GET':
         context['setting'] = settings
-        return render(requests, 'Settings/global-settings.html', context)
+        return render(requests, str(settings.APP_lang)+'/Settings/global-settings.html', context)
     elif requests.method == 'POST':
         ICE = str(requests.POST['ICE']).strip().upper()
         TVATAUX = requests.POST['TVATAUX']
         Place = requests.POST['place']
-        if ICE and TVATAUX and Place:
+        LANG = requests.POST['LANG']
+        if ICE and TVATAUX and Place and LANG:
             if settings:
                 settings.Company_ICE = ICE
                 settings.Company_Place = Place
                 settings.Company_TVATAUX = TVATAUX
+                settings.APP_lang = LANG
                 settings.save()
                 messages.info(
                     requests, 'Les paramètres ont été modifiés avec succès')
                 return redirect('/settings/global-settings')
             elif not settings:
                 APP_Settings.objects.create(
-                    Company_ICE=ICE, Company_TVATAUX=TVATAUX, Company_Place=Place)
+                    Company_ICE=ICE, Company_TVATAUX=TVATAUX, Company_Place=Place, APP_lang=LANG)
                 messages.info(
                     requests, 'Les paramètres ont été créés avec succès')
                 return redirect('/settings/global-settings')

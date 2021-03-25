@@ -207,7 +207,7 @@
     }
     button.btn.btn-info.add-new {
         padding: 5px !important;
-        float: right !important;
+        float: left !important;
     }
 
 
@@ -284,7 +284,7 @@
 
 .bg-warning {
     background: rgb(255,193,7);
-    background: linear-gradient(321deg, rgb(237 255 27) 18%, rgb(228 255 0) 17%, rgb(181 191 23) 75%);
+    background: linear-gradient(50deg, rgb(237 255 27) 18%, rgb(228 255 0) 17%, rgb(181 191 23) 75%);
 }
 
 .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
@@ -296,4 +296,15 @@
 .main-header .navbar-nav .nav-item {
     margin: 0;
     margin-right: 9px !important;
+}
+
+
+
+#sidebar_item{
+  margin-right: 10px;
+}
+#sidebar_subitem{
+  display: inline;
+  margin-right: 5px;
+
 }

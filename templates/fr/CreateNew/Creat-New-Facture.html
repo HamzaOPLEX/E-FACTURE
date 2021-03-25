@@ -1,4 +1,5 @@
-{% extends "main.html" %}
+{% extends "main_fr.html" %}
+
 {% load Filters %}
 {% block content %}
 <!--suppress ALL -->
@@ -113,13 +114,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>La Date</label>
-                                    <input type="text" id="datepicker" class="form-control" id="Date" autocomplete="off" name="date" value="{{todaydate}}" placeholder="..." required>
+                                    <input type="date" class="form-control" id="Date" autocomplete="off" name="date" value="{{todaydate}}" placeholder="..." required>
                                 </div>
-                                <script>
-                                    $(function () {
-                                        $("#datepicker").datepicker();
-                                    });
-                                </script>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">

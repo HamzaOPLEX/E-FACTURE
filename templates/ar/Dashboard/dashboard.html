@@ -1,11 +1,11 @@
-{% extends "main.html" %}
+{% extends "main_ar.html" %}
 {% load Filters %}
 {% block content %}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Tableau de bord</h1>
+                <h1>لوحة القيادة</h1>
             </div>
         </div>
     </div>
@@ -16,13 +16,13 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{Lenghts.len_factures}}</h3>
-                    <p>Toutes les factures</p>
+                    <p>جميع الفواتير</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-file-invoice"></i>
                 </div>
                 <a href="/list-all-facturs/" class="small-box-footer">
-                    Afficher <i class="fas fa-arrow-circle-right"></i>
+                    عرض <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -30,13 +30,13 @@
             <div class="small-box bg-info" style="background: rgb(5,103,119); background: linear-gradient( 311deg , rgb(12 24 33) -36%, rgb(14 108 123) 91%, rgb(24 117 132) 100%); }">
                 <div class="inner">
                     <h3>{{Lenghts.len_devis}}</h3>
-                    <p>Touts les Devis</p>
+                    <p>جميع التسعيرات</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-file-invoice"></i>
                 </div>
-                <a href="/list-all-facturs/" class="small-box-footer">
-                    Afficher <i class="fas fa-arrow-circle-right"></i>
+                <a href="/list-all-devis/" class="small-box-footer">
+                    عرض <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -44,13 +44,13 @@
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>{{Lenghts.len_products}}</h3>
-                    <p>Gérez vos produits</p>
+                    <p>إدارة منتجاتك</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-shopping-basket"></i>
                 </div>
                 <a href="/settings/manage-products" class="small-box-footer">
-                    Gérer <i class="fas fa-arrow-circle-right"></i>
+                    إدارة <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -58,13 +58,13 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>{{Lenghts.len_clients}}</h3>
-                    <p>Gérez vos Clients</p>
+                    <p>إدارة عملائك</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-handshake"></i>
                 </div>
                 <a href="/settings/manage-clients" class="small-box-footer">
-                    Gérer <i class="fas fa-arrow-circle-right"></i>
+                    إدارة <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -96,7 +96,7 @@
     </div>
     <div class="card card-info">
         <div class="card-header">
-            <h3 class="card-title">Statistiques des factures :</h3>
+            <h3 class="card-title">إحصائيات الفواتير :</h3>
         </div>
         <div class="card-body">
             <div class="chart">
@@ -120,7 +120,7 @@
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card">
                 <div class="card-header border-transparent">
-                    <h3 class="card-title">Toutes les factures crées ce mois-ci :</h3>
+                    <h3 class="card-title">جميع فواتير هذا الشهر :</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -135,12 +135,12 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th>N°</th>
-                                <th>Nom du client</th>
-                                <th>La Date</th>
-                                <th>Créé par</th>
-                                <th>Payé:</th>
-                                <th>Action</th>
+                                <th>الرقم</th>
+                                <th>اسم الزبون</th>
+                                <th>التاريخ</th>
+                                <th>تم انشائها من طرف</th>
+                                <th>هل دُفعت</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,7 +162,7 @@
         <section class="col-lg-7 connectedSortable ui-sortable ">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Tous les clients ajoutés ce mois-ci :</h3>
+                    <h3 class="card-title">جميع عملاء هذا الشهر :</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
@@ -177,9 +177,9 @@
                     <table class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th>Nom de Client</th>
+                                <th>اسم الزبون</th>
                                 <th>ICE</th>
-                                <th>Ville</th>
+                                <th>المدينة</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -192,44 +192,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer text-center">
-                    <a href="/settings/manage-clients" class="uppercase">Voir toutes les Clients</a>
-                </div>
-                <!-- /.card-footer -->
-            </div>
-        </section>
-        <section class="col-lg-5 connectedSortable ui-sortable">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Tous les produits ajoutés ce mois-ci</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-head-fixed text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Nom du Produit</th>
-                                <th>P.U</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                {{producttablebody | CreateTableBody}}
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer text-center">
-                    <a href="/settings/manage-products" class="uppercase">Voir toutes les Produits</a>
+                    <a href="/settings/manage-clients" class="uppercase">رؤية جميع العملاء</a>
                 </div>
                 <!-- /.card-footer -->
             </div>

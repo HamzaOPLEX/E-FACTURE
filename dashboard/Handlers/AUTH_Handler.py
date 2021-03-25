@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, get_object_or_404
 from dashboard.APPfunctions.APPfunctions import *
-from dashboard.models import APP_User, APP_History
+from dashboard.models import APP_User, APP_History , APP_Settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404

@@ -1,4 +1,4 @@
-{% extends "main.html" %}
+{% extends "main_ar.html" %}
 {% load Filters %}
 {% block content %}
 <style>
@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Toutes les Bon de Laivrason crées</h1>
+                <h1>جميع اوراق التسليم المنشئة</h1>
             </div>
         </div>
     </div>
@@ -52,12 +52,12 @@
                     <table class="table table-head-fixed" id="Table{{bl.2}}">
                         <thead>
                             <tr>
-                                <th style="width: 1%;">choisir</th>
-                                <th>N°</th>
-                                <th>Nom du client:</th>
-                                <th>La Date:</th>
-                                <th>Créé par:</th>
-                                <th>Les Actions</th>
+                                <th style="width: 1%;">اختر</th>
+                                <th>الرقم</th>
+                                <th>اسم الزبون</th>
+                                <th>التاريخ/th>
+                                <th>تم انشائها من طرف</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,17 +77,17 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">S'il vous plait entrez votre mot de passe : </h4>
+                        <h4 class="modal-title">من فضلك أدخل كلمة السر: </h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <label for="modalpass" class="col-form-label">Mot de passe :</label>
+                        <label for="modalpass" class="col-form-label">كلمة السر</label>
                         <input type="password" name="password" class="form-control" id="modalpass" required>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-default btn-danger"><i class="fas fa-trash"></i>
-                            Supprimer</button>
-                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                            حذف </button>
+                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">غلق</button>
                     </div>
                 </div>
             </div>
