@@ -24,7 +24,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
-    Date = FactureObj.Date.strftime('%Y-%m-%d')
+    Date = FactureObj.Date.strftime('%d-%m-%Y')
     Year = FactureObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
@@ -179,8 +179,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                 <b>ICE de Client:</b> {str(FactureObj.ICE).title()}<br/>
                 """
     client_side = f"""
-                    <b>Numéro de Facture:</b> {FactureObj.number}/{Year}<br/>
-                    <b>{Company_City} le:</b> {FactureObj.Date}"""
+                    <b>Numéro de Facture:</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
+                    <b>{Company_City} le:</b> {Date}"""
 
     client_company_table_data = [
         [Paragraph(client_side, ClientSide), '',

@@ -60,10 +60,8 @@ def H_Create_New_BL(requests):
             # Check if BL_number already Exist
             all_BL_numbers = [n.number for n in All_BLs]
             if int(BL_number) in all_BL_numbers:
-
-                messages.error(
-                    requests, f"un BL avec le même numéro ({BL_number}) existe déjà")
-                return redirect('/create-new-bl/')
+                messages.error(requests, f"un BL avec le même numéro ({BL_number}) existe déjà")
+                return JsonResponse({'status':True})
             if int(BL_number) not in all_BL_numbers:
                 # Created BL With POST data if BL_number not found
                 BL = APP_Created_BL.objects.create(

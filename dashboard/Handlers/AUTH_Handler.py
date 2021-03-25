@@ -17,8 +17,7 @@ def RequireLogin(viewfunc):
                     APP_User.objects, id=userid).account_status
             except KeyError:
                 requests.session.flush()
-                messages.info(
-                    requests, 'Votre session a expiré veuillez vous connecter pour continuer')
+                messages.info(requests, 'Votre session a expiré veuillez vous connecter pour continuer')
                 return redirect('/login/')
             if Userstatus == 'Active':
                 return viewfunc(*args, **kwargs)
@@ -41,8 +40,7 @@ def RequirePermission(viewfunc):
                 User = get_object_or_404(APP_User.objects, id=userid)
             except KeyError:
                 requests.session.flush()
-                messages.info(
-                    requests, 'Votre session a expiré veuillez vous connecter pour continuer')
+                messages.info(requests, 'Votre session a expiré veuillez vous connecter pour continuer')
                 return redirect('/login/')
             if User.account_status == 'Active':
                 if User.userpermission == 'Admin':
