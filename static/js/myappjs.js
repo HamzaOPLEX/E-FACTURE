@@ -278,17 +278,7 @@ function LoadDatatableAndSubmit() {
     let tabledata = JSON.parse(JsonTable)
     if (tabledata.myrows.length > 0){
         document.getElementById('tableinput').value = JsonTable
-        $('#Form').submit(function () {
-            $.ajax({
-                url: '/create-new-bl/',
-                type: 'POST',
-                data: $('#Form').serialize(),
-                success: function () {
-                    console.log('form submitted.');
-                }
-            });
-            return false;
-        });
+        document.getElementById("Form").submit();
     }
     if (tabledata.myrows.length == 0) {
         toastr.error('Le tableau des éléments de facture est vide', "S'il Vous Plaît Ajouter Un Élément à Votre Facture");
