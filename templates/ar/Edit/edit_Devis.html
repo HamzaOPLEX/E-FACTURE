@@ -1,12 +1,13 @@
 {% extends "main.html" %}
 {% load Filters %}
 {% block content %}
-<!--suppress ALL -->
+{% if User.userpermission == 'Admin' or Devis.CreatedBy.id == User.id %}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.upper}} bienvenue sur la page pour Créer un Facture </h1>
+                <h1>{{User.username.upper}} bienvenue sur la page pour Éditer le Devis {{Devis.number}}
+                </h1>
             </div>
         </div>
     </div>
@@ -29,7 +30,7 @@
             <div class="card card-default">
                 <!-- <div class="card"> -->
                 <div class="card-header">
-                    <h3 class="card-title">Tableau des éléments de <b>Facture</b></h3>
+                    <h3 class="card-title">Tableau des éléments de <b>Devis</b></h3>
                     <button type="button" class="btn btn-info add-new" onclick="AddNewFactureItemModalHandler();"><i
                             class="fa fa-plus"></i> Ajouter</button>
                 </div>
@@ -46,6 +47,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {{tablebody | CreateTableBody_FactureItems}}
                         </tbody>
                     </table>
 
@@ -55,38 +57,48 @@
         <div class="col-md-6">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">Saisir les informations de facturation</h3>
+                    <h3 class="card-title">Saisir les informations de Devis</h3>
                 </div>
                 <div class="card-body">
-                    <form id='Form' action="/create-new-facture/" method="post">
+                    <form id='Form' action="/list-all-devis/edit/{{Devis.id}}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="datatable" id="tableinput" value="" required>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Numéro de facture </label>
-                                    <input type="number" min="0" class="form-control" name='facture_number'
-                                        value='{{new_facture_number}}' id="facture_number" placeholder="N°:" required>
+                                    <label>Numéro de Devis </label>
+                                    <input type="number" class="form-control" name='Devis_number'
+                                        value='{{Devis.number}}' id="facture_number" placeholder="N°:" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="form-group" style="height: 65px">
-                                    <label>Nom De Client</label>
+                                <div class="form-group" style="height : 60px;">
+                                    <label>DESIGNATION</label>
                                     <select id="ClientName" name="client_name" class="form-control"
                                         onchange="GetSelectedThenSet();">
                                         {{ selectbody | CreateHTMLSelectOptions }}
                                     </select>
-                                    <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
-                                        class="form-control editOption" id="ClientNameInput"
+                                    <input type='text' id="ClientNameInput" placeholder="choisissez le nom du client ou entrez-en un nouveau"
+                                        class="form-control editOption"
                                         onchange="GetInputAndSet2Select('ClientName',0);">
                                     </input>
                                 </div>
+                                <script>
+
+                                    var client = '{{client}}'.replaceAll('&amp;', '&')
+                                    var client = client.replaceAll('&#x27;', "'")
+                                    var client = client.replaceAll('&gt;', ">")
+                                    var client = client.replaceAll('&lt;', "<")
+                                    var client = client.replaceAll('&quot;', '"')
+                                    document.getElementById('ClientName').value = client
+                                    document.getElementsByClassName('editOption')[0].value = client
+                                </script>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>ICE</label>
                                     <input type="text" id='ICE' class="form-control" autocomplete="off" name='ICE'
-                                        value="" placeholder="ICE de Client..." required>
+                                        value="{{Devis.ICE}}" placeholder="ICE de Client..." required>
                                     <div id="circle01"
                                         style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
                                         <div class="loader" style="animation: rotate 1.5s linear infinite !important">
@@ -99,8 +111,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Le Lieu</label>
-                                    <input type="text" id='City' autocomplete="off" class="form-control" name="place"
-                                        placeholder="Lieu..." required>
+                                    <input type="text" id='City' autocomplete="off" value="{{Devis.Place}}"
+                                        class="form-control" name="place" placeholder="Lieu..." required>
                                     <div id="circle02"
                                         style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
                                         <div class="loader" style="animation: rotate 1.5s linear infinite !important">
@@ -113,57 +125,21 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>La Date</label>
-                                    <input type="text" id="datepicker" class="form-control" id="Date" autocomplete="off" name="date" value="{{todaydate}}" placeholder="..." required>
-                                </div>
-                                <script>
-                                    $(function () {
-                                        $("#datepicker").datepicker();
-                                    });
-                                </script>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
+                                    <input type="date" class="form-control" id="Date" autocomplete="off" name="date"
+                                        value="{{Date}}" placeholder="..." required>
+
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Cette facture est-elle payée?</label>
-                                    <select class="form-control" id='ispaid' name="ispaid"
-                                        onchange="disabled_or_enabled_paiementmethod();">
-                                        <option>Non</option>
-                                        <option>Oui</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Méthode de paiement</label>
-                                    <select class="form-control" id='paiementmethod' name="paiementmethod" disabled>
-                                        <option>Espèces</option>
-                                        <option>Chèque</option>
-                                        <option>Cart</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <script>
-                            function disabled_or_enabled_paiementmethod() {
-                                var ispaid = document.getElementById('ispaid').value
-                                if (ispaid == 'Non') {
-                                    document.getElementById('paiementmethod').disabled = true
-                                }
-                                else {
-                                    document.getElementById('paiementmethod').disabled = false
-                                }
-                            }
-                        </script>
-                        <div class="ButtnEnregister">
+                        <div class="ButtnEnregister" style="margin: auto;">
                             <center>
-                                <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
-                                    class="btn btn-block btn-primary"
-                                    style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
-                                        class="fas fa-check"></i>
-                                    <b>ENREGISTRER</b></button>
+                            <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
+                                class="btn btn-block btn-primary" style="background-color:#17a2b8;border-radius: 5px;width: auto !important;margin: auto !important;"><i class="fas fa-check"></i>
+                                <b>ENREGISTRER</b></button>
                             </center>
                         </div>
                 </div>
@@ -219,8 +195,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('addnew');"><i class="fas fa-plus"></i> Ajouter</button>
-                <button type="button" class="btn btn-default btn-success" id="closeeditmodal" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('addnew');"><i
+                        class="fas fa-plus"></i> Ajouter</button>
+                <button type="button" class="btn btn-default btn-success" id="closeeditmodal"
+                    data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -288,5 +266,19 @@
         top: 107px !important;
     }
 </style>
+{% else %}
+<div class="content p-4">
+
+    <div class="card">
+        <div class="card-header bg-white font-weight-bold">
+            Editer le Devis {{Devis.number}}
+        </div>
+        <div class="card-body">
+            <center>{{PermissionMessage | safe}}</center>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 
 {% endblock content %}

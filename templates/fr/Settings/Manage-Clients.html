@@ -1,0 +1,173 @@
+{% extends "main.html" %}
+{% load Filters %}
+
+{% block content %}
+
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>{{User.username.title}} bienvenue sur la page de gestion des Client </h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- <div class="card"> -->
+                <div class="card-header">
+                    <h3 class="card-title">List de Tous Les Client</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0" style="height: 552px;">
+                    <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Client</th>
+                                <th>ICE</th>
+                                <th>Ville</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {{tablebody | CreateTableBody}}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title">Ajouté un Nouvelle Client</h3>
+                </div>
+                <form action="/settings/manage-clients" method="POST">
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="ClientName" autocomplete="off"
+                                placeholder="Nom de Client" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-handshake"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="ICE" autocomplete="off" placeholder="ICE De Client" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-fingerprint"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="City" autocomplete="off" placeholder="Ville du client" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-city"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- /.col -->
+                            <div class="col-4" style="margin: auto;">
+                                <center>
+                                    <button type="submit" class="btn btn-block btn-primary"
+                                        style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i class="fas fa-plus"></i>
+                                        <b> Ajouter</b></button>
+                                </center>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+    <form action="" method="POST" id='deleteform'>
+        {% csrf_token %}
+        <div class="modal fade" id="DeleteModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">S'il vous plait entrez votre mot de passe : </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="modalpass" class="col-form-label">Mot de passe :</label>
+                        <input type="password" name="password" class="form-control" id="modalpass" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default btn-danger"><i class="fas fa-trash"></i>
+                            Supprimer</button>
+                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form action="" method="POST" id='FormToEditClient'>
+        {% csrf_token %}
+        <div class="modal fade" id="EditClientModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><h4 class="modal-title">Entrez toutes les informations ici :) </h4></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id='ClientName' name="ClientName" autocomplete="off" placeholder="Nom de Client" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-handshake"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id='ICE' name="ICE" autocomplete="off" placeholder="ICE De Client" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-fingerprint"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id='City' name="City" autocomplete="off" placeholder="Ville du client" required>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-city"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default btn-info"><i class="fas fa-edit"></i>Edité</button>
+                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

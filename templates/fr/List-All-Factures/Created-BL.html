@@ -1,0 +1,97 @@
+{% extends "main.html" %}
+{% load Filters %}
+{% block content %}
+<style>
+    tr {
+        text-align: center;
+    }
+</style>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Toutes les Bon de Laivrason crées</h1>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<section class="content">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <div id="accordion">
+        <form id="FormSELECTEDBL" method="POST" action="/convert-bl/">
+            {% csrf_token %}
+            <input type="hidden" name="SELECTEDBL" id='SELECTEDBL' value="">
+        </form>
+        {% for bl in all_stuff %}
+        <div class="card">
+            <div class="card-header" id="heading{{bl.2}}">
+                <h5 class="mb-0">
+                    <button class="btn btn-info" data-toggle="collapse" onclick="$(this).collapse('hide')"
+                        data-target="#collapse{{bl.2}}" aria-expanded="true"
+                        aria-controls="collapse{{bl.2}}">
+                        <b>{{bl.1.upper}}</b>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapse{{bl.2}}" class="collapse hide" aria-labelledby="heading{{bl.2}}" data-parent="#accordion">
+                <div class="card-body">
+                    <div class="text-center" style="margin-top: -19px;">
+                        <button class="btn bg-gradient-success" style="margin:auto;color: white;" onclick="Selectallthengo('Table{{bl.2}}')">Sélectionner Tout et Convertir</button>
+                        <button class="btn bg-gradient-success" style="margin:auto;color: white;" onclick="Selectthengo('Table{{bl.2}}')">Convertir Sélectionné</button>
+                    </div>
+                    <table class="table table-head-fixed" id="Table{{bl.2}}">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%;">choisir</th>
+                                <th>N°</th>
+                                <th>Nom du client:</th>
+                                <th>La Date:</th>
+                                <th>Créé par:</th>
+                                <th>Les Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{bl.0 | CreateTableBody}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- /.card -->
+    </div>
+    <form action="" method="POST" id='deleteform'>
+        {% csrf_token %}
+        <div class="modal fade" id="DeleteModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">S'il vous plait entrez votre mot de passe : </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="modalpass" class="col-form-label">Mot de passe :</label>
+                        <input type="password" name="password" class="form-control" id="modalpass" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default btn-danger"><i class="fas fa-trash"></i>
+                            Supprimer</button>
+                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+{% endblock content %}

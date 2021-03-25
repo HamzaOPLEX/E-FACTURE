@@ -141,9 +141,15 @@ class APP_Clients(models.Model):
         return self.Client_Name
 
 class APP_Settings(models.Model):
+    langs = (
+        ('fr', 'fr'),
+        ('ar', 'ar'),
+        ('en', 'en'),
+    )
     Company_ICE = models.CharField(max_length=255,default='00000000000000')
     Company_TVATAUX = models.FloatField(default=20)
-    Company_Place = models.CharField(max_length=255,default='Tanger')
+    Company_Place = models.CharField(max_length=255,default='earth')
+    APP_lang = models.CharField(max_length=3, choices=langs, blank=False)
 
     def __str__(self):
         return self.Company_ICE

@@ -142,7 +142,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
         canvas.drawImage(str(BASE_DIR)+"/logo-watermark.png", 30, 300, 500, 300)
         canvas.setFont('Helvetica', 10)
         Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
-        footer_msg = "18 RES DALA Jirari 5R Magasin 1 - Tanger - 0660055110 - 0531777771 info@notechnologie.com - ICE : 00006665600026".strip()
+        footer_msg = "18 RES DALA Jirari 5R Magasin 1 - Tanger - 0660055110 - 0531777771 info@notechnologie.com - ICE : 000066656000026".strip()
         draw_wrapped_line(canvas, Money_msg, 100, 290, 75, 10)
         canvas.setLineWidth(2)
         canvas.line(50, 50, 530, 50)

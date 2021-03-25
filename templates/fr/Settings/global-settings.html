@@ -62,19 +62,6 @@
                                 name="place" placeholder="Lieu ..." required>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>langue de votre application :</label>
-                            <select name="LANG" id="LANG" class="form-control" required>
-                                <option value="fr">fr</option>
-                                <option value="ar">ar</option>
-                                <option value="en">en</option>
-                            </select>
-                            <script>
-                                document.getElementById('LANG').value = "{{ setting.APP_lang }}"
-                            </script>
-                        </div>
-                    </div>
                 </div>
                 <div class="ButtnEnregister">
                     <center><button id="savebttn" type="submit" class="btn btn-block btn-primary"
