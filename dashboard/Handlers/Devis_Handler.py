@@ -30,6 +30,8 @@ def H_Create_New_Devis(requests):
         'selecteditem': 'devis'
     }
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         context['selectbody'] = [
             clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
         context['selectproductbody'] = [
@@ -148,6 +150,8 @@ def H_Edit_Devis(requests, Devis_id):
     # Edit Devis Require Admin Account or The Creator of this Devis
     if User.userpermission == 'Admin' or Devis.CreatedBy.id == userid:
         if requests.method == "GET":
+            settings = APP_Settings.objects.all().first()
+            context['setting'] = settings
             # Pass All Clients name in context to show them in select2
             context['selectbody'] = [
                 clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
@@ -228,6 +232,8 @@ def H_List_All_Devis(requests):
     context = {'pagetitle': 'Lister Toutes Les Devis',
                'User': User, 'selecteditem': 'list-all-Deviss'}
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         # Generate HTML Table and Pass it in context
         Deviss = list(APP_Created_Devis.objects.all())
         tablebody = generate_table_of_devis(devis=Deviss)
@@ -245,6 +251,8 @@ def H_OpenPdf(requests, Devis_id):
         Devis = APP_Created_Devis.objects.get(id=Devis_id)
         context['Devis'] = Devis
         if requests.method == "GET":
+            settings = APP_Settings.objects.all().first()
+            context['setting'] = settings
             Devis_item = APP_Devis_items.objects.filter(BelongToDevis=Devis)
             try:
                 CalculedTOTAL = Calcule_TVA_TOTAL_TTC(Devis_item)
@@ -274,6 +282,8 @@ def H_Devis_To_Facture(requests,Devis_id):
     Devis_items = APP_Devis_items.objects.filter(BelongToDevis=Devis)
     isAlreadyConverted = APP_Created_Facture.objects.filter(ConvertedFrom=Devis)
     if requests.method == 'GET':
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         if isAlreadyConverted :
             messages.info(requests, f"Ce Devis a été Déjà Convertir à une Facture  avec le nombre {isAlreadyConverted[0].number}")
             return redirect('/list-all-facturs/')

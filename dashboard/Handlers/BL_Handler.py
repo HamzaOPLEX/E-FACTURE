@@ -30,10 +30,10 @@ def H_Create_New_BL(requests):
         'selecteditem': 'BL'
     }
     if requests.method == "GET":
-        context['selectbody'] = [
-            clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
-        context['selectproductbody'] = [
-            product.DESIGNATION for product in list(APP_Products.objects.all())]
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
+        context['selectbody'] = [clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
+        context['selectproductbody'] = [product.DESIGNATION for product in list(APP_Products.objects.all())]
         return render(requests, 'CreateNew/Creat-New-BL.html', context)
     elif requests.method == "POST":
         # Get Post Data
@@ -148,6 +148,8 @@ def H_Edit_BL(requests, BL_id):
     # Edit BL Require Admin Account or The Creator of this BL
     if User.userpermission == 'Admin' or BL.CreatedBy.id == userid:
         if requests.method == "GET":
+            settings = APP_Settings.objects.all().first()
+            context['setting'] = settings
             # Pass All Clients name in context to show them in select2
             context['selectbody'] = [
                 clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
@@ -232,6 +234,7 @@ def H_List_All_BL(requests):
             set() : remove duplicated clients
             n : for increment by 1 for the colapss ID
         """
+
         # For each client get his BL's :
         all_bl_clients = list(set([(clientobj.Client_Name,clientobj.ICE,clientobj.Place) for clientobj in  APP_Created_BL.objects.all()]))
         all_stuff = []
@@ -242,6 +245,8 @@ def H_List_All_BL(requests):
             all_stuff.append(tablebody)
             n = n + 1
         context['all_stuff'] = all_stuff
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         return render(requests, 'List-All-Factures/Created-BL.html', context)
 
 
@@ -255,6 +260,8 @@ def H_OpenPdf(requests, BL_id):
         BL = APP_Created_BL.objects.get(id=BL_id)
         context['BL'] = BL
         if requests.method == "GET":
+            settings = APP_Settings.objects.all().first()
+            context['setting'] = settings
             BL_item = APP_BL_items.objects.filter(BelongToBL=BL)
             try:
                 CalculedTOTAL = Calcule_TVA_TOTAL_TTC(BL_item)

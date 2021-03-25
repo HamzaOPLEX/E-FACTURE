@@ -25,6 +25,8 @@ def ManageClients(requests):
         allclients = APP_Clients.objects.all()
         tablebody = generate_table_of_clients(allclients=allclients)
         context['tablebody'] = tablebody
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         return render(requests, templatepath, context)
     elif requests.method == "POST":
         ClientName = str(requests.POST['ClientName']).strip().lower()

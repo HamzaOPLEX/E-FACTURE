@@ -20,6 +20,8 @@ def ManageProducts(requests):
     # path to Template
     templatepath = 'Settings/Manage-Products.html'
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         # Generate Table Of Products and pass the Table in the context
         Products = list(APP_Products.objects.all())
         context['tablebody'] = generate_table_of_products(Products=Products)
@@ -105,6 +107,8 @@ def EditProduct(requests, id):
             messages.info(requests, 'Veuillez remplir toutes les informations')
             return redirect('/settings/manage-products')
     elif requests.method == 'GET':
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         product = get_object_or_404(APP_Products, id=id)
         product_info = {
             'ProductName': product.DESIGNATION,

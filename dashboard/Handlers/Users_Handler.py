@@ -16,6 +16,8 @@ def ManageUsers(requests):
     context['User'] = User
     context['selecteditem'] = 'settings'
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings        
         all_users = APP_User.objects.all()
         tablebody = []
         for user in all_users:
@@ -73,6 +75,8 @@ def EditUser(requests, id):
                 requests, "veuillez saisir des correct informations")
             return redirect('/settings/manage-users')
     elif requests.method == 'GET':
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         edit_user = get_object_or_404(APP_User, id=id)
         context['edituser'] = edit_user
         return render(requests, 'Settings/Edit-User.html', context)
@@ -109,6 +113,8 @@ def ShowUserProfile(requests, id):
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User.objects, id=userid)
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         try:
             UserTarget = APP_User.objects.get(id=id)
             factures = list(
@@ -168,6 +174,9 @@ def ChangeUserPassword(requests, id):
                 requests, "veuillez saisir des correct informations")
             return render(requests, 'Settings/changepwduser.html', context)
     elif requests.method == 'GET':
+        
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         try:
             edit_user = APP_User.objects.get(id=id)
             context['edituser'] = edit_user

@@ -30,6 +30,8 @@ def H_Create_New_Facture(requests):
         'selecteditem': 'facture'
     }
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         context['selectbody'] = [
             clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
         context['selectproductbody'] = [
@@ -159,6 +161,8 @@ def H_Edit_Facture(requests, facture_id):
     # Edit Facture Require Admin Account or The Creator of this Facture
     if User.userpermission == 'Admin' or Facture.CreatedBy.id == userid:
         if requests.method == "GET":
+            settings = APP_Settings.objects.all().first()
+            context['setting'] = settings
             # Pass All Clients name in context to show them in select2
             context['selectbody'] = [
                 clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
@@ -250,6 +254,8 @@ def H_List_All_Factures(requests):
     context = {'pagetitle': 'Lister Toutes Les facture',
                'User': User, 'selecteditem': 'list-all-factures'}
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         # Generate HTML Table and Pass it in context
         factures = list(APP_Created_Facture.objects.all())
         tablebody = generate_table_of_created_factures(factures=factures)
@@ -266,6 +272,8 @@ def H_OpenPdf(requests, facture_id):
         Facture = APP_Created_Facture.objects.get(id=facture_id)
         context['facture'] = Facture
         if requests.method == "GET":
+            settings = APP_Settings.objects.all().first()
+            context['setting'] = settings
             Facture_item = APP_Facture_items.objects.filter(
                 BelongToFacture=Facture)
             # try:

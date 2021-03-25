@@ -1,15 +1,18 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html dir="ltr" lang="fr">
-
+{% if setting.APP_lang == 'ar' %}
+<html dir="rtl" lang="{{setting.APP_lang}}">
+{% else %}
+<html dir="ltr" lang="{{setting.APP_lang}}">
+{% endif %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title> {{pagetitle}} | E-FACTURES </title>
 
   <!-- My App Css-->
-  <link rel="stylesheet" href="{% static 'css/fr/myappcss.css' %}" />
+  <link rel="stylesheet" href="/static/css/{{setting.APP_lang}}/myappcss.css' />
 
   <!-- Toster -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
@@ -22,7 +25,7 @@
   <link rel="stylesheet" href='{% static "plugins/daterangepicker/daterangepicker.css" %}'>
   <link rel="stylesheet" href='{% static "plugins/summernote/summernote-bs4.min.css" %}'>
   <link rel="stylesheet" href='{% static "plugins/fontawesome-free/css/all.min.css" %}'>
-  <link rel="stylesheet" href='{% static "css/fr/adminlte.css" %}'>
+  <link rel="stylesheet" href="/static/css/{{setting.APP_lang}}/adminlte.css">
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -38,7 +41,7 @@
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse" lang="fr">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse">
     <div id="circle" style="display: initial;">
       <div class="loader">
         <div class="loader">

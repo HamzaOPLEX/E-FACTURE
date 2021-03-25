@@ -14,6 +14,8 @@ def Profile(requests):
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User.objects, id=userid)
     if requests.method == "GET":
+        settings = APP_Settings.objects.all().first()
+        context['setting'] = settings
         factures = list(APP_Created_Facture.objects.filter(CreatedBy=User))
         tablebody = []
         for facture in factures:
