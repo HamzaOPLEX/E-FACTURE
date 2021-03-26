@@ -45,8 +45,8 @@ class APP_Created_Devis(models.Model):
 class APP_Devis_items(models.Model):
     Qs = models.IntegerField(default=0)
     DESIGNATION = models.TextField(default=None)
-    PU = models.IntegerField(default=0)
-    PT = models.BigIntegerField(default=0)
+    PU = models.FloatField(default=0)
+    PT = models.FloatField(default=0)
     BelongToDevis = models.ForeignKey(
         APP_Created_Devis, on_delete=models.CASCADE, editable=False)
 
@@ -86,8 +86,8 @@ class APP_Created_Facture(models.Model):
 class APP_Facture_items(models.Model):
     Qs = models.IntegerField(default=0)
     DESIGNATION = models.TextField(default=None)
-    PU = models.IntegerField(default=0)
-    PT = models.BigIntegerField(default=0)
+    PU = models.FloatField(default=0)
+    PT = models.FloatField(default=0)
     BelongToFacture = models.ForeignKey(APP_Created_Facture, on_delete=models.CASCADE, editable=False)
     Date = models.DateField(auto_now=True)
     def __str__(self):
@@ -113,8 +113,8 @@ class APP_Created_BL(models.Model):
 class APP_BL_items(models.Model):
     Qs = models.IntegerField(default=0)
     DESIGNATION = models.TextField(default=None)
-    PU = models.IntegerField(default=0)
-    PT = models.BigIntegerField(default=0)
+    PU = models.FloatField(default=0)
+    PT = models.FloatField(default=0)
     BelongToBL = models.ForeignKey(APP_Created_BL, on_delete=models.CASCADE, editable=False)
 
     def __str__(self):
@@ -124,7 +124,7 @@ class APP_BL_items(models.Model):
 # Settings Tables
 ########################################
 class APP_Products(models.Model):
-    PU = models.IntegerField()
+    PU = models.FloatField()
     DESIGNATION = models.TextField()
     Number_Of_Use = models.IntegerField(default=None, null=True)
     Date = models.DateField(auto_now=True)

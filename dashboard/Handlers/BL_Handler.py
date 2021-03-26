@@ -14,7 +14,6 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 
-settings = APP_Settings.objects.all().first()
 
 @RequireLogin
 def H_Create_New_BL(requests):
@@ -30,6 +29,7 @@ def H_Create_New_BL(requests):
         'User': User,
         'selecteditem': 'BL'
     }
+    settings = APP_Settings.objects.all().first()
     if requests.method == "GET":
         context['setting'] = settings
         context['selectbody'] = [clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
@@ -48,7 +48,7 @@ def H_Create_New_BL(requests):
         if len(datatable) != 0:
             datatable_status = 'not valid'
             for row in datatable:
-                if row['DESIGNATION'] and row['P.T'] and row['P.U'] and row['Qs']:
+                if row[list(row.keys())[0]] and row[list(row.keys())[1]] and row[list(row.keys())[2]] and row[list(row.keys())[3]]:
                     datatable_status = 'valid'
                 else:
                     datatable_status = 'not valid'
@@ -83,10 +83,10 @@ def H_Create_New_BL(requests):
                 for data in datatable:
                     # For item in DataTable Create item
                     APP_BL_items.objects.create(
-                        Qs=data['Qs'],
-                        DESIGNATION=data['DESIGNATION'],
-                        PU=data['P.U'],
-                        PT=data['P.T'],
+                        Qs=data[list(data.keys())[0]],
+                        DESIGNATION=data[list(data.keys())[1]],
+                        PU=data[list(data.keys())[2]],
+                        PT=data[list(data.keys())[3]],
                         BelongToBL=BL
                     )
                 messages.info(
@@ -137,6 +137,7 @@ def H_Delete_BL(requests, id):
 def H_Edit_BL(requests, BL_id):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
+    settings = APP_Settings.objects.all().first()
     User = get_object_or_404(APP_User.objects, id=userid)
     # Context
     context = {'pagetitle': 'Edité Le BL',
@@ -181,7 +182,7 @@ def H_Edit_BL(requests, BL_id):
             if len(datatable) != 0:
                 datatable_status = 'not valid'
                 for row in datatable:
-                    if row['DESIGNATION'] and row['P.T'] and row['P.U'] and row['Qs']:
+                    if row[list(row.keys())[0]] and row[list(row.keys())[1]] and row[list(row.keys())[2]] and row[list(row.keys())[3]]:
                         datatable_status = 'valid'
                     else:
                         datatable_status = 'not valid'
@@ -205,7 +206,12 @@ def H_Edit_BL(requests, BL_id):
                 for data in datatable:
                     try:
                         APP_BL_items.objects.create(
-                            Qs=data['Qs'], DESIGNATION=data['DESIGNATION'], PU=data['P.U'], PT=data['P.T'], BelongToBL=BL)
+                            Qs=data[list(data.keys())[0]],
+                            DESIGNATION=data[list(data.keys())[1]],
+                            PU=data[list(data.keys())[2]],
+                            PT=data[list(data.keys())[3]],
+                            BelongToBL=BL
+                        )
                     except Exception as err:
                         print(err)
                 BL.save()
@@ -224,6 +230,7 @@ def H_Edit_BL(requests, BL_id):
 def H_List_All_BL(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
+    settings = APP_Settings.objects.all().first()
     User = get_object_or_404(APP_User.objects, id=userid)
     # context
     context = {'pagetitle': 'Lister Toutes Les BL',

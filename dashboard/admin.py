@@ -5,6 +5,6 @@ from dashboard.models import *
 
 
 
-Models = (APP_History, APP_User,APP_Warning,APP_Facture_items,APP_Created_Facture,APP_Clients)
+Models = (APP_History, APP_User,APP_Warning,APP_Facture_items,APP_Created_Facture,APP_Clients,APP_Settings)
 
 admin.site.register(Models)

@@ -14,7 +14,6 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 
-settings = APP_Settings.objects.all().first()
 
 @RequireLogin
 def H_Create_New_Devis(requests):
@@ -30,12 +29,11 @@ def H_Create_New_Devis(requests):
         'User': User,
         'selecteditem': 'devis'
     }
+    settings = APP_Settings.objects.all().first()
     if requests.method == "GET":
         context['setting'] = settings
-        context['selectbody'] = [
-            clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
-        context['selectproductbody'] = [
-            product.DESIGNATION for product in list(APP_Products.objects.all())]
+        context['selectbody'] = [clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
+        context['selectproductbody'] = [product.DESIGNATION for product in list(APP_Products.objects.all())]
         return render(requests, str(settings.APP_lang)+'/CreateNew/Creat-New-Devis.html', context)
     elif requests.method == "POST":
         # Get Post Data
@@ -138,17 +136,18 @@ def H_Edit_Devis(requests, Devis_id):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User.objects, id=userid)
+    settings = APP_Settings.objects.all().first()
     # Context
     context = {'pagetitle': 'Edité Le Devis',
                'User': User, 'selecteditem': 'list-all-Deviss'}
     # template Path
     templatepath = str(settings.APP_lang)+'/Edit/edit_Devis.html'
+    print(templatepath)
     # Get requests Devis by id
     Devis = get_object_or_404(APP_Created_Devis, id=Devis_id)
     # Edit Devis Require Admin Account or The Creator of this Devis
     if User.userpermission == 'Admin' or Devis.CreatedBy.id == userid:
         if requests.method == "GET":
-            settings = APP_Settings.objects.all().first()
             context['setting'] = settings
             # Pass All Clients name in context to show them in select2
             context['selectbody'] = [
@@ -161,8 +160,7 @@ def H_Edit_Devis(requests, Devis_id):
             # Pass the Date of Devis
             context['Date'] = Devis.Date.strftime('%Y-%m-%d')
             # Get All Devis items that belong to that Devis
-            Devis_item = APP_Devis_items.objects.filter(
-                BelongToDevis=Devis)
+            Devis_item = APP_Devis_items.objects.filter(BelongToDevis=Devis)
             # generate table of Devis items and pass him in context
             table = generate_table_of_devis_items(Devis_items=Devis_item)
             context['tablebody'] = table

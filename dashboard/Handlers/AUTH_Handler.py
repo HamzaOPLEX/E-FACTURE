@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 
+settings = APP_Settings.objects.all().first()
+
 
 # Function Of Decorator That Will Check If User is Loged in  if not redirect him to login
 def RequireLogin(viewfunc):
@@ -63,7 +65,7 @@ def Login(requests):
         if requests.session.session_key and requests.session.exists(requests.session.session_key):
             return redirect('/dashboard')
         else:
-            return render(requests, 'Authentication/login.html', context)
+            return render(requests, str(settings.APP_lang)+'/Authentication/login.html', context)
     elif requests.method == "POST":
         username = requests.POST['username']
         password = requests.POST['password']
@@ -85,9 +87,8 @@ def Login(requests):
             else:
                 return Your_Account_Has_Been_Suspended(requests)
         except APP_User.DoesNotExist or Exception:
-            messages.error(
-                requests, f"Mot de passe ou nom d'utilisateur incorrect")
-            return render(requests, 'Authentication/login.html', context)
+            messages.error(requests, f"Mot de passe ou nom d'utilisateur incorrect")
+            return redirect('/login/')
 
 
 @RequireLogin

@@ -6,7 +6,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.upper}} bienvenue sur la page pour Créer un Bon De Livraison </h1>
+                <h1>{{User.username.upper}} مرحبًا بك في الصفحة لإنشاء ورقة التسليم</h1>
             </div>
         </div>
     </div>
@@ -29,19 +29,19 @@
             <div class="card card-default">
                 <!-- <div class="card"> -->
                 <div class="card-header">
-                    <h3 class="card-title">Tableau des éléments de <b>Bon De Livraison</b></h3>
+                    <h3 class="card-title">جدول عناصر الورقة التسليم</h3>
                     <button type="button" class="btn btn-info add-new" onclick="AddNewFactureItemModalHandler();"><i
-                            class="fa fa-plus"></i> Ajouter</button>
+                            class="fa fa-plus"></i> اضافة</button>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 552px;">
                     <table id='Table' class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th id='smallth'>Qs</th>
-                                <th>DESIGNATION</th>
-                                <th id='smallth'>P.U</th>
-                                <th id='smallth'>P.T</th>
+                                <th id='smallth'>الكمية</th>
+                                <th>وصف</th>
+                                <th id='smallth'>سعر الوحده</th>
+                                <th id='smallth'>سعر الكل</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -55,7 +55,7 @@
         <div class="col-md-6">
             <div class="card card-default">
                 <div class="card-header">
-                    <h3 class="card-title">Saisir les informations de <b>Bon De Livraison</b></h3>
+                    <h3 class="card-title">أدخل معلومات ورقة التسليم</h3>
                 </div>
                 <div class="card-body">
                     <form id='Form' method="post">
@@ -64,19 +64,19 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Numéro de BL </label>
+                                    <label>رقم ورقة التسليم</label>
                                     <input type="number" min="0" class="form-control" name='BL_number'
                                         value='{{new_BL_number}}' id="facture_number" placeholder="N°:" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group" style="height: 65px">
-                                    <label>Nom De Client</label>
+                                    <label>اسم الزبون</label>
                                     <select id="ClientName" name="client_name" class="form-control"
                                         onchange="GetSelectedThenSet();">
                                         {{ selectbody | CreateHTMLSelectOptions }}
                                     </select>
-                                    <input type='text' placeholder="choisissez le nom du client ou entrez-en un nouveau"
+                                    <input type='text' placeholder="اختر اسم العميل أو أدخل اسمًا جديدًا"
                                         class="form-control editOption" id="ClientNameInput"
                                         onchange="GetInputAndSet2Select('ClientName',0);">
                                     </input>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Le Lieu</label>
+                                    <label>مدينة</label>
                                     <input type="text" id='City' autocomplete="off" class="form-control" name="place" placeholder="Lieu..."
                                         required>
                                     <div id="circle02"
@@ -112,7 +112,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>La Date</label>
+                                    <label>التاريخ</label>
                                     <input type="date" class="form-control" id="Date" autocomplete="off" name="date"
                                         value="{{todaydate}}" placeholder="..." required>
                                 </div>
@@ -128,7 +128,7 @@
                                     class="btn btn-block btn-primary"
                                     style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
                                         class="fas fa-check"></i>
-                                    <b>ENREGISTRER</b></button>
+                                    <b>حفظ</b></button>
                             </center>
                         </div>
                 </div>
@@ -142,21 +142,21 @@
     <div class="modal-dialog card card-default">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Entrez toutes les informations ici :) </h4>
+                <h4 class="modal-title">أدخل جميع المعلومات هنا: </h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Qs</label>
+                    <label>الكمية</label>
                     <input type="number" min="0" class="form-control" id='Qs' name="Qs" autocomplete="off"
                         onkeyup="CalculatePT();" placeholder="Qs" required>
                 </div>
                 <div class="form-group" style="height: 65px">
-                    <label>DESIGNATION</label>
+                    <label>وصف</label>
                     <select id="ProductName" class="form-control" onchange="GetSelectedProductThenSet();">
                         {{selectproductbody | CreateHTMLSelectOptions}}
                     </select>
-                    <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
+                    <input type='text' placeholder="اختر اسم المنتج أو أدخل اسمًا جديدًا"
                         class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
                     </input>
                     <script>
@@ -166,7 +166,7 @@
                     </script>
                 </div>
                 <div class="form-group">
-                    <label>PU</label>
+                    <label>سعر الوحده</label>
                     <input type="number" class="form-control" id='PU' name="PU" onkeyup="CalculatePT();"
                         autocomplete="off" placeholder="PU" required>
                     <div id="circle_addnew"
@@ -178,16 +178,16 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>PT</label>
+                    <label>سعر الكل</label>
                     <input type="number" class="form-control" id='PT' name="PT" autocomplete="off" placeholder="PT"
                         required readonly>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('addnew');"><i
-                        class="fas fa-plus"></i> Ajouter</button>
+                        class="fas fa-plus"></i> اضافة</button>
                 <button type="button" class="btn btn-default btn-success" id="closeeditmodal"
-                    data-dismiss="modal">Fermer</button>
+                    data-dismiss="modal">إغلاق</button>
             </div>
         </div>
     </div>
@@ -198,22 +198,22 @@
     <div class="modal-dialog  card card-default">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Entrez toutes les informations ici : </h4>
+                <h4 class="modal-title">أدخل جميع المعلومات هنا: </h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id='SelectedRowNumber' value="">
                 <div class="form-group">
-                    <label>Qs</label>
+                    <label>الكمية</label>
                     <input type="number" min="0" class="form-control" id='Edit_Qs' name="Qs" autocomplete="off"
                         onkeyup="CalculatePTedit();" placeholder="Qs" required>
                 </div>
                 <div class="form-group" style="height: 65px">
-                    <label>DESIGNATION</label>
+                    <label>وصف</label>
                     <select id="Edit_ProductName" class="form-control" onchange="GetSelectedProductThenSetEdit();">
                         {{selectproductbody | CreateHTMLSelectOptions}}
                     </select>
-                    <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
+                    <input type='text' placeholder="اختر اسم المنتج أو أدخل اسمًا جديدًا"
                         class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
                     <script>
                         function CalculatePTedit() {
@@ -222,10 +222,10 @@
                     </script>
                 </div>
                 <div class="form-group">
-                    <label>PU</label>
+                    <label>سعر الوحده</label>
                     <input type="number" class="form-control" id='Edit_PU' name="PU" onkeyup="CalculatePTedit();"
                         autocomplete="off" placeholder="PU" required>
-                    <div id="circle_addnew"
+                    <div id="circle_edit"
                         style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
                         <div class="loader" style="animation: rotate 1.5s linear infinite !important">
                             <div class="loader" style="animation: rotate 1.5s linear infinite !important">
@@ -234,15 +234,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>PT</label>
+                    <label>سعر الكل</label>
                     <input type="number" class="form-control" id='Edit_PT' name="PT" autocomplete="off" placeholder="PT"
                         required readonly>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('edit');"><i
-                        class="fas fa-plus"></i>Edit</button>
-                <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Fermer</button>
+                        class="fas fa-plus"></i>تعديل</button>
+                <button type="button" class="btn btn-default btn-success" data-dismiss="modal">إغلاق</button>
             </div>
         </div>
     </div>

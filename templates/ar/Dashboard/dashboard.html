@@ -116,50 +116,49 @@
     </div>
     <!-- <div class="container-fluid"> -->
     <div class="row">
-        <section class="col-lg-7 connectedSortable ui-sortable">
-            <!-- Custom tabs (Charts with tabs)-->
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header border-transparent">
-                    <h3 class="card-title">جميع فواتير هذا الشهر :</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                            <i class="fas fa-times"></i>
-                        </button>
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">جميع فواتير هذا الشهر :</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-head-fixed text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>الرقم</th>
-                                <th>اسم الزبون</th>
-                                <th>التاريخ</th>
-                                <th>تم انشائها من طرف</th>
-                                <th>هل دُفعت</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                {{tablebody | CreateTableBody}}
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer clearfix">
-                    <a href="/list-all-facturs/" class="btn btn-sm btn-secondary float-right">Voir toutes les
-                        factures</a>
-                </div>
-                <!-- /.card-footer -->
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>اسم الزبون</th>
+                                    <th>التاريخ</th>
+                                    <th>تم انشائها من طرف</th>
+                                    <th>هل دُفعت</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {{tablebody | CreateTableBody}}
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <a href="/list-all-facturs/" class="btn btn-sm btn-secondary float-right">جميع الفواتير</a>
+                    </div>
+                    <!-- /.card-footer -->
             </div>
-        </section>
-        <section class="col-lg-7 connectedSortable ui-sortable ">
+        </div>
+        <div class="col-md-6">
+
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">جميع عملاء هذا الشهر :</h3>
@@ -196,7 +195,7 @@
                 </div>
                 <!-- /.card-footer -->
             </div>
-        </section>
+        </div>
     </div>
     <!-- </div> -->
 </section>

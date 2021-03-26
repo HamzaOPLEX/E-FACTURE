@@ -156,7 +156,8 @@ def H_Edit_Facture(requests, facture_id):
     context = {'pagetitle': 'Edité La facture',
                'User': User, 'selecteditem': 'list-all-factures'}
     # template Path
-    templatepath = 'Edit/edit_facture.html'
+    settings = APP_Settings.objects.all().first()
+    templatepath = settings.APP_lang+'/Edit/edit_facture.html'
     # Get requests facture by id
     Facture = get_object_or_404(APP_Created_Facture, id=facture_id)
     # Edit Facture Require Admin Account or The Creator of this Facture

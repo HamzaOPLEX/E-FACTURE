@@ -175,7 +175,7 @@ def GlobaleSettings(requests):
         TVATAUX = requests.POST['TVATAUX']
         Place = requests.POST['place']
         LANG = requests.POST['LANG']
-        if ICE and TVATAUX and Place and LANG:
+        if ICE and TVATAUX and Place:
             if settings:
                 settings.Company_ICE = ICE
                 settings.Company_Place = Place
