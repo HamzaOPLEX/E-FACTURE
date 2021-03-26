@@ -237,10 +237,10 @@
     $(function () {
 
         var areaChartData = {
-            labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            labels: ['يناير', 'فبراير', 'مارس', 'ابريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],
             datasets: [
                 {
-                    label: 'Facture Payéé',
+                    label: 'فواتير مدفوعة',
                     backgroundColor: 'rgba(60,141,188,0.9)',
                     borderColor: 'rgba(60,141,188,0.8)',
                     pointRadius: false,
@@ -251,7 +251,7 @@
                     data: {{ all_paid_factures}}
                 },
                 {
-                    label: 'Facture Non Payéé',
+                    label: 'فواتير غير مدفوعة',
                     backgroundColor: 'rgba(210, 214, 222, 1)',
                     borderColor: 'rgba(210, 214, 222, 1)',
                     pointRadius: false,

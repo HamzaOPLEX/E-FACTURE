@@ -86,13 +86,18 @@
                                 </div>
                                 <script>
 
-                                    var client = '{{client}}'.replaceAll('&amp;', '&')
-                                    var client = client.replaceAll('&#x27;', "'")
-                                    var client = client.replaceAll('&gt;', ">")
-                                    var client = client.replaceAll('&lt;', "<")
-                                    var client = client.replaceAll('&quot;', '"')
-                                    document.getElementById('ClientName').value = client
-                                    document.getElementsByClassName('editOption')[0].value = client
+                                            var client = '{{client}}'.replaceAll('&amp;', '&')
+                                            var client = client.replaceAll('&#x27;', "'")
+                                            var client = client.replaceAll('&gt;', ">")
+                                            var client = client.replaceAll('&lt;', "<")
+                                            var client = client.replaceAll('&quot;', '"')
+                                            document.getElementsByClassName('editOption')[0].value = client
+                                            slct = document.getElementById('ClientName')
+                                            var option = document.createElement("option");
+                                            option.text = client;
+                                            option.value = client;
+                                            slct.add(option);
+                                            document.getElementById('ClientName').value = client
                                 </script>
                             </div>
                             <div class="col-sm-6">

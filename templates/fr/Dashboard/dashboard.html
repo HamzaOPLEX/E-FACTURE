@@ -116,7 +116,7 @@
     </div>
     <!-- <div class="container-fluid"> -->
     <div class="row">
-        <section class="col-lg-7 connectedSortable ui-sortable">
+        <div class="col-md-6">
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card">
                 <div class="card-header border-transparent">
@@ -158,8 +158,8 @@
                 </div>
                 <!-- /.card-footer -->
             </div>
-        </section>
-        <section class="col-lg-7 connectedSortable ui-sortable ">
+        </div>
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Tous les clients ajoutés ce mois-ci :</h3>
@@ -196,44 +196,7 @@
                 </div>
                 <!-- /.card-footer -->
             </div>
-        </section>
-        <section class="col-lg-5 connectedSortable ui-sortable">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Tous les produits ajoutés ce mois-ci</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-head-fixed text-nowrap">
-                        <thead>
-                            <tr>
-                                <th>Nom du Produit</th>
-                                <th>P.U</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                {{producttablebody | CreateTableBody}}
-                            </tr>
-                        </tbody>
-                    </table>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer text-center">
-                    <a href="/settings/manage-products" class="uppercase">Voir toutes les Produits</a>
-                </div>
-                <!-- /.card-footer -->
-            </div>
-        </section>
+        </div>
     </div>
     <!-- </div> -->
 </section>
@@ -278,7 +241,7 @@
             labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
             datasets: [
                 {
-                    label: 'Facture Payéé',
+                    label: 'les Factures Payées',
                     backgroundColor: 'rgba(60,141,188,0.9)',
                     borderColor: 'rgba(60,141,188,0.8)',
                     pointRadius: false,
@@ -289,7 +252,7 @@
                     data: {{ all_paid_factures}}
                 },
                 {
-                    label: 'Facture Non Payéé',
+                    label: 'les Factures non Payées',
                     backgroundColor: 'rgba(210, 214, 222, 1)',
                     borderColor: 'rgba(210, 214, 222, 1)',
                     pointRadius: false,
