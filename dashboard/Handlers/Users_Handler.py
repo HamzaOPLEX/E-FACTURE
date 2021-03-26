@@ -10,13 +10,13 @@ from dashboard.APPfunctions.APPfunctions import Fix_Date
 @RequirePermission
 def ManageUsers(requests):
     context = {'pagetitle': 'Gérer Vos Utilisateurs'}
-    templatepath = 'Settings/Manage-Users.html'
+    settings = APP_Settings.objects.all().first()
+    templatepath = str(settings.APP_lang)+'/Settings/Manage-Users.html'
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User.objects, id=userid)
     context['User'] = User
     context['selecteditem'] = 'settings'
     if requests.method == "GET":
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings        
         all_users = APP_User.objects.all()
         tablebody = []
@@ -47,6 +47,7 @@ def EditUser(requests, id):
     context = {'pagetitle': 'Edité un utilisateur'}
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User.objects, id=userid)
+    settings = APP_Settings.objects.all().first()
     context['selecteditem'] = 'settings'
     context['User'] = User
     if requests.method == 'POST':
@@ -79,7 +80,7 @@ def EditUser(requests, id):
         context['setting'] = settings
         edit_user = get_object_or_404(APP_User, id=id)
         context['edituser'] = edit_user
-        return render(requests, 'Settings/Edit-User.html', context)
+        return render(requests, str(settings.APP_lang)+'/Settings/Edit-User.html', context)
 
 @RequirePermission
 def DeleteUser(requests, id):
@@ -134,7 +135,7 @@ def ShowUserProfile(requests, id):
             context['tablebody'] = tablebody
             context['UserTarget'] = UserTarget
             context['User'] = User
-            return render(requests, 'Settings/showprofile.html', context)
+            return render(requests, str(settings.APP_lang)+'/Settings/showprofile.html', context)
         except APP_User.DoesNotExist:
             return HTTP_404(requests)
     else:
@@ -148,6 +149,7 @@ def ChangeUserPassword(requests, id):
     User = get_object_or_404(APP_User.objects, id=userid)
     context['selecteditem'] = 'settings'
     context['User'] = User
+    settings = APP_Settings.objects.all().first()
     if requests.method == 'POST':
         fpwd = requests.POST['fpwd']
         spwd = requests.POST['spwd']
@@ -172,7 +174,7 @@ def ChangeUserPassword(requests, id):
         else:
             messages.error(
                 requests, "veuillez saisir des correct informations")
-            return render(requests, 'Settings/changepwduser.html', context)
+            return render(requests, str(settings.APP_lang)+'/Settings/changepwduser.html', context)
     elif requests.method == 'GET':
         
         settings = APP_Settings.objects.all().first()
@@ -180,7 +182,7 @@ def ChangeUserPassword(requests, id):
         try:
             edit_user = APP_User.objects.get(id=id)
             context['edituser'] = edit_user
-            return render(requests, 'Settings/changepwduser.html', context)
+            return render(requests, str(settings.APP_lang)+'/Settings/changepwduser.html', context)
         except APP_User.DoesNotExist:
             return HTTP_404(requests, context)
 

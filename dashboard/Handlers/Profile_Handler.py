@@ -33,7 +33,7 @@ def Profile(requests):
             tablebody.append(D)
         context['tablebody'] = tablebody
         context['User'] = User
-        return render(requests, 'Profile/profile.html', context)
+        return render(requests, str(settings.APP_lang)+'/Profile/profile.html', context)
 
 
 @RequireLogin

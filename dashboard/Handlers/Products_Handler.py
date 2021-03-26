@@ -18,9 +18,9 @@ def ManageProducts(requests):
     context = {'pagetitle': 'Gérer Les Produits',
                'User': User, 'selecteditem': 'settings'}
     # path to Template
-    templatepath = 'Settings/Manage-Products.html'
+    settings = APP_Settings.objects.all().first()
+    templatepath = str(settings.APP_lang)+'/Settings/Manage-Products.html'
     if requests.method == "GET":
-        settings = APP_Settings.objects.all().first()
         context['setting'] = settings
         # Generate Table Of Products and pass the Table in the context
         Products = list(APP_Products.objects.all())
