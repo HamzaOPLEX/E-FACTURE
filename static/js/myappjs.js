@@ -13,7 +13,7 @@ function GetSelectedThenSet() {
                 document.getElementById('circle01').style.display = 'none'
                 document.getElementById('circle02').style.display = 'none'
             }
-            if (this.status == 404){
+            if (this.status == 404 || this.status == 502){
                 document.getElementById('circle01').style.display = 'none'
                 document.getElementById('circle02').style.display = 'none'
             }
@@ -41,7 +41,7 @@ function GetSelectedProductThenSet() {
             }
             document.getElementById('circle_addnew').style.display = 'none'
         }
-        if (this.status == 404){
+        if (this.status == 404 || this.status == 502 ){
             document.getElementById('circle_addnew').style.display = 'none'
         }
 
@@ -68,7 +68,7 @@ function GetSelectedProductThenSetEdit() {
             }
             document.getElementById('circle_edit').style.display = 'none'
         }
-        if (this.status == 404) {
+        if (this.status == 404 || this.status == 502 ) {
             document.getElementById('circle_edit').style.display = 'none'
         }
     };
