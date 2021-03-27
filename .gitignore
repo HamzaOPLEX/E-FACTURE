@@ -1,9 +1,7 @@
 
 *.pyc
-NTFM/settings.py
 NTFM/wsgi.py
 *.pdf
 NTFM/settings.py
-NTFM/settings.py
-NTFM/settings.py
 NTFM/wsgi.py
+dashboard/pdf_templates/*
