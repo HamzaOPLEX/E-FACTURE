@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '9cx4xjw@&h@!-2^hnesozwrh$pz!dij$3f27)z#@@+2ekvk2gp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['ntfm.notechnologie.com','www.ntfm.notechnologie.com']
 
