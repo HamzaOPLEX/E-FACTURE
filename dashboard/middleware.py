@@ -31,7 +31,7 @@ class CheckCompanySettingMiddelWare:
         if bypass_check == False:
             try :
                 company_settings = APP_Settings.objects.all().first()
-            except ProgrammingError:
+            except Exception:
                 # if table does not exist just set var as false
                 company_settings = False
             if company_settings:
