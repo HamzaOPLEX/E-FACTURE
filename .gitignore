@@ -5,3 +5,4 @@ NTFM/wsgi.py
 NTFM/settings.py
 NTFM/wsgi.py
 dashboard/pdf_templates/*
+NTFM/settings.py
