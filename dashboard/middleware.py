@@ -29,7 +29,11 @@ class CheckCompanySettingMiddelWare:
         if bypass_check == True:
             response = self.get_response(request)
         if bypass_check == False:
-            company_settings = APP_Settings.objects.all().first()
+            try :
+                company_settings = APP_Settings.objects.all().first()
+            except Exception:
+                # if table does not exist just set var as false
+                company_settings = False
             if company_settings:
                 response = self.get_response(request)
             else : 
