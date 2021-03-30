@@ -168,12 +168,12 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
         return t
     
     company_side = f"""
-                <b>Nom du client:</b> {str(FactureObj.Client_Name).title()}<br/>
-                <b>ICE de Client:</b> {str(FactureObj.ICE).upper()}<br/>
+                <b>Facturé pour :</b> {str(FactureObj.Client_Name).title()}<br/>
+                <b>ICE :</b> {str(FactureObj.ICE).upper()}<br/>
                 """
     client_side = f"""
-                    <b>Numéro de Facture:</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
-                    <b>{Company_City} le:</b> {Date}"""
+                    <b>La Facture:</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
+                    <b>{str(Company_City).upper()} le :</b> {Date}"""
 
     client_company_table_data = [
         [Paragraph(client_side, ClientSide), '',
