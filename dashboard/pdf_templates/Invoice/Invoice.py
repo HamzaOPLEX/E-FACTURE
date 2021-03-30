@@ -1,7 +1,7 @@
 import os
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import Table, SimpleDocTemplate, TableStyle, Spacer, Paragraph
+from reportlab.platypus import Table, SimpleDocTemplate, TableStyle, Spacer, Paragraph,PageBreak
 from reportlab import platypus
 from reportlab.lib import colors
 from reportlab.lib.units import inch, cm
@@ -28,7 +28,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     Year = FactureObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
-    tabledata.append(header)
+
+
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='ClientSide',
                               alignment=TA_LEFT,
@@ -43,7 +44,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                               borderWidth=1,
                               borderPadding=10,
                               borderColor=colors.black,
-                              borderRadius=8
+                              borderRadius=5
 
                               ))
     styles.add(ParagraphStyle(name='CompanySide',
@@ -59,7 +60,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                               borderWidth=1,
                               borderPadding=10,
                               borderColor=colors.black,
-                              borderRadius=8
+                              borderRadius=5
                               ))
     styles.add(ParagraphStyle(name='HeaderDataStyle',
                               alignment=TA_LEFT,
@@ -87,6 +88,10 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                               spaceShrinkage=0.05,
                               ))
 
+    HeaderDataStyle = styles['HeaderDataStyle']
+    FooterMessage = styles['FooterMessage']
+    ClientSide = styles['ClientSide']
+    CompanySide = styles['CompanySide']
     def Number2Letter(number):
         if ',' in str(number):
             number = number.replace(',', '')
@@ -112,8 +117,12 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     TOTALtableData = [TOTAL, TVA, TTC]
     TOTALletter = Number2Letter(str(TTC_int))
 
+    def chunks(l, n):
+        n = max(1, n)
+        return (l[i:i+n] for i in range(0, len(l), n))
+
     def Info_Table(tabledata):
-        colwidths = (200, 90, 200)
+        colwidths = (190, 100, 200)
         t = Table(tabledata, colwidths)
         t.hAlign = 'CENTER'
         GRID_STYLE = TableStyle(
@@ -138,19 +147,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
 
     def DrawPageImages(canvas, doc):
         canvas.saveState()
-        canvas.drawImage(str(BASE_DIR)+"/header.png", 50, 780, 500, 60)
-        canvas.drawImage(str(BASE_DIR)+"/logo-watermark.png", 30, 300, 500, 300)
-        canvas.setFont('Helvetica', 10)
-        Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
-        footer_msg = "18 RES DALA Jirari 5R Magasin 1 - Tanger - 0660055110 - 0531777771 info@notechnologie.com - ICE : 000066656000026".strip()
-        draw_wrapped_line(canvas, Money_msg, 100, 290, 75, 10)
-        canvas.setLineWidth(2)
-        canvas.line(50, 50, 530, 50)
-
-        draw_wrapped_line(canvas, footer_msg, 80, 290, 35, 10)
-        canvas.saveState()
-        canvas.rotate(90)
-        canvas.drawCentredString(460, -580, 'Patente N°: 50466287 - I.F N°: 04909034 - R.C: 30209')
+        canvas.drawImage(str(BASE_DIR)+"/invoice-bg.png", 0, 0, 600, 840)
         canvas.restoreState()
 
     #create the table for our document
@@ -163,20 +160,16 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colr(248, 87, 52)),
+                ('BACKGROUND', (0, 0), (-1, 0), colr(5, 98, 156)),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ]
         )
         t.setStyle(GRID_STYLE)
         return t
-
-    HeaderDataStyle = styles['HeaderDataStyle']
-    FooterMessage = styles['FooterMessage']
-    ClientSide = styles['ClientSide']
-    CompanySide = styles['CompanySide']
+    
     company_side = f"""
                 <b>Nom du client:</b> {str(FactureObj.Client_Name).title()}<br/>
-                <b>ICE de Client:</b> {str(FactureObj.ICE).title()}<br/>
+                <b>ICE de Client:</b> {str(FactureObj.ICE).upper()}<br/>
                 """
     client_side = f"""
                     <b>Numéro de Facture:</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
@@ -187,34 +180,42 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
          Paragraph(company_side, CompanySide)],
     ]
     client_company_table = Info_Table(client_company_table_data)
-    story.append(client_company_table)
-    story.append(Spacer(1, .25*inch))
-    story.append(Spacer(1, .25*inch))
 
     def colr(x, y, z):
         return (x/255, y/255, z/255)
     # change this to for item in facture items , tabledata.append(item)
     for item in FactureItemsObj:
-        row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),
-               str(item.PU).strip(), str(item.PT).strip()]
+        row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),str(item.PU).strip(), str(item.PT).strip()]
         tabledata.append(row)
-    if len(tabledata) <= 30:
-        emptyrows_needed = 30-int(len(tabledata))
-        for i in range(emptyrows_needed):
-            empty_row = ['', '', '', '']
-            tabledata.append(empty_row)
-    tabmestle = myTable(tabledata)
-    story.append(tabmestle)
 
-    story.append(TOTAL_table(TOTALtableData,))
-    story.append(Spacer(1, .25*inch))
-    # story.append(Paragraph(, FooterMessage))
+    tabledata = list(chunks(tabledata,27))
+
+    for chunk in tabledata :
+        if len(chunk) <= 27:
+            emptyrows_needed = 27-int(len(chunk))
+            for i in range(emptyrows_needed):
+                empty_row = ['', '', '', '']
+                chunk.append(empty_row)
+        story.append(Spacer(1, .25*inch))
+        story.append(client_company_table)
+        story.append(Spacer(1, .25*inch))
+        chunk.insert(0,header)
+        tabmestle = myTable(chunk)
+        story.append(tabmestle)
+        # check if chunk is last element in tabledata so add TOTAL info to the last table in pages
+        if tabledata.index(chunk) == tabledata.index(tabledata[-1]):
+            story.append(TOTAL_table(TOTALtableData,))
+            story.append(Spacer(1, .25*inch))
+            Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
+            story.append(Paragraph(Money_msg,FooterMessage))
+
+        story.append(PageBreak())
 
     filename = f'{FactureObj.Client_Name}-{FactureObj.number}-{Date}'
     filepath = os.path.join(BASE_DIR.parent.parent,
                             'all_facturs')+f"/{filename}.pdf"
     doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',
-                            rightMargin=43, leftMargin=43, bottomMargin=1)
+                            rightMargin=43, leftMargin=43,topMargin=100, bottomMargin=23)
     doc.title = filename
     doc.author = 'HamzaOPLEX X Nord Ouest Technologie'
     doc.producer = 'Hamza Alaoui Hamdi - 0620163792'
