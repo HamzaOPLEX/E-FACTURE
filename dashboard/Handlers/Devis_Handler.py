@@ -253,10 +253,9 @@ def H_OpenPdf(requests, Devis_id):
             Devis_item = APP_Devis_items.objects.filter(BelongToDevis=Devis)
             try:
                 CalculedTOTAL = Calcule_TVA_TOTAL_TTC(Devis_item)
-                Company_TVATAUX = APP_Settings.objects.all().first().Company_TVATAUX
                 Company_ICE = APP_Settings.objects.all().first().Company_ICE
                 Company_City = APP_Settings.objects.all().first().Company_Place
-                filepath = DrawNotechPdf(Devis, Devis_item, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City)
+                filepath = DrawNotechPdf(Devis, Devis_item, CalculedTOTAL, Company_City)
             except AttributeError:
                 return render(requests, str(settings.APP_lang)+'/ErrorPages/COMPANY_INFORMATIONS_ERR.html', context)
             return FileResponse(open(filepath, 'rb'), content_type='application/pdf')
