@@ -10,7 +10,7 @@ from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
 
-def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City):
+def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
     def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
         if len(text) > length:
             wraps = textwrap.wrap(text, length)
@@ -24,8 +24,8 @@ def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Compa
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
-    Date = DevisObj.Date.strftime('%Y-%m-%d')
-    Year = DevisObj.Date.strftime('%Y')
+    Date = BLObj.Date.strftime('%Y-%m-%d')
+    Year = BLObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
     styles = getSampleStyleSheet()
@@ -106,7 +106,7 @@ def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Compa
     TOTALint, TVA, TTC_int = CalculedTOTAL
     TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
     TOTALtableData = [TOTAL]
-    TOTALletter = Number2Letter(str(TOTALint))
+    TOTALletter = Number2Letter(str(TTC_int))
 
     def Info_Table(tabledata):
         colwidths = (200, 90, 200)
@@ -159,12 +159,12 @@ def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Compa
     ClientSide = styles['ClientSide']
     CompanySide = styles['CompanySide']
     company_side = f"""
-                <b>Client :</b> {str(DevisObj.Client_Name).title()}<br/>
-                <b>ICE :</b> {str(DevisObj.ICE).title()}<br/>
+                <b>Client:</b> {str(BLObj.Client_Name).title()}<br/>
+                <b>ICE :</b> {str(BLObj.ICE).title()}<br/>
                 """
     client_side = f"""
-                    <b>Devis :</b> {DevisObj.number}/{Year}<br/>
-                    <b>{str(Company_City).upper()} le:</b> {DevisObj.Date}"""
+                    <b>Bon de Laivrason :</b> {BLObj.number}/{Year}<br/>
+                    <b>{str(Company_City).upper()} le:</b> {BLObj.Date}"""
 
     client_company_table_data = [
         [Paragraph(client_side, ClientSide), '',
@@ -172,16 +172,20 @@ def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Compa
     ]
     client_company_table = Info_Table(client_company_table_data)
 
+
     def chunks(l, n):
         n = max(1, n)
         return (l[i:i+n] for i in range(0, len(l), n))
+
     def colr(x, y, z):
         return (x/255, y/255, z/255)
-    # change this to for item in Devis items , tabledata.append(item)
-    for item in DevisItemsObj:
+    # change this to for item in BL items , tabledata.append(item)
+
+    for item in BLItemsObj:
         row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),
                str(item.PU).strip(), str(item.PT).strip()]
         tabledata.append(row)
+
     tabledata = list(chunks(tabledata,27))
 
     for chunk in tabledata :
@@ -205,12 +209,10 @@ def DrawNotechPdf(DevisObj, DevisItemsObj, CalculedTOTAL, Company_TVATAUX, Compa
 
         story.append(PageBreak())
 
-
-    filename = f'{DevisObj.Client_Name}-{DevisObj.number}-{Date}'
+    filename = f'{BLObj.Client_Name}-{BLObj.number}-{Date}'
     filepath = os.path.join(BASE_DIR.parent.parent,
                             'all_facturs')+f"/{filename}.pdf"
-    doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',
-                            rightMargin=43, leftMargin=43,topMargin=100, bottomMargin=23)
+    doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',rightMargin=43, leftMargin=43,topMargin=100, bottomMargin=23)
     doc.title = filename
     doc.author = 'HamzaOPLEX X Nord Ouest Technologie'
     doc.producer = 'Hamza Alaoui Hamdi - 0620163792'
