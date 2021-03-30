@@ -315,7 +315,7 @@
         document.getElementById('HT').innerText = HT
 
         // TTC
-        var TVA = HT / 100 * {{setting.Company_TVATAUX}}
+        var TVA = HT / 100 * parseFloat('{{setting.Company_TVATAUX}}'.replaceAll(',','.'))
         document.getElementById('TVA').innerText = TVA.toFixed(2)
         var TTC = HT + TVA
         document.getElementById('TTC').innerText = TTC
