@@ -1,6 +1,5 @@
 {% extends "main_fr.html" %}
 {% load Filters %}
-
 {% block content %}
 <section class="content-header">
     <div class="container-fluid">
@@ -11,7 +10,6 @@
         </div>
     </div>
 </section>
-
 <section class="content-header">
     {% if messages %}
     {% for message in messages %}
@@ -23,85 +21,94 @@
     </div>
     {% endfor %}
     {% endif %}
-<form id="Form" action="/settings/global-settings" method="POST">
-
-    <div class="card">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
-            <b>vous devez configurer tous les paramètres ci-dessous pour utiliser votre application sans aucun problème
-                : (Tous les champs sont obligatoires)</b>
-        </div>
-        <div class="card-body">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>ICE de votre société</label>
-                            <input type="text" class="form-control" autocomplete="off" name="ICE"
-                                value="{{setting.Company_ICE}}" placeholder="ICE ..." required>
+    <form id="Form" action="/settings/global-settings" method="POST">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                        <b>vous devez configurer tous les paramètres ci-dessous pour utiliser votre application sans
+                            aucun
+                            problème
+                            : (Tous les champs sont obligatoires)</b>
+                    </div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>ICE de votre société</label>
+                                    <input type="text" class="form-control" autocomplete="off" name="ICE"
+                                        value="{{setting.Company_ICE}}" placeholder="ICE ..." required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Taux de TVA de votre société :</label>
+                                    <select name="TVATAUX" id="TVATAUX" class="form-control" required>
+                                        <option value="20">20%</option>
+                                        <option value="10">10%</option>
+                                        <option value="5.5">5.5%</option>
+                                        <option value="2.1">2.1%</option>
+                                        <option value="19.6">19.6%</option>
+                                        <option value="7">7%</option>
+                                    </select>
+                                    <script>
+                                        document.getElementById('TVATAUX').value = {{ setting.Company_TVATAUX }}
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Le Lieu de Votre Société</label>
+                                    <input type="text" class="form-control" autocomplete="off"
+                                        value="{{setting.Company_Place}}" name="place" placeholder="Lieu ..." required>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                        <b>Paramètres de langue</b>
+                    </div>
+                    <div class="card-body">
                         <div class="form-group">
-                            <label>Taux de TVA de votre société :</label>
-                            <select name="TVATAUX" id="TVATAUX" class="form-control" required>
-                                <option value="20">20%</option>
-                                <option value="10">10%</option>
-                                <option value="5.5">5.5%</option>
-                                <option value="2.1">2.1%</option>
-                                <option value="19.6">19.6%</option>
-                                <option value="7">7%</option>
+                            <label>Lang de votre Application :</label>
+                            <select name="LANG" id="LANG" class="form-control" required>
+                                <option value="fr">fr</option>
+                                <option value="ar">ar</option>
+                                <option value="en">en</option>
                             </select>
                             <script>
-                                document.getElementById('TVATAUX').value = {{ setting.Company_TVATAUX }}
+                                document.getElementById('LANG').value = "{{ setting.APP_lang }}"
                             </script>
                         </div>
+                    <div class="ButtnEnregister">
+                        <center><button id="savebttn" type="submit" class="btn btn-block btn-primary"
+                                style="background-color:#17a2b8;width: 50%;"><i class="fas fa-check"></i>
+                                <b>ENREGISTRER</b></button>
+                        </center>
                     </div>
-                    <div class="col-sm-6">
+                </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                        <b>Paramètres de thème de facture</b>
+                    </div>
+                    <div class="card-body">
                         <div class="form-group">
-                            <label>Le Lieu de Votre Société</label>
-                            <input type="text" class="form-control" autocomplete="off" value="{{setting.Company_Place}}"
-                                name="place" placeholder="Lieu ..." required>
+                            <label>Color :</label>
+                            <input type="color" class="form-control" name="COLOR" value="{{setting.Invoice_Color}}">
                         </div>
-                    </div>
                 </div>
-        </div>
-
-
-    </div>
-
-
-    <div class="card">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
-            <b>Paramètres de langue</b>
-        </div>
-        <div class="card-body">
-                    <div class="form-group">
-                        <label>Lang de votre Application :</label>
-                        <select name="LANG" id="LANG" class="form-control" required>
-                            <option value="fr">fr</option>
-                            <option value="ar">ar</option>
-                            <option value="en">en</option>
-                        </select>
-                        <script>
-                            document.getElementById('LANG').value = "{{ setting.APP_lang }}"
-                        </script>
-                    </div>
                 </div>
-                <div class="ButtnEnregister">
-                    <center><button id="savebttn" type="submit" class="btn btn-block btn-primary"
-                            style="background-color:#17a2b8;width: 50%;"><i class="fas fa-check"></i>
-                            <b>ENREGISTRER</b></button></center>
-                </div>
+            </div>
         </div>
-    
-    
-    </div>
-
-
-</form>
-
-
-
+    </form>
 </section>
-
 {% endblock content %}

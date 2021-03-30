@@ -175,19 +175,21 @@ def GlobaleSettings(requests):
         TVATAUX = requests.POST['TVATAUX']
         Place = requests.POST['place']
         LANG = requests.POST['LANG']
-        if ICE and TVATAUX and Place:
+        COLOR = requests.POST['COLOR']
+        if ICE and TVATAUX and Place and COLOR:
             if settings:
                 settings.Company_ICE = ICE
                 settings.Company_Place = Place
                 settings.Company_TVATAUX = TVATAUX
                 settings.APP_lang = LANG
+                settings.Invoice_Color = COLOR
                 settings.save()
                 messages.info(
                     requests, 'Les paramètres ont été modifiés avec succès')
                 return redirect('/settings/global-settings')
             elif not settings:
                 APP_Settings.objects.create(
-                    Company_ICE=ICE, Company_TVATAUX=TVATAUX, Company_Place=Place, APP_lang=LANG)
+                    Company_ICE=ICE, Company_TVATAUX=TVATAUX, Company_Place=Place, APP_lang=LANG,Invoice_Color=COLOR)
                 messages.info(
                     requests, 'Les paramètres ont été créés avec succès')
                 return redirect('/settings/global-settings')

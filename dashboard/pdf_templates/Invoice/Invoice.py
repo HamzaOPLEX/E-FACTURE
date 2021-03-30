@@ -2,6 +2,7 @@ import os
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Table, SimpleDocTemplate, TableStyle, Spacer, Paragraph,PageBreak
+from dashboard.models import APP_Settings
 from reportlab import platypus
 from reportlab.lib import colors
 from reportlab.lib.units import inch, cm
@@ -9,8 +10,12 @@ from pathlib import Path
 from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
+from colour import Color
 
 def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City):
+    Table_Color = Color(APP_Settings.objects.all().first().Invoice_Color)
+    Table_Color = Table_Color.rgb
+
     def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
         if len(text) > length:
             wraps = textwrap.wrap(text, length)
@@ -160,7 +165,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colr(245, 123, 32)),
+                ('BACKGROUND', (0, 0), (-1, 0), Table_Color),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ]
         )
@@ -181,8 +186,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     ]
     client_company_table = Info_Table(client_company_table_data)
 
-    def colr(x, y, z):
-        return (x/255, y/255, z/255)
+    # def colr(x, y, z):
+    #     return (x/255, y/255, z/255)
     # change this to for item in facture items , tabledata.append(item)
     for item in FactureItemsObj:
         row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),str(item.PU).strip(), str(item.PT).strip()]

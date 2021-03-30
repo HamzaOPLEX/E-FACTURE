@@ -150,7 +150,7 @@ class APP_Settings(models.Model):
     Company_TVATAUX = models.FloatField(default=20)
     Company_Place = models.CharField(max_length=255,default='earth')
     APP_lang = models.CharField(max_length=3, choices=langs,default='fr', blank=False)
-
+    Invoice_Color = models.CharField(max_length=255,default='#000000')
     def __str__(self):
         return self.Company_ICE
 ########################################
