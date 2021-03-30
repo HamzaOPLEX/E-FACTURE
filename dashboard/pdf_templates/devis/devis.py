@@ -147,7 +147,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colr(5, 98, 156)),
+                ('BACKGROUND', (0, 0), (-1, 0), colr(245, 123, 32)),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ]
         )
