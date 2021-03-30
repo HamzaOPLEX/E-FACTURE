@@ -163,7 +163,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
                 <b>ICE :</b> {str(BLObj.ICE).title()}<br/>
                 """
     client_side = f"""
-                    <b>Bon de Laivrason :</b> {BLObj.number}/{Year}<br/>
+                    <b>Devis :</b> {BLObj.number}/{Year}<br/>
                     <b>{str(Company_City).upper()} le:</b> {BLObj.Date}"""
 
     client_company_table_data = [
