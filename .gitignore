@@ -6,3 +6,9 @@ NTFM/settings.py
 NTFM/wsgi.py
 dashboard/pdf_templates/*
 NTFM/settings.py
+dashboard/pdf_templates/Invoice/invoice-bg.png
+dashboard/pdf_templates/Invoice/Invoice.py
+dashboard/pdf_templates/BL/invoice-bg.png
+dashboard/pdf_templates/BL/bl.py
+dashboard/pdf_templates/devis/invoice-bg.png
+dashboard/pdf_templates/devis/devis.py
