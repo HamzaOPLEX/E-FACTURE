@@ -116,6 +116,7 @@ class APP_BL_items(models.Model):
     PU = models.FloatField(default=0)
     PT = models.FloatField(default=0)
     BelongToBL = models.ForeignKey(APP_Created_BL, on_delete=models.CASCADE, editable=False)
+    Date = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.DESIGNATION

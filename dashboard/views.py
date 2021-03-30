@@ -19,13 +19,13 @@ def Dashboard(requests):
         ###### Dashboard Header Handler
         # Get lenght of some objects from database
 
-        len_users = len(APP_User.objects.all())
         len_clients = len(APP_Clients.objects.all())
         len_products = len(APP_Products.objects.all())
         len_factures = len(APP_Created_Facture.objects.all())
         len_devis = len(APP_Created_Devis.objects.all())
+        len_bl = len(APP_Created_BL.objects.all())
         # Pass them to context
-        context['Lenghts'] = {'len_users': len_users, 'len_clients': len_clients,
+        context['Lenghts'] = {'len_bl': len_bl, 'len_clients': len_clients,
                               'len_products': len_products, 'len_factures': len_factures, 'len_devis': len_devis}
         ####################################
 
@@ -99,7 +99,13 @@ def Dashboard(requests):
             HT = 0
         TVA = HT / 100 * TVA_taux
         TTC = HT + TVA
+
+
+        HT_BL = APP_BL_items.objects.filter(Date__year=this_year).aggregate(Sum('PT'))['PT__sum']
+        if not HT_BL:
+            HT_BL = 0
         context['HT'] = HT
+        context['HT_BL'] = HT_BL
         context['TVA_taux'] = TVA_taux
         context['TTC'] = TTC
         ################### End Chiffre D'affair Handler ###################
