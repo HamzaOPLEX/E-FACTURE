@@ -26,6 +26,17 @@
         {% endfor %}
         {% endif %}
     </div>
+    <div class="col-md-6">
+        <div class="card card-default">
+            <!-- <div class="card"> -->
+            <div class="card-header" style="text-align: center;background: #0d899a;color: white;">
+                <span class="text-left" style="float: left;"> <b>N</b>: <span id="N_ELEMENT">{{len_item}}</span>
+                </span>
+                <span class="text-right" style="float: right;"> <b>TOTAL HT</b>: <span id="HT">{{TT_INFO.0}}</span> </span>
+            </div>
+            <!-- /.card-header -->
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6">
             <div class="card card-default">
@@ -271,6 +282,23 @@
         top: 107px !important;
     }
 </style>
+<script>
+    function TableInfoHandler() {
+        // calcule N items , HT , TTC 
+
+        // N items
+        var theTABLE = document.getElementById('Table')
+        document.getElementById('N_ELEMENT').innerText = theTABLE.rows.length - 1
+
+        // HT
+        HT = 0
+        $('td:eq(3)', $('#Table tr')).each(function () {
+            HT = parseFloat(HT) + parseFloat($(this).html())
+        });
+        document.getElementById('HT').innerText = HT
+
+    }
+</script>
 {% else %}
 <div class="content p-4">
 

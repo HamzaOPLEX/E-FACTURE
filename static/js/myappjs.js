@@ -103,7 +103,6 @@ const loader = document.querySelector(".loader");
 const sidebar = document.querySelector(".main-sidebar");
 sidebar.style.visibility = "initial"
 const wrapper = document.querySelector(".wrapper");
-const footer = document.querySelector(".main-footer");
 const loadingmsg = document.querySelector(".loadingmsg");
 window.onload = function () {
     setTimeout(function () {
@@ -112,7 +111,6 @@ window.onload = function () {
         document.getElementById('circle').remove()
         loadingmsg.style.display = "none";
         wrapper.style.visibility = "visible"
-        footer.style.visibility = "visible"
         sidebar.style.visibility = "visible"
     }, 1000);
 }
@@ -219,11 +217,14 @@ function AddToTable() {
     cell_action.innerHTML = Action
     cell_action.style = 'text-align:center;'
     $('#AddNewFactureItemModal').modal('hide')
+    TableInfoHandler()
+
 
 };
 function DeleteSelectedRow(row) {
     var p = row.parentNode.parentNode;
     p.parentNode.removeChild(p);
+    TableInfoHandler()
 };
 function EditSelectedRow(row) {
     var p = row.parentNode.parentNode;
@@ -252,6 +253,7 @@ function EditSelectedRow(row) {
     $(document).ready(function () {
         $("#EditFactureItemModal").modal({ backdrop: false });
     });
+
 }
 function tableToJSON() {
     var myRows = [];
@@ -293,7 +295,13 @@ function SaveEdited(row) {
     table.rows[row_index].cells[2].innerText = document.getElementById('Edit_PU').value
     table.rows[row_index].cells[3].innerText = document.getElementById('Edit_PT').value
     $('#EditFactureItemModal').modal('hide')
+    TableInfoHandler()
+
 }
+
+
+
+
 
 
 
@@ -465,6 +473,7 @@ jQuery(document).ready(function ($) {
     //Fire it when the page first loads:
     alterClass();
 });
+
 
 
 

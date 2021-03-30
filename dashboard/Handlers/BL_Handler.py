@@ -161,13 +161,15 @@ def H_Edit_BL(requests, BL_id):
             # Pass the Date of BL
             context['Date'] = BL.Date.strftime('%Y-%m-%d')
             # Get All BL items that belong to that BL
-            BL_item = APP_BL_items.objects.filter(
-                BelongToBL=BL)
+            BL_item = APP_BL_items.objects.filter(BelongToBL=BL)
             # generate table of BL items and pass him in context
             table = generate_table_of_BL_items(BL_items=BL_item)
             context['tablebody'] = table
             # pass client name
             context['client'] = BL.Client_Name
+
+            context['len_item'] = len(BL_item)
+            context['TT_INFO'] = Calcule_TVA_TOTAL_TTC(BL_item)
             return render(requests, templatepath, context)
         elif requests.method == "POST":
             # Get Post Data

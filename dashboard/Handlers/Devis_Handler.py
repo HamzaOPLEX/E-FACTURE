@@ -166,6 +166,9 @@ def H_Edit_Devis(requests, Devis_id):
             context['tablebody'] = table
             # pass client name
             context['client'] = Devis.Client_Name
+
+            context['len_item'] = len(Devis_item)
+            context['TT_INFO'] = Calcule_TVA_TOTAL_TTC(Devis_item)
             return render(requests, templatepath, context)
         elif requests.method == "POST":
             # Get Post Data

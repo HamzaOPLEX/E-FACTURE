@@ -25,6 +25,19 @@
         {% endfor %}
         {% endif %}
     </div>
+        <div class="col-md-6">
+            <div class="card card-default">
+                <!-- <div class="card"> -->
+                <div class="card-header" style="text-align: center;background: #0d899a;color: white;">
+                    <span class="text-left" style="float: left;"> <b>N</b>: <span id="N_ELEMENT">0</span> </span>
+                    <span class="text-center"> <b>TOTAL HT</b>: <span id="HT">0</span> </span>
+                    <span class="text-right" style="float: right;"> <b>TOTAL TTC</b>: <span id="TTC">0</span> </span><br>
+                    <span class="text-right" style="float: right;"> <b>TVA</b>: <span id="TVA">0</span> </span>
+                </div>
+                <!-- /.card-header -->
+            </div>
+        </div>
+
     <div class="row">
         <div class="col-md-6">
             <div class="card card-default">
@@ -53,6 +66,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card card-default">
                 <div class="card-header">
@@ -166,7 +180,7 @@
                 </form>
             </div>
         </div>
-    </div>
+
     </div>
 </section>
 <div class="modal fade" id="AddNewFactureItemModal" role="dialog">
@@ -284,5 +298,28 @@
         top: 107px !important;
     }
 </style>
+
+<script>
+    function TableInfoHandler() {
+        // calcule N items , HT , TTC 
+
+        // N items
+        var theTABLE = document.getElementById('Table')
+        document.getElementById('N_ELEMENT').innerText = theTABLE.rows.length - 1
+
+        // HT
+        HT = 0
+        $('td:eq(3)', $('#Table tr')).each(function () {
+            HT = parseFloat(HT) + parseFloat($(this).html())
+        });
+        document.getElementById('HT').innerText = HT
+
+        // TTC
+        var TVA = HT / 100 * {{setting.Company_TVATAUX}}
+        document.getElementById('TVA').innerText = TVA.toFixed(2)
+        var TTC = HT + TVA
+        document.getElementById('TTC').innerText = TTC
+    }
+</script>
 
 {% endblock content %}
