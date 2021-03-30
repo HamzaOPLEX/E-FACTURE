@@ -23,7 +23,7 @@ SECRET_KEY = '9cx4xjw@&h@!-2^hnesozwrh$pz!dij$3f27)z#@@+2ekvk2gp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ntfm.notechnologie.com','www.ntfm.notechnologie.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'NTFM.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',   # ENGINE => Mysql
-        'NAME': 'notechno_NTFMDB',                     # DB name => Ex : MusicApp
-        'USER': 'notechno_admin',                         # DB user
-        'PASSWORD': 'Db$Admin@2021',                     # DB password
-        'HOST': 'localhost',                    # DB IP
-        'PORT': '3306',                         # DB PORT
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',     
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
@@ -129,5 +129,3 @@ SESSION_COOKIE_AGE = 43200
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
-
-# handler400 = 'dashboard.views.HTTP_400'
