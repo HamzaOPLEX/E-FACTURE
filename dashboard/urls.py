@@ -9,7 +9,8 @@ from dashboard.Handlers import (
     Profile_Handler,
     AUTH_Handler,
     Devis_Handler,
-    BL_Handler
+    BL_Handler,
+    JournalVent
 )
 urlpatterns = [
     # Auth Urls
@@ -121,11 +122,9 @@ urlpatterns = [
          Users_Handler.DeleteUser, name='Delete User'),
     path('settings/adduser/', Users_Handler.AddUser, name='Add new User'),
 
-
-
-
-
     # List ALL Events (History & Warnning) :
     path('All-Histories/', views.ShowAllHistory, name='Show All Histories'),
+
+    path('journal-de-vente/', JournalVent.DownloadJVFile, name='Show All Histories'),
 
 ]
