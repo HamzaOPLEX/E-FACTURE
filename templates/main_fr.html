@@ -69,20 +69,38 @@
         <!-- Notifications Dropdown Menu -->
         <div id="RemoveOn650px" style="display: inherit;">
           <li class="nav-item">
+            <a class="nav-link" href="/create-new-bl/">
+              <button type="button" class="btn btn-block btn-info" id="top-btn">
+                <b>situation des clients</b></button>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/create-new-facture/">
-              <button type="button" class="btn btn-block btn-info" style="font-size: 13px;background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer Une Facture</button>
+              <button type="button" id="top-btn" class="btn btn-block btn-info">
+                <b>Créer Une Facture</b>
+              </button>
             </a>
             </li>
           <li class="nav-item">
             <a class="nav-link" href="/create-new-devis/">
-              <button type="button" class="btn btn-block btn-info" style="font-size: 13px;background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer Un Devis</button>
+              <button type="button" id="top-btn" class="btn btn-block btn-info">
+                <b>Créer Un Devis</b>
+              </button>
             </a>
             </li>
           <li class="nav-item">
             <a class="nav-link" href="/create-new-bl/">
-              <button type="button" class="btn btn-block btn-info" style="font-size: 13px; background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%);">Créer Un Bon De Livraison</button>
+              <button type="button" id="top-btn" class="btn btn-block btn-info">
+                <b>Créer Un Bon De Livraison</b>
+              </button>
             </a>
-            </li>
+          </li>
+          <style>
+            #top-btn{
+              font-size: 13px !important; 
+              background-image: linear-gradient(to right, #107f90 0%, #548ac4 51%, #056777 100%) !important;
+            }
+          </style>
         </div>
         <a class="nav-link" href="/logout">
           <i class="fas fa-sign-out-alt"></i>
@@ -147,7 +165,7 @@
                 <li class="nav-item has-treeview">
                   <a href="#" {% if selecteditem == 'facture' or selecteditem == 'list-all-factures' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-F"></i>
-                    <p>
+                    <p id="side_bar">
                     Gestioner Des Factures <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>
@@ -175,7 +193,8 @@
                   <a href="#" {% if selecteditem == 'devis' or selecteditem == 'list-all-devis' %} class="nav-link active" {% else %}
                     class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-D"></i>
-                    <p>
+                    <p id="side_bar">
+
                       Gestioner Des Devis <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>
@@ -202,7 +221,8 @@
                 <li class="nav-item has-treeview">
                   <a href="#" {% if selecteditem == 'BL' %} class="nav-link active" {% else %} class="nav-link" {% endif %}>
                     <i class="nav-icon fas fa-B"></i>
-                    <p>
+                                            <p id="side_bar">
+
                       Gestioner Des BL <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>

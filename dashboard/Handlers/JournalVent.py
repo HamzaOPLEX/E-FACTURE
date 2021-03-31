@@ -33,6 +33,15 @@ def DownloadJVFile(request):
         data.append(row)
         row = ['VE', '', '', '', '', TVA]
         data.append(row)
+
+    HT = APP_Facture_items.objects.filter(Date__year=this_year).aggregate(Sum('PT'))['PT__sum']
+    if not HT:
+        HT = 0
+    TVA = HT / 100 * TVA_taux
+    TTC = HT + TVA
+    ToTalRow = ['', 'TOTAL', f'{HT}(HT)', f'{TVA}(TVA)', f'{TTC}(TTC)','']
+    data.append(ToTalRow)
+
     ########################################
 
     ########## Global Vars #################

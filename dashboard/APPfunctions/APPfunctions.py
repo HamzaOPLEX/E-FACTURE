@@ -17,6 +17,7 @@ from django.http import Http404
 from datetime import datetime
 import textwrap
 import re
+from django.db.models import Sum
 
 def Login_To_Continue_Handler(requests, *args, **kwargs):
     messages.error(requests, "S'il vous plait Connectez-vous d'abord : )")
@@ -102,29 +103,36 @@ def generate_table_of_products(showaction=True, Products=''):
     return tablebody
 
 def generate_table_of_created_factures(showaction='all', factures=''):
+    TVA_taux = int(APP_Settings.objects.all().first().Company_TVATAUX)
     factures = list(factures)[::-1]
     tablebody = []
     for facture in factures:
-        facture_number = facture.number
+        facture_number = f"{str(facture.number).zfill(3)}/{facture.Date.strftime('%Y')}"
         client = facture.Client_Name
-        date = facture.Date
-        CreatedBy = facture.CreatedBy
+        date = facture.Date.strftime('%d/%m/%Y')
         isPaid = facture.isPaid
-        Paiment_Mathod = facture.Paiment_Mathod
+        HT = APP_Facture_items.objects.filter(BelongToFacture=facture).aggregate(Sum('PT'))['PT__sum']
+        if not HT:
+            HT = 0
+        TVA = HT / 100 * TVA_taux
+        TTC = HT + TVA
         D = {}
         D['N'] = facture_number
         D['client'] = client
         D['date'] = date
-        D['CreatedBy'] = CreatedBy
         D['isPaid'] = isPaid
         if showaction == 'all':
-            D['Paiment_Mathod'] = Paiment_Mathod
+            D['HT'] = HT
+            D['TVA'] = TVA
+            D['TTC'] = TTC
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" data-toggle="tooltip">
                                     <i class="fas fa-pencil-alt"></i>\n</a> 
                                 <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-facturs/delete/{facture.id}\');" title="Delete" data-toggle="tooltip">
                                     <i class="fas fa-trash"></i></a>\n
                                 <a href="/list-all-facturs/detail/open/{facture.id}" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
                                 '''
+
+
         elif showaction == 'Detail-Edit':
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" target='_blank' data-toggle="tooltip">
                                     <i class="fas fa-pencil-alt"></i>\n</a> 
@@ -276,3 +284,9 @@ def Fix_Date(date):
     format = "%Y-%m-%d %H:%M:%S"
     date = datetime.strftime(date, format)
     return date
+
+
+
+
+def CheckNewNumberisNotExsit(obj):
+    pass

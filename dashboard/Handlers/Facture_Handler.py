@@ -166,18 +166,15 @@ def H_Edit_Facture(requests, facture_id):
             settings = APP_Settings.objects.all().first()
             context['setting'] = settings
             # Pass All Clients name in context to show them in select2
-            context['selectbody'] = [
-                clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
+            context['selectbody'] = [clientname.Client_Name for clientname in list(APP_Clients.objects.all())]
             # Pass All Product name in context to show them in select2
-            context['selectproductbody'] = [
-                product.DESIGNATION for product in list(APP_Products.objects.all())]
+            context['selectproductbody'] = [product.DESIGNATION for product in list(APP_Products.objects.all())]
             # Pass the Facture item
             context['facture'] = Facture
             # Pass the Date of Facture
             context['Date'] = Facture.Date.strftime('%Y-%m-%d')
             # Get All Facture items that belong to that Facture
-            Facture_item = APP_Facture_items.objects.filter(
-                BelongToFacture=Facture)
+            Facture_item = APP_Facture_items.objects.filter(BelongToFacture=Facture)
             # generate table of facture items and pass him in context
             table = generate_table_of_facture_items(Facture_item)
             context['tablebody'] = table
