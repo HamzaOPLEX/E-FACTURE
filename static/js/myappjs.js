@@ -85,7 +85,11 @@ function GetSelectedProductThenSetEdit() {
 // datatable javascipt config code
 $(function () {
     $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "responsive": true, 
+        "info": true,
+        "lengthChange": false, 
+        "autoWidth": false, 
+        "searching": false,
     })
     $('#example2').DataTable({
         "paging": true,

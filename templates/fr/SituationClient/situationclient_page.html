@@ -1,108 +1,230 @@
-{% extends "main_fr.html" %}
-{% load Filters %}
-
-{% block content %}
+{% extends "main_fr.html" %} {% load Filters %} {% block content %}
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.upper}} bienvenue sur la page pour search </h1>
             </div>
         </div>
     </div>
 </section>
+<script>
+    $(document).ready(function () {
+
+        var areaChartData = {
+            labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            datasets: [
+                {
+                    label: 'les Factures Payées',
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+                {
+                    label: 'les Factures non Payées',
+                    backgroundColor: 'rgba(210, 214, 222, 1)',
+                    borderColor: 'rgba(210, 214, 222, 1)',
+                    pointRadius: false,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                },
+            ]
+        }
+
+        var areaChartOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        display: false,
+                    }
+                }]
+            }
+        }
+
+        var barChartCanvas = $('#ClientChart').get(0).getContext('2d')
+        var barChartData = jQuery.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        var temp1 = areaChartData.datasets[1]
+        barChartData.datasets[0] = temp1
+        barChartData.datasets[1] = temp0
+
+        var barChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            datasetFill: false
+        }
+
+        var barChart = new Chart(barChartCanvas, {
+            type: 'bar',
+            data: barChartData,
+            options: barChartOptions
+        })
+
+
+    })
+</script>
 <section class="content">
     <div class="container-fluid">
-            <!-- <div class="col-md-6"> -->
-                <div class="card card-default">
-                    <!-- <div class="card"> -->
-                    <div class="card-header">
-                        <h3 class="card-title"><b>Filters</b></h3>
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0" style="text-align: center; margin: auto; display: inline-flex;">
-                        <div class="row" style="margin: auto;">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <select id="ClientName" name="Client" class="form-control" style="width: 250px;">
-                                        <option value="-" disabled selected>choisir un client</option>
-                                        {{ selectbody | CreateHTMLSelectOptions }}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <select id="year" name="year" class="form-control" style="width: 90px;">
-                                        <option value=" -" disabled selected>année</option>
-                                        <option value="*">*</option>
-                                        {{ Years | CreateHTMLSelectOptions }}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <select id="month" name="month" class="form-control" style="width: 110px;">
-                                        <option value=" -" disabled selected>mois</option>
-                                        <option value="*">*</option>
-                                        <option value="1">Janvier</option>
-                                        <option value="2">Février</option>
-                                        <option value="3">Mars</option>
-                                        <option value="4">Avril</option>
-                                        <option value="5">Mai</option>
-                                        <option value="6">Juin</option>
-                                        <option value="7">Juillet</option>
-                                        <option value="8">Août</option>
-                                        <option value="9">Septembre</option>
-                                        <option value="10">Octobre</option>
-                                        <option value="11">Novembre</option>
-                                        <option value="12">Décembre</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <input type="number" placeholder="jour" max="31" min="1" class="form-control" style="width: 90px;" name="day" id="day" /> 
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <select id="status" name="status" class="form-control" style="width: 150px;">
-                                        <option value="-" disabled selected>status</option>
-                                        <option value="Oui">Payéé</option>
-                                        <option value="Non">Non Payéé</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                <button id="top-btn" type="button" class="btn btn-block btn-info" style="font-size: 15px !important;"><i class="fas fa-search"></i> <b>chercher</b></button>
-                                    
-                                </div>
-                            </div>
+        <div class="card card-default">
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0" style="text-align: center; margin: auto; display: inline-flex;">
+                <div class="row" style="margin: auto;">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <select id="ClientName" name="Client" class="form-control" style="width: 250px;">
+                                <option value="-" disabled selected>choisir un client</option>
+                                {{ selectbody | CreateHTMLSelectOptions }}
+                            </select>
                         </div>
-                        <script>
-                            $(document).ready(function () {
-                                $('#status').select2();
-                                $('#ClientName').select2();
-                                $('#year').select2();
-                                $('#month').select2();
-                                $('#day').select2();
-                            });
-                        </script>
-                        <style>
-                            .col-sm-6{
-                                display: contents;
-                            }        
-  
-                            .form-group{
-                                margin-right: 10px;
-                            }
-                            .p-0 {
-                                padding: 20px !important;
-                            }               
-                        </style>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <select id="year" name="year" class="form-control" style="width: 90px;">
+                                <option value=" -" disabled selected>année</option>
+                                <option value="*">*</option>
+                                {{ Years | CreateHTMLSelectOptions }}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <select id="month" name="month" class="form-control" style="width: 110px;">
+                                <option value=" -" disabled selected>mois</option>
+                                <option value="*">*</option>
+                                <option value="1">Janvier</option>
+                                <option value="2">Février</option>
+                                <option value="3">Mars</option>
+                                <option value="4">Avril</option>
+                                <option value="5">Mai</option>
+                                <option value="6">Juin</option>
+                                <option value="7">Juillet</option>
+                                <option value="8">Août</option>
+                                <option value="9">Septembre</option>
+                                <option value="10">Octobre</option>
+                                <option value="11">Novembre</option>
+                                <option value="12">Décembre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="number" placeholder="jour" max="31" min="1" class="form-control"
+                                style="width: 90px;" name="day" id="day" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <select id="status" name="status" class="form-control" style="width: 150px;">
+                                <option value="-" disabled selected>status</option>
+                                <option value="Oui">Payéé</option>
+                                <option value="Non">Non Payéé</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <button id="top-btn" type="button" class="btn btn-block btn-info"
+                                style="font-size: 15px !important;"><i class="fas fa-search"></i>
+                                <b>chercher</b></button>
+
+                        </div>
                     </div>
                 </div>
+                <script>
+                    $(document).ready(function () {
+                        $('#status').select2();
+                        $('#ClientName').select2();
+                        $('#year').select2();
+                        $('#month').select2();
+                        $('#day').select2();
+                    });
+                </script>
+                <style>
+                    .col-sm-6 {
+                        display: contents;
+                    }
+
+                    .form-group {
+                        margin-right: 10px;
+                    }
+
+                    .form-group {
+                        margin-bottom: 0;
+                    }
+
+                    .p-0 {
+                        padding: 20px !important;
+                    }
+                </style>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-default" style="height: 350px; max-height: 350px; min-height: 350px;">
+                <div class="card-body table-responsive p-0">
+                    <table id="example1" class="table table-bordered table-striped" >
+                        <thead>
+                            <tr>
+                                <th>Serie :</th>
+                                <th>Date:</th>
+                                <th>Status :</th>
+                                <th>HT :</th>
+                                <th>TVA :</th>
+                                <th>TTC :</th>
+                                <th>Action :</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td>ddd</td>
+                            <td>ddd</td>
+                            <td>ddd</td>
+                            <td>ddd</td>
+                            <td>ddd</td>
+                            <td>ddd</td>
+                            <td>ddd</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-body">
+                    <div class="chart">
+                        <div class="chartjs-size-monitor">
+                            <div class="chartjs-size-monitor-expand">
+                                <div class=""></div>
+                            </div>
+                            <div class="chartjs-size-monitor-shrink">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                        <canvas id="ClientChart" style="display: block; height: 309px; max-height: 309px; min-height: 309px;" class="chartjs-render-monitor"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+    </div>
+
 </section>
+
 {% endblock content %}
