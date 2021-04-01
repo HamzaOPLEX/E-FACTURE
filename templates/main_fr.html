@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/static/css/fr/myappcss.css">
   {% endif %}
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"/>
+
   <!-- Toster -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
   <link rel="shortcut icon" type="image/ico" href="{% static 'img/favicon.ico' %}"/>
@@ -69,7 +71,7 @@
         <!-- Notifications Dropdown Menu -->
         <div id="RemoveOn650px" style="display: inherit;">
           <li class="nav-item">
-            <a class="nav-link" href="/create-new-bl/">
+            <a class="nav-link" href="/situation-client/">
               <button type="button" class="btn btn-block btn-info" id="top-btn">
                 <b>situation des clients</b></button>
             </a>
@@ -105,12 +107,6 @@
         <a class="nav-link" href="/logout">
           <i class="fas fa-sign-out-alt"></i>
         </a>
-        <li class="nav-item">
-          <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-            <i class="fas fa-expand-arrows-alt"></i>
-          </a>
-
-        </li>
       </ul>
     </nav>
     <!-- /.navbar -->
@@ -308,6 +304,7 @@
 
   
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 
 </body>

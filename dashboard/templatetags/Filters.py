@@ -40,7 +40,6 @@ def CreateTableBody_FactureItems(tablebody):
 @register.filter
 def CreateHTMLSelectOptions(selectbody):
     body = []
-    body.append('<option value="-">--choisir un élément--</option>')
     for i in selectbody:
         option_tag = f'<option value="{i}">{i}</option>'
         body.append(option_tag)
@@ -50,7 +49,6 @@ def CreateHTMLSelectOptions(selectbody):
 @register.filter
 def CreateHTMLSelectOptionsWith_ID(selectbody):
     body = []
-    body.append('<option value="-">--choisir un élément--</option>')
     for i in selectbody:
         option_tag = f'<option value="{i[1]}">{i[0]}</option>'
         body.append(option_tag)

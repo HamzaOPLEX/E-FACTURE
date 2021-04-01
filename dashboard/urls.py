@@ -10,7 +10,8 @@ from dashboard.Handlers import (
     AUTH_Handler,
     Devis_Handler,
     BL_Handler,
-    JournalVent
+    JournalVent,
+     SituationClient_Handler,
 )
 urlpatterns = [
     # Auth Urls
@@ -126,5 +127,8 @@ urlpatterns = [
     path('All-Histories/', views.ShowAllHistory, name='Show All Histories'),
 
     path('journal-de-vente/', JournalVent.DownloadJVFile, name='Show All Histories'),
+
+    # Situation Client
+    path('situation-client/',SituationClient_Handler.FilterPageHandler)
 
 ]
