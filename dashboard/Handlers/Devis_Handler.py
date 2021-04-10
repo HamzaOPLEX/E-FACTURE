@@ -78,13 +78,14 @@ def H_Create_New_Devis(requests):
                     # For item in DataTable Create item
                     PT = data[list(data.keys())[3]]
                     HT = HT + float(PT)
-                    APP_Devis_items(
+                    Items = APP_Devis_items(
                         Qs=data[list(data.keys())[0]],
                         DESIGNATION=data[list(data.keys())[1]],
                         PU=data[list(data.keys())[2]],
                         PT=data[list(data.keys())[3]],
                         BelongToDevis=Devis
                     )
+                    ALL_ITEMS.append(Items)
                 # Create a History
                 actiondetail = f'{User.username} crée un nouvelle Devis avec le numéro {Devis_number} en {Fix_Date(str(datetime.today()))}'
                 APP_History.objects.create(
