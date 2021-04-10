@@ -33,61 +33,60 @@ def FilterPageHandler_POST(requests):
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User.objects, id=userid)
     if requests.method == 'POST':
-        ClientID = requests.POST['ClientID']
-        Year = requests.POST['Year']
-        month = requests.POST['month']
-        jour = requests.POST['day']
-        status = requests.POST['status']
-        is_OK = False
-        for i in (ClientID,Year,month,status) :
-            if i != '-' and i != '':
-                is_OK = True
-            else:
-                is_OK = False
-                break
-        if is_OK:
-            Client = get_object_or_404(APP_Clients,id=ClientID)
+        try :
+            ClientID = requests.POST['ClientID']
+            Year = requests.POST['Year']
+            month = requests.POST['month']
+            jour = requests.POST['day']
+            status = requests.POST['status']
+            is_OK = False
+            for i in (ClientID,Year,month,status) :
+                if i != '-' and i != '':
+                    is_OK = True
+                else:
+                    is_OK = False
+                    break
+            if is_OK:
+                Client = get_object_or_404(APP_Clients,id=ClientID)
+                if jour == '*' and Year=='*' and month=='*':
+                    factures = APP_Created_Facture.objects.filter(Client=Client)
+                if jour != '*'  and Year=='*' and month=='*':
+                    factures = APP_Created_Facture.objects.filter(Client=Client,Date__day=jour)
+                if jour != '*'  and Year!='*' and month=='*':
+                    factures = APP_Created_Facture.objects.filter(Client=Client,Date__day=jour,Date__year=Year)
+                if jour != '*'  and Year!='*' and month!='*':
+                    factures = APP_Created_Facture.objects.filter(Client=Client,Date__day=jour,Date__year=Year,Date__month=month)
+                if jour == '*'  and Year=='*' and month!='*':
+                    factures = APP_Created_Facture.objects.filter(Client=Client,Date__month=month)
+                if jour == '*'  and Year!='*' and month=='*':
+                    factures = APP_Created_Facture.objects.filter(Client=Client,Date__year=Year)
 
-            filter_config = {}
-            if jour == '*' and Year=='*' and month=='*':
-                factures = APP_Created_Facture.objects.filter(Client=Client)
-            if jour != '*'  and Year=='*' and month=='*':
-                factures = APP_Created_Facture.objects.filter(Client=Client,Date__day=jour)
-            if jour != '*'  and Year!='*' and month=='*':
-                factures = APP_Created_Facture.objects.filter(Client=Client,Date__day=jour,Date__year=Year)
-            if jour != '*'  and Year!='*' and month!='*':
-                factures = APP_Created_Facture.objects.filter(Client=Client,Date__day=jour,Date__year=Year,Date__month=month)
-            if jour == '*'  and Year=='*' and month!='*':
-                factures = APP_Created_Facture.objects.filter(Client=Client,Date__month=month)
-            if jour == '*'  and Year!='*' and month=='*':
-                factures = APP_Created_Facture.objects.filter(Client=Client,Date__year=Year)
-
-            if status != "*":
-                factures = factures.filter(isPaid=status)
- 
+                if status != "*":
+                    factures = factures.filter(isPaid=status)
+    
 
 
-            paid = []
-            non_paid = []
-            # Get Client Paid & Non-Paid Factres
-            month = 1
-            for i in range(12):
-                all_paid_factures = APP_Created_Facture.objects.filter(isPaid='Oui',Client=Client ,Date__month=month)
-                all_none_paid_factures = APP_Created_Facture.objects.filter(isPaid='Non', Client=Client ,Date__month=month)
-                paid.append(len(all_paid_factures))
-                non_paid.append(len(all_none_paid_factures))
-                month = month + 1
+                paid = []
+                non_paid = []
+                # Get Client Paid & Non-Paid Factres
+                month = 1
+                for i in range(12):
+                    all_paid_factures = APP_Created_Facture.objects.filter(isPaid='Oui',Client=Client ,Date__month=month)
+                    all_none_paid_factures = APP_Created_Facture.objects.filter(isPaid='Non', Client=Client ,Date__month=month)
+                    paid.append(len(all_paid_factures))
+                    non_paid.append(len(all_none_paid_factures))
+                    month = month + 1
+                facture_table_data = generate_table_of_created_factures(showaction='Detail-Edit', factures=factures)
+                MSG = {'MSG': 'Search was done', 'PAID': paid,
+                    'NON_PAID': non_paid, 'FacturesData': facture_table_data}
+                return JsonResponse(MSG,status=200)
 
-            facture_table_data = generate_table_of_created_factures(showaction='Detail-Edit', factures=factures)
-
-            MSG = {'MSG': 'Search was done', 'PAID': paid,
-                   'NON_PAID': non_paid, 'FacturesData': facture_table_data}
-            return JsonResponse(MSG,status=200)
-
-        if not is_OK: 
-            ERR_MSG = {'ERR_MSG':'all fields are require'}
-            return JsonResponse(ERR_MSG,status=400)
-
+            if not is_OK: 
+                ERR_MSG = {'ERR_MSG':'all fields are require'}
+                return JsonResponse(ERR_MSG,status=500)
+        except Exception as ERR_MSG:               
+            ERR_MSG = {'ERR_MSG': str(ERR_MSG)}
+            return JsonResponse(ERR_MSG, status=500)
     else:
         return redirect('/situation-client/')
 
