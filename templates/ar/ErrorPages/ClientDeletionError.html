@@ -1,0 +1,19 @@
+{% extends "main_ar.html" %}
+{% block content %}
+<div class="content p-4">
+
+    <div class="card">
+        <div class="card-header bg-white font-weight-bold" style='font-size:17px'>
+            لا يمكنك حذف هذا العميل لأنه مرتبط بكائنات أخرى. <br/> لحذف هذا العميل ، احذف كل هذه الكائنات المذكورة أدناه :
+        </div>
+        <div class="card-body">
+            <ul>
+            {% for rf in ref %}
+                <li style='font-size: 18px;font-style: italic;'>{{rf}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -8,8 +8,8 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-settings = APP_Settings.objects.all().first()
-
+from django.core.exceptions import *
+from django.contrib.admin.utils import NestedObjects
 
 @RequirePermission
 def ManageClients(requests):
@@ -19,7 +19,8 @@ def ManageClients(requests):
     # Context
     context = {'pagetitle': 'Gérer Vos Clients',
                'User': User, 'selecteditem': 'settings'}
-    # path to Template
+    # path to Templatesta
+    settings = APP_Settings.objects.all().first()
     templatepath = str(settings.APP_lang)+'/Settings/Manage-Clients.html'
     if requests.method == "GET":
         # Generate Table Of Clients and pass the Table in the context
@@ -36,16 +37,15 @@ def ManageClients(requests):
             try:
                 APP_Clients.objects.get(
                     Client_Name=ClientName,
-                    ICE=ICE
+                    ICE=ICE,
                 )
-                messages.info(
-                    requests, f'Le client {ClientName}:{ICE} existe déjà !')
-                return redirect('/settings/manage-clients')
+                ERR_MSG = f'Le client {ClientName}:{ICE} existe déjà !'
+                return JsonResponse({"ERR_MSG": ERR_MSG}, status=400)
             except APP_Clients.DoesNotExist:
-                APP_Clients.objects.create(
+                client = APP_Clients.objects.create(
                     Client_Name=ClientName,
                     ICE=ICE,
-                    City=City
+                    City = City
                 )
                 actiondetail = f'{User.username} creé un client avec le nome {ClientName}  en {Fix_Date(str(datetime.today()))}'
                 APP_History.objects.create(
@@ -54,9 +54,14 @@ def ManageClients(requests):
                     action_detail=actiondetail,
                     DateTime=str(datetime.today())
                 )
-                messages.info(
-                    requests, f'Le client {ClientName}:{ICE} a été créé avec succès')
-                return redirect('/settings/manage-clients')
+                MSG = f'Le client {ClientName}:{ICE} a été créé avec succès'
+                Client_DATA = {
+                    'Client_Name':client.Client_Name,
+                    'City':client.City,
+                    'ICE':client.City,
+                }
+                response_data = {"MSG": MSG,'CLIENT_ID':client.id,'ClientData':Client_DATA}
+                return JsonResponse(response_data, status=200)
         else:
             messages.info(
                 requests, f'veuillez remplir toutes les informations')
@@ -71,23 +76,37 @@ def DeleteClient(requests, id):
         pwd = requests.POST['password']
         client2delete = get_object_or_404(APP_Clients, id=id)
         ClientName = client2delete.Client_Name
+        context = {'pagetitle': 'Oooops !','User': User, 'selecteditem': 'settings'}
+        settings = APP_Settings.objects.all().first()
         if check_password(pwd, User.password):
-            messages.error(
-                requests, f"le Client {client2delete.Client_Name} a été supprimé avec succès")
-            client2delete.delete()
-            actiondetail = f'{User.username} supprimer un client avec le nome {ClientName}  en {Fix_Date(str(datetime.today()))}'
-            APP_History.objects.create(
-                CreatedBy=User,
-                action='supprimer un client',
-                action_detail=actiondetail,
-                DateTime=str(datetime.today())
-            )
-            return redirect('/settings/manage-clients')
+            try :
+                client2delete.delete()
+                messages.error(requests, f"le Client {client2delete.Client_Name} a été supprimé avec succès")
+                actiondetail = f'{User.username} supprimer un client avec le nome {ClientName}  en {Fix_Date(str(datetime.today()))}'
+                APP_History.objects.create(
+                    CreatedBy=User,
+                    action='supprimer un client',
+                    action_detail=actiondetail,
+                    DateTime=str(datetime.today())
+                )
+                return redirect('/settings/manage-clients')
+            except Exception as Err:
+                collector = NestedObjects(using="default")
+                collector.collect([client2delete])
+                ref = list(collector.data)[1::]
+                ALL_REFRECES = []
+                for obj in ref :
+                    obj = obj.objects.filter(Client=client2delete)
+                    for o in obj:
+                        ALL_REFRECES.append(o)
+                context['ref'] = ALL_REFRECES
+                context['setting'] = settings
+                return render(requests,str(settings.APP_lang)+'/ErrorPages/ClientDeletionError.html',context)
         else:
             messages.error(requests, "Ooops ! Mot de passe incorrect")
             return redirect('/settings/manage-clients')
     else:
-        return HTTP_404(requests)
+        return redirect('/settings/manage-clients')
 
 
 @RequirePermission
@@ -103,16 +122,6 @@ def EditClient(requests, id):
         ICE = requests.POST['ICE']
         City = requests.POST['City']
         if client_name and ICE and City:
-            factures_of_that_client = APP_Created_Facture.objects.filter(
-                Client_Name=client.Client_Name,
-                ICE=client.ICE,
-                Place=client.City
-            )
-            for client_info in factures_of_that_client:
-                client_info.Client_Name = client_name
-                client_info.ICE = ICE
-                client_info.Place = City
-                client_info.save()
             client.Client_Name = client_name
             client.ICE = ICE
             client.City = City
@@ -134,10 +143,4 @@ def EditClient(requests, id):
             messages.info(requests, 'Veuillez remplir toutes les informations')
             return redirect('/settings/manage-clients')
     elif requests.method == 'GET':
-        client = get_object_or_404(APP_Clients, id=id)
-        client_info = {
-            'ClientName': client.Client_Name,
-            'ICE': client.ICE,
-            'City': client.City
-        }
-        return JsonResponse(client_info)
+        return redirect('/settings/manage-clients')

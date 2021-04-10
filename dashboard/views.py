@@ -94,11 +94,12 @@ def Dashboard(requests):
 
         ################### Chiffre D'affair Handler ###################
         TVA_taux = int(APP_Settings.objects.all().first().Company_TVATAUX)
-        HT = APP_Facture_items.objects.filter(Date__year=this_year).aggregate(Sum('PT'))['PT__sum']
+        HT = APP_Created_Facture.objects.filter(Date__year=this_year).aggregate(Sum('HT'))['HT__sum']
         if not HT:
             HT = 0
-        TVA = HT / 100 * TVA_taux
-        TTC = HT + TVA
+        TTC = APP_Created_Facture.objects.filter(Date__year=this_year).aggregate(Sum('TTC'))['TTC__sum']
+        if not TTC:
+            TTC = 0
 
 
         HT_BL = APP_BL_items.objects.filter(Date__year=this_year).aggregate(Sum('PT'))['PT__sum']

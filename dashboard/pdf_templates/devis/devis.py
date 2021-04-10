@@ -7,10 +7,14 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch, cm
 from pathlib import Path
 from num2words import num2words
+from dashboard.models import APP_Settings
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
+from colour import Color
 
-def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
+def DrawNotechPdf(DevisObj, DevisItemsObj, Company_City):
+    Table_Color = Color(APP_Settings.objects.all().first().Invoice_Color)
+    Table_Color = Table_Color.rgb
     def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
         if len(text) > length:
             wraps = textwrap.wrap(text, length)
@@ -24,8 +28,8 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
-    Date = BLObj.Date.strftime('%Y-%m-%d')
-    Year = BLObj.Date.strftime('%Y')
+    Date = DevisObj.Date.strftime('%Y-%m-%d')
+    Year = DevisObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
     styles = getSampleStyleSheet()
@@ -103,10 +107,10 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
             return number.title()
 
     # - Start TOTAL,TVA,TTC Table Handler - ##################################################
-    TOTALint, TVA, TTC_int = CalculedTOTAL
+    TOTALint = DevisObj.HT
     TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
     TOTALtableData = [TOTAL]
-    TOTALletter = Number2Letter(str(TTC_int))
+    TOTALletter = Number2Letter(str(TOTALint))
 
     def Info_Table(tabledata):
         colwidths = (200, 90, 200)
@@ -147,7 +151,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colr(245, 123, 32)),
+                ('BACKGROUND', (0, 0), (-1, 0), Table_Color),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ]
         )
@@ -159,12 +163,12 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
     ClientSide = styles['ClientSide']
     CompanySide = styles['CompanySide']
     company_side = f"""
-                <b>Client:</b> {str(BLObj.Client_Name).title()}<br/>
-                <b>ICE :</b> {str(BLObj.ICE).title()}<br/>
+                <b>Client:</b> {str(DevisObj.Client.Client_Name).title()}<br/>
+                <b>ICE :</b> {str(DevisObj.Client.ICE).title()}<br/>
                 """
     client_side = f"""
-                    <b>Devis :</b> {BLObj.number}/{Year}<br/>
-                    <b>{str(Company_City).upper()} le:</b> {BLObj.Date}"""
+                    <b>Devis :</b> {str(DevisObj.number).zfill(3)}/{Year}<br/>
+                    <b>{str(Company_City).upper()} le:</b> {DevisObj.Date}"""
 
     client_company_table_data = [
         [Paragraph(client_side, ClientSide), '',
@@ -179,9 +183,9 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
 
     def colr(x, y, z):
         return (x/255, y/255, z/255)
-    # change this to for item in BL items , tabledata.append(item)
+    # change this to for item in Devis items , tabledata.append(item)
 
-    for item in BLItemsObj:
+    for item in DevisItemsObj:
         row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),
                str(item.PU).strip(), str(item.PT).strip()]
         tabledata.append(row)
@@ -209,7 +213,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
 
         story.append(PageBreak())
 
-    filename = f'{BLObj.Client_Name}-{BLObj.number}-{Date}'
+    filename = f'{DevisObj.Client.Client_Name}-{str(DevisObj.number).zfill(3)}-{Date}' 
     filepath = os.path.join(BASE_DIR.parent.parent,
                             'all_facturs')+f"/{filename}.pdf"
     doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',rightMargin=43, leftMargin=43,topMargin=100, bottomMargin=23)

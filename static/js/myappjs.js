@@ -1,34 +1,86 @@
+// Add New Client From Creat / Edit (modal handler)
 
-function GetSelectedThenSet() {
-    var clientname = document.getElementById("ClientName");
-    if (clientname.value !== '') {
-        document.getElementsByClassName('editOption')[0].value = clientname.value
-        var url = '/create-new-facture/getclientinfo/' + clientname.value
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                ClientData = JSON.parse(this.responseText);
-                document.getElementById("ICE").value = ClientData.ICE;
-                document.getElementById("City").value = ClientData.City;
-                document.getElementById('circle01').style.display = 'none'
-                document.getElementById('circle02').style.display = 'none'
-            }
-            if (this.status == 404 || this.status == 502){
-                document.getElementById('circle01').style.display = 'none'
-                document.getElementById('circle02').style.display = 'none'
-            }
-        }
-        if (clientname.value !== '-'){
-            document.getElementById('circle01').style.display = 'block'
-            document.getElementById('circle02').style.display = 'block'
-        }
-        xhttp.open("GET", url, true);
-        xhttp.send();
-    }
+function AddNewClient() {
+    $(document).ready(function () {
+        $("#AddClientModal").modal({ backdrop: false });
+    }); 
 }
+
+// on submit form use Ajax
+$('#AddNewClientForm').submit(function(e) {
+    e.preventDefault() // prevat form from reloading page
+    document.getElementById('IconPlus').style = 'display:none'
+    document.getElementById('IconSpin').style = 'display:content'
+    $.ajax({
+            type: "POST",
+            url: this.action, // get action from form
+            data: $('#AddNewClientForm').serialize(), // get all inputs from from and convert them to Json
+            dataType: "json",
+            encode: true,
+            success: function (response) { // if respond == 200
+                toastr.success(response.MSG, "demande réussie"); 
+                var ClientName = response.ClientData.Client_Name.toUpperCase() + ':' + response.ClientData.City
+                $("#ClientID").append(new Option(ClientName, response.CLIENT_ID));
+                $("#ClientID").val(response.CLIENT_ID)
+                document.getElementById('IconPlus').style = 'display:content'
+                document.getElementById('IconSpin').style = 'display:none'
+                $('#AddClientModal').modal('hide');
+                document.getElementById("AddNewClientForm").reset();
+            },
+            error: function (response) {
+                document.getElementById('IconPlus').style = 'display:content'
+                document.getElementById('IconSpin').style = 'display:none'
+                toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+            }
+        })
+    })
+
+// on submit form use Ajax
+$('#MainAddNewClientForm').submit(function (e) {
+    e.preventDefault() // prevat form from reloading page
+    document.getElementById('IconPlus').style = 'display:none'
+    document.getElementById('IconSpin').style = 'display:content'
+    $.ajax({
+        type: "POST",
+        url: this.action, // get action from form
+        data: $('#MainAddNewClientForm').serialize(), // get all inputs from from and convert them to Json
+        dataType: "json",
+        encode: true,
+        success: function (response) { // if respond == 200
+            toastr.success(response.MSG, "demande réussie");
+            var ClientName = response.ClientData.Client_Name
+            var ICE = response.ClientData.ICE
+            var City = response.ClientData.City
+            var Action = `<a class='btn btn-info  btn-sm' href='#' onclick="EditClient(this, '/settings/manage-clients/edit/${response.CLIENT_ID}')" title='Edit' data-toggle='tooltip'><i class='fas fa-pencil-alt' ></i >\n</a ><a class='btn btn-danger btn-sm' href='#' title='Delete' onclick="EnterPwdToDeletePopup('/settings/manage-clients/delete/${response.CLIENT_ID}');" data-toggle='tooltip'><i class='fas fa-trash'></i></a>`
+            var ROWS = [ClientName, ICE, City, Action]
+            var table = document.getElementById('ClientTable').getElementsByTagName('tbody')[0];
+            var new_row = table.insertRow(0)
+            for(i=0;i<ROWS.length;i++){
+                new_cell = new_row.insertCell(i)
+                new_cell.innerHTML = ROWS[i]
+            }
+            document.getElementById('IconPlus').style = 'display:content'
+            document.getElementById('IconSpin').style = 'display:none'
+            document.getElementById("MainAddNewClientForm").reset();
+        },
+        error: function (response) {
+            document.getElementById('IconPlus').style = 'display:content'
+            document.getElementById('IconSpin').style = 'display:none'
+            toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+        }
+    })
+})
+
+
+
+
+
+
+
+
 function GetSelectedProductThenSet() {
     var ProductName = document.getElementById("ProductName");
-    document.getElementsByClassName('editOption')[1].value = ProductName.value
+    document.getElementsByClassName('editOption')[0].value = ProductName.value
     var url = '/create-new-facture/getproductinfo/' + ProductName.value
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -54,7 +106,7 @@ function GetSelectedProductThenSet() {
 }
 function GetSelectedProductThenSetEdit() {
     var ProductName = document.getElementById("Edit_ProductName");
-    document.getElementsByClassName('editOption')[2].value = ProductName.value
+    document.getElementsByClassName('editOption')[1].value = ProductName.value
     var ProductName = document.getElementById("Edit_ProductName");
     var url = '/create-new-facture/getproductinfo/' + ProductName.value
     var xhttp = new XMLHttpRequest();
@@ -79,7 +131,25 @@ function GetSelectedProductThenSetEdit() {
     xhttp.send();
 }
 
-
+function GetInputAndSet2Select(Idselect, editOptionIndex) {
+    var editText = document.getElementsByClassName('editOption')[editOptionIndex].value
+    let select = document.getElementById(Idselect);
+    if (editText !== '') {
+        statuss = check_if_inputval_is_already_in_select(Idselect, editText)
+        if (statuss == false) {
+            var option = document.createElement("option");
+            option.value = editText;
+            option.text = editText;
+            select.add(option);
+            select.value = editText
+            select.onchange()
+        }
+        if (statuss == true) {
+            select.value = editText
+            select.onchange()
+        }
+    }
+}
 
 
 // datatable javascipt config code
@@ -127,17 +197,12 @@ function EnterPwdToDeletePopup(action) {
     });
 };
 
-function EditProduct(action) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            ProductData = JSON.parse(this.responseText);
-            document.getElementById("ProductName").value = ProductData.ProductName;
-            document.getElementById("PU").value = ProductData.PU;
-        }
-    };
-    xhttp.open("GET", action, true);
-    xhttp.send();
+function EditProduct(row,action) {
+    var p = row.parentNode.parentNode;
+    var row_data_client = p.innerText
+    var row_data_client = row_data_client.split('	').slice(0, 3)
+    document.getElementById('ProductName').value = row_data_client[0]
+    document.getElementById('PU').value = row_data_client[1]
     document.getElementById('FormToEditProduct').action = action
     $(document).ready(function () {
         $("#EditProductModal").modal({ backdrop: false });
@@ -145,18 +210,13 @@ function EditProduct(action) {
 };
 
 
-function EditClient(action) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            ClientData = JSON.parse(this.responseText);
-            document.getElementById("ClientName").value = ClientData.ClientName;
-            document.getElementById("ICE").value = ClientData.ICE;
-            document.getElementById("City").value = ClientData.City;
-        }
-    };
-    xhttp.open("GET", action, true);
-    xhttp.send();
+function EditClient(row,action) {
+    var p = row.parentNode.parentNode;
+    var row_data_client = p.innerText
+    var row_data_client = row_data_client.split('	').slice(0, 3)
+    document.getElementById('ICE').value = row_data_client[1]
+    document.getElementById('ClientName').value = row_data_client[0]
+    document.getElementById('City').value = row_data_client[2]
     document.getElementById('FormToEditClient').action = action
     $(document).ready(function () {
         $("#EditClientModal").modal({ backdrop: false });
@@ -170,30 +230,12 @@ function check_if_inputval_is_already_in_select(selec, data2check) {
     if ($("#" + selec + " option[value='" + data2check + "']").length !== 0) { return true };
     if ($("#" + selec + " option[value='" + data2check + "]'").length == 0) { return false };
 }
-function GetInputAndSet2Select(Idselect, editOptionIndex) {
-    var editText = document.getElementsByClassName('editOption')[editOptionIndex].value
-    let select = document.getElementById(Idselect);
-    if (editText !== '') {
-        statuss = check_if_inputval_is_already_in_select(Idselect, editText)
-        if (statuss == false) {
-            var option = document.createElement("option");
-            option.value = editText;
-            option.text = editText;
-            select.add(option);
-            select.value = editText
-            select.onchange()
-        }
-        if (statuss == true) {
-            select.value = editText
-            select.onchange()
-        }
-    }
-}
+
 
 function AddNewFactureItemModalHandler() {
     document.getElementById('Qs').value = 1
     document.getElementById('ProductName').value = "-"
-    document.getElementsByClassName('editOption')[1].value = null
+    document.getElementsByClassName('editOption')[0].value = null
     document.getElementById('PU').value = 0
     document.getElementById('PT').value = 0
     $(document).ready(function () {
@@ -237,7 +279,7 @@ function EditSelectedRow(row) {
     document.getElementById('SelectedRowNumber').value = p.rowIndex
     document.getElementById('Edit_Qs').value = row_data[0]
     document.getElementById('Edit_ProductName').value = row_data[1]
-    document.getElementsByClassName('editOption')[2].value = row_data[1]
+    document.getElementsByClassName('editOption')[1].value = row_data[1]
     document.getElementById('Edit_PU').value = row_data[2]
     document.getElementById('Edit_PT').value = row_data[3]
 
@@ -309,22 +351,6 @@ function SaveEdited(row) {
 
 
 
-/* --> Start Function To Valid All Inputs <-- */
-
-
-        /* 
-            1 - Find a way to push input into InvalidInputs Array
-            2 - Find a way to get for every Select here Input :)
-        */
-// function ValidSelectXinput(select,input) {
-//     if (select.value.trim() == '-' || input.value.trim() == '') {
-//         clearSelected(select)
-//         InvalidInputs.push(input)
-//     }
-//     if (select.value.trim() !== '-' || input.value.trim() !== '') {
-//         RemoveInvalidClass([input]);
-//     }
-// }
 
 
 
@@ -334,13 +360,13 @@ function ValidInputNotEmpty(modaltype) {
         for (let index = 0; index < list_of_inputs.length; index++) {
             var theinput = list_of_inputs[index]
 
-            if (theinput.id == 'ClientName'){
-                if (theinput.id == 'ClientName' && theinput.value.trim() == '-' || document.getElementById('ClientNameInput').value.trim() == '') {
-                    clearSelected(document.getElementById('ClientName'))
-                    InvalidInputs.push(document.getElementById('ClientNameInput'))
+            if (theinput.id == 'ClientID'){
+                if (theinput.id == 'ClientID' && theinput.value.trim() == '-') {
+                    $('#ClientID').val('-');
+                    InvalidInputs.push(document.getElementById('ClientID'))
                 }
-                if (theinput.id == 'ClientName' && theinput.value.trim() !== '-' || document.getElementById('ClientNameInput').value.trim() !== '') {
-                    RemoveInvalidClass([document.getElementById('ClientNameInput')]);
+                if (theinput.id == 'ClientID' && theinput.value.trim() !== '-') {
+                    RemoveInvalidClass([document.getElementById('ClientID')]);
                 }  
             }
             else{
@@ -388,11 +414,9 @@ function ValidInputNotEmpty(modaltype) {
     }
     if (modaltype == 'clientside') {
         var F = document.getElementById('facture_number')
-        var C = document.getElementById('ClientName')
-        var I = document.getElementById('ICE')
-        var CI = document.getElementById('City')
+        var C = document.getElementById('ClientID')
         var D = document.getElementById('Date')
-        var list_of_inputs = [F, C, I, CI,D]
+        var list_of_inputs = [F,C,D]
         valid(list_of_inputs,modaltype);
     }
 }

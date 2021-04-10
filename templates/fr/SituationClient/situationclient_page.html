@@ -7,9 +7,184 @@
         </div>
     </div>
 </section>
-<script>
-    $(document).ready(function () {
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-default">
+            <form action='/situation-client/ajax/' id='GetClientInfoForm' method='POST'>
+                {%csrf_token%}
+                <div class="card-body table-responsive p-0"
+                    style="text-align: center; margin: auto; display: inline-flex;background-color: #0ea5ae;}">
+                    <div class="row" style="margin: auto;">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Client</label>                                
+                                <select id="ClientName" name="ClientID" class="form-control" def style="width: 250px;">
+                                    {{ selectbody | CreateHTMLSelectOptionsWith_ID }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>année</label>
+                                <select id="year" name="Year" class="form-control" style="width: 90px;">
+                                    <option value="*" selected>*</option>
+                                    {{ Years | CreateHTMLSelectOptions }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>mois</label>
+                                <select id="month" name="month" class="form-control" style="width: 110px;">
+                                    <option value="*" selected>*</option>
+                                    <option value="1">Janvier</option>
+                                    <option value="2">Février</option>
+                                    <option value="3">Mars</option>
+                                    <option value="4">Avril</option>
+                                    <option value="5">Mai</option>
+                                    <option value="6">Juin</option>
+                                    <option value="7">Juillet</option>
+                                    <option value="8">Août</option>
+                                    <option value="9">Septembre</option>
+                                    <option value="10">Octobre</option>
+                                    <option value="11">Novembre</option>
+                                    <option value="12">Décembre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>jour</label>
+                                <!-- <input type="number" placeholder="jour" max="31" min="1" class="form-control"
+                                    style="width: 90px;" name="day" id="day" /> -->
+                                <select id="jour" name="day" class="form-control" style="width: 150px;">
+                                    <option value="*" selected>*</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option>
+                                    <option>31</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>status</label>
+                                <select id="status" name="status" class="form-control" style="width: 150px;">
+                                    <option value="*" selected>*</option>
+                                    <option value="Oui">Payéé</option>
+                                    <option value="Non">Non Payéé</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label></label>
+                                <button id="top-btn" type="submit" class="btn btn-block btn-info" style="font-size: 15px !important;margin-top: 8px;"> <i id='IconPlus' class="fas fa-search"></i> <span id='IconSpin'
+                                        class="spinner-border spinner-border-sm" style='display:none'></span> <b>chercher</b></button>
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        .col-sm-6 {
+                            display: contents;
+                        }
 
+                        .form-group {
+                            margin-right: 10px;
+                        }
+
+                        .form-group {
+                            margin-bottom: 6px;
+                        }
+
+                        .p-0 {
+                            padding: 20px !important;
+                        }
+                        label {
+                            display: inline-block;
+                            margin-bottom: 0.5rem;
+                            color: white;
+                            font-size: 14px;
+                        }
+                    </style>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card card-default" style="height: 350px; max-height: 350px; min-height: 350px;">
+                    <div class="card-body table-responsive p-0">
+                        <table id="" class="ClientTable table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Serie :</th>
+                                    <th>Client :</th>
+                                    <th>Date:</th>
+                                    <th>Status :</th>
+                                    <th>HT :</th>
+                                    <th>TVA :</th>
+                                    <th>TTC :</th>
+                                    <th>Action :</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-info">
+                    <div class="card-body">
+                        <div class="chart">
+                            <div class="chartjs-size-monitor">
+                                <div class="chartjs-size-monitor-expand">
+                                    <div class=""></div>
+                                </div>
+                                <div class="chartjs-size-monitor-shrink">
+                                    <div class=""></div>
+                                </div>
+                            </div>
+                            <canvas id="ClientChart"
+                                style="display: block; height: 309px; max-height: 309px; min-height: 309px;"
+                                class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function ChartHandler(paid, non_paid) {
         var areaChartData = {
             labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
             datasets: [
@@ -22,7 +197,7 @@
                     pointStrokeColor: 'rgba(60,141,188,1)',
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    data: paid
                 },
                 {
                     label: 'les Factures non Payées',
@@ -33,7 +208,7 @@
                     pointStrokeColor: '#c1c7d1',
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(220,220,220,1)',
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    data: non_paid
                 },
             ]
         }
@@ -78,153 +253,48 @@
         })
 
 
+    }
+
+
+    $('#GetClientInfoForm').submit(function (e) {
+        e.preventDefault() // prevat form from reloading page
+        document.getElementById('IconPlus').style = 'display:none'
+        document.getElementById('IconSpin').style = 'display:content'
+        $.ajax({
+            type: "POST",
+            url: this.action, // get action from form
+            data: $('#GetClientInfoForm').serialize(), // get all inputs from from and convert them to Json
+            dataType: "json",
+            encode: true,
+            success: function (response) { // if respond == 200
+                document.getElementById('IconPlus').style = 'display:content'
+                document.getElementById('IconSpin').style = 'display:none'
+                $(".ClientTable tr>td").remove();
+                var paid = response.PAID
+                var non_paid = response.NON_PAID
+                ChartHandler(paid, non_paid)
+                var FacturesData = response.FacturesData
+                var table = document.getElementsByClassName('ClientTable')[0].getElementsByTagName('tbody')[0];
+                var c = 0
+                for(i in FacturesData){
+                    var new_row = table.insertRow(i)
+                    var ROW = FacturesData[i]
+                    for(j in ROW){
+                        new_cell = new_row.insertCell(c)
+                        new_cell.innerHTML = ROW[j]
+                        c++
+                    }
+                    c = 0
+                }
+
+                toastr.info(response.MSG);
+            },
+            error: function (response) {
+                document.getElementById('IconPlus').style = 'display:content'
+                document.getElementById('IconSpin').style = 'display:none'
+                toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+            }
+        })
     })
 </script>
-<section class="content">
-    <div class="container-fluid">
-        <div class="card card-default">
-            <!-- /.card-header -->
-            <div class="card-body table-responsive p-0" style="text-align: center; margin: auto; display: inline-flex;">
-                <div class="row" style="margin: auto;">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <select id="ClientName" name="Client" class="form-control" style="width: 250px;">
-                                <option value="-" disabled selected>choisir un client</option>
-                                {{ selectbody | CreateHTMLSelectOptions }}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <select id="year" name="year" class="form-control" style="width: 90px;">
-                                <option value=" -" disabled selected>année</option>
-                                <option value="*">*</option>
-                                {{ Years | CreateHTMLSelectOptions }}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <select id="month" name="month" class="form-control" style="width: 110px;">
-                                <option value=" -" disabled selected>mois</option>
-                                <option value="*">*</option>
-                                <option value="1">Janvier</option>
-                                <option value="2">Février</option>
-                                <option value="3">Mars</option>
-                                <option value="4">Avril</option>
-                                <option value="5">Mai</option>
-                                <option value="6">Juin</option>
-                                <option value="7">Juillet</option>
-                                <option value="8">Août</option>
-                                <option value="9">Septembre</option>
-                                <option value="10">Octobre</option>
-                                <option value="11">Novembre</option>
-                                <option value="12">Décembre</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <input type="number" placeholder="jour" max="31" min="1" class="form-control"
-                                style="width: 90px;" name="day" id="day" />
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <select id="status" name="status" class="form-control" style="width: 150px;">
-                                <option value="-" disabled selected>status</option>
-                                <option value="Oui">Payéé</option>
-                                <option value="Non">Non Payéé</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <button id="top-btn" type="button" class="btn btn-block btn-info"
-                                style="font-size: 15px !important;"><i class="fas fa-search"></i>
-                                <b>chercher</b></button>
-
-                        </div>
-                    </div>
-                </div>
-                <script>
-                    $(document).ready(function () {
-                        $('#status').select2();
-                        $('#ClientName').select2();
-                        $('#year').select2();
-                        $('#month').select2();
-                        $('#day').select2();
-                    });
-                </script>
-                <style>
-                    .col-sm-6 {
-                        display: contents;
-                    }
-
-                    .form-group {
-                        margin-right: 10px;
-                    }
-
-                    .form-group {
-                        margin-bottom: 0;
-                    }
-
-                    .p-0 {
-                        padding: 20px !important;
-                    }
-                </style>
-            </div>
-        </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card card-default" style="height: 350px; max-height: 350px; min-height: 350px;">
-                <div class="card-body table-responsive p-0">
-                    <table id="example1" class="table table-bordered table-striped" >
-                        <thead>
-                            <tr>
-                                <th>Serie :</th>
-                                <th>Date:</th>
-                                <th>Status :</th>
-                                <th>HT :</th>
-                                <th>TVA :</th>
-                                <th>TTC :</th>
-                                <th>Action :</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <td>ddd</td>
-                            <td>ddd</td>
-                            <td>ddd</td>
-                            <td>ddd</td>
-                            <td>ddd</td>
-                            <td>ddd</td>
-                            <td>ddd</td>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card card-info">
-                <div class="card-body">
-                    <div class="chart">
-                        <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-                                <div class=""></div>
-                            </div>
-                            <div class="chartjs-size-monitor-shrink">
-                                <div class=""></div>
-                            </div>
-                        </div>
-                        <canvas id="ClientChart" style="display: block; height: 309px; max-height: 309px; min-height: 309px;" class="chartjs-render-monitor"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    </div>
-
-</section>
-
 {% endblock content %}

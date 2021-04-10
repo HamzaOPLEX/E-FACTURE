@@ -7,7 +7,7 @@ from urllib.parse import unquote
 import json
 
 @RequireLogin
-def GetClientInfoByName(requests, clientname):
+def GetClientInfoByID(requests, clientname):
     if requests.method == 'GET':
         clientname = unquote(clientname)
         client = get_object_or_404(APP_Clients, Client_Name=str(clientname).strip())
@@ -19,7 +19,7 @@ def GetClientInfoByName(requests, clientname):
 
 
 @RequireLogin
-def GetProductInfoByName(requests, productname):
+def GetProductInfoByID(requests, productname):
     if requests.method == 'GET':
         productname = unquote(productname)
         product = get_object_or_404(APP_Products, DESIGNATION=str(productname).strip().lower())

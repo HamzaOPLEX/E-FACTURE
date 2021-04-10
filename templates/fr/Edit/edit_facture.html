@@ -3,12 +3,13 @@
 {% load Filters %}
 {% block content %}
 {% if User.userpermission == 'Admin' or facture.CreatedBy.id == User.id %}
+
+<!--suppress ALL -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>{{User.username.title}} bienvenue sur la page pour Éditer la Factures {{facture.facture_number}}
-                </h1>
             </div>
         </div>
     </div>
@@ -26,18 +27,22 @@
         {% endfor %}
         {% endif %}
     </div>
-        <div class="col-md-6">
-            <div class="card card-default">
-                <!-- <div class="card"> -->
-                <div class="card-header" style="text-align: center;background: #0d899a;color: white;">
-                    <span class="text-left" style="float: left;"> <b>N</b>: <span id="N_ELEMENT">{{len_item}}</span> </span>
-                    <span class="text-center"> <b>TOTAL HT</b>: <span id="HT">{{TT_INFO.0}}</span> </span>
-                    <span class="text-right" style="float: right;"> <b>TOTAL TTC</b>: <span id="TTC">{{TT_INFO.2}}</span> </span><br>
-                    <span class="text-right" style="float: right;"> <b>TVA</b>: <span id="TVA">{{TT_INFO.1}}</span> </span>
-                </div>
-                <!-- /.card-header -->
+    <div class="col-md-6">
+        <div class="card card-default">
+            <!-- <div class="card"> -->
+            <div class="card-header" style="text-align: center;background: #0d899a;color: white;">
+                <span class="text-left" style="float: left;"> <b>N</b>: <span id="N_ELEMENT">{{len_item}}</span>
+                </span>
+                <span class="text-center"> <b>TOTAL HT</b>: <span id="HT">{{TT_INFO.0}}</span> </span>
+                <span class="text-right" style="float: right;"> <b>TOTAL TTC</b>: <span id="TTC">{{TT_INFO.2}}</span>
+                </span><br>
+                <span class="text-right" style="float: right;"> <b>TVA</b>: <span id="TVA">{{TT_INFO.1}}</span>
+                </span>
             </div>
+            <!-- /.card-header -->
         </div>
+    </div>
+
     <div class="row">
         <div class="col-md-6">
             <div class="card card-default">
@@ -45,7 +50,9 @@
                 <div class="card-header">
                     <h3 class="card-title">Tableau des éléments de <b>Facture</b></h3>
                     <button type="button" class="btn btn-info add-new" onclick="AddNewFactureItemModalHandler();"><i
-                            class="fa fa-plus"></i> Ajouter</button>
+                            class="fa fa-plus"></i>
+                        Ajouter</button>
+
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 552px;">
@@ -67,6 +74,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card card-default">
                 <div class="card-header">
@@ -76,78 +84,35 @@
                     <form id='Form' action="/list-all-facturs/edit/{{facture.id}}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="datatable" id="tableinput" value="" required>
+                        <div class="form-group">
+                            <label>Numéro de facture </label>
+                            <input type="number" class="form-control" name='facture_number' value='{{facture.number}}'
+                                id="facture_number" placeholder="N°:" required disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Nom De Client</label>
+                            <div style="display: flex;">
+                                <select id="ClientID" name="client_name" class="form-control"
+                                    style="margin-right: 10px;">
+                                    <option value="-" selected disabled>Sélectionner Un Client</option>
+                                    {{ selectbody | CreateHTMLSelectOptionsWith_ID }}
+                                </select>
+                                <button type="button" class="btn btn-success add-new" onclick='AddNewClient()'><i class="fa fa-plus" style="width: 25px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <script>
+                            var client = {{ ClientID }}
+                            slct = document.getElementById('ClientID')
+                            slct.value = client
+                        </script>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Numéro de facture </label>
-                                    <input type="number" class="form-control" name='facture_number'
-                                        value='{{facture.number}}' id="facture_number" placeholder="N°:" required disabled>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group" style="height : 60px;">
-                                    <label>DESIGNATION</label>
-                                    <select id="ClientName" name="client_name" class="form-control"
-                                        onchange="GetSelectedThenSet();">
-                                        {{ selectbody | CreateHTMLSelectOptions }}
-                                    </select>
-                                    <input type='text' id="ClientNameInput"
-                                        placeholder="choisissez le nom du client ou entrez-en un nouveau"
-                                        class="form-control editOption"
-                                        onchange="GetInputAndSet2Select('ClientName',0);">
-                                    </input>
-                                </div>
-                                <script>
-                                            var client = '{{client}}'.replaceAll('&amp;', '&')
-                                            var client = client.replaceAll('&#x27;', "'")
-                                            var client = client.replaceAll('&gt;', ">")
-                                            var client = client.replaceAll('&lt;', "<")
-                                            var client = client.replaceAll('&quot;', '"')
-                                            document.getElementsByClassName('editOption')[0].value = client
-                                            slct = document.getElementById('ClientName')
-                                            var option = document.createElement("option");
-                                            option.text = client;
-                                            option.value = client;
-                                            slct.add(option);
-                                            document.getElementById('ClientName').value = client
-                                </script>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>ICE</label>
-                                    <input type="text" id='ICE' class="form-control" autocomplete="off" name='ICE'
-                                        value="{{facture.ICE}}" placeholder="ICE de Client..." required>
-                                    <div id="circle01"
-                                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
-                                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
-                                            <div class="loader"
-                                                style="animation: rotate 1.5s linear infinite !important">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Le Lieu</label>
-                                    <input type="text" id='City' autocomplete="off" value="{{facture.Place}}"
-                                        class="form-control" name="place" placeholder="Lieu..." required>
-                                    <div id="circle02"
-                                        style="display: none;width: 33px !important;height: 33px !important;float: right;margin-top: -36px;margin-right: 2px;">
-                                        <div class="loader" style="animation: rotate 1.5s linear infinite !important">
-                                            <div class="loader"
-                                                style="animation: rotate 1.5s linear infinite !important">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>La Date</label>
                                     <input type="date" class="form-control" id="Date" autocomplete="off" name="date"
                                         value="{{Date}}" placeholder="..." required>
-
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -192,18 +157,18 @@
 
                         </script>
                         <div class="ButtnEnregister">
-                            <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
-                                class="btn btn-block btn-primary"
-                                style="background-color:#17a2b8;border-radius: 5px;width: auto !important;margin: auto !important;"><i
-                                    class="fas fa-check"></i>
-                                <b>ENREGISTRER</b></button>
+                            <center>
+                                <button id="savebttn" type="button" onclick="ValidInputNotEmpty('clientside');"
+                                    class="btn btn-block btn-primary"
+                                    style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i
+                                        class="fas fa-check"></i><b>ENREGISTRER</b></button>
                             </center>
                         </div>
                 </div>
                 </form>
             </div>
         </div>
-    </div>
+
     </div>
 </section>
 <div class="modal fade" id="AddNewFactureItemModal" role="dialog">
@@ -222,10 +187,11 @@
                 <div class="form-group" style="height: 65px">
                     <label>DESIGNATION</label>
                     <select id="ProductName" class="form-control" onchange="GetSelectedProductThenSet();">
+                        <option value="-" disabled selected>Choisir Un Produit</option>
                         {{selectproductbody | CreateHTMLSelectOptions}}
                     </select>
                     <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
-                        class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
+                        class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',0);">
                     </input>
                     <script>
                         function CalculatePT() {
@@ -279,10 +245,11 @@
                 <div class="form-group" style="height: 65px">
                     <label>DESIGNATION</label>
                     <select id="Edit_ProductName" class="form-control" onchange="GetSelectedProductThenSetEdit();">
+                        <option value="-" disabled selected>Choisir Un Produit</option>
                         {{selectproductbody | CreateHTMLSelectOptions}}
                     </select>
                     <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
-                        class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
+                        class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',1);"></input>
                     <script>
                         function CalculatePTedit() {
                             document.getElementById('Edit_PT').value = document.getElementById('Edit_Qs').value * document.getElementById("Edit_PU").value
@@ -315,14 +282,54 @@
         </div>
     </div>
 </div>
-<style>
-    .modal-dialog {
-        float: right;
-        height: 439px !important;
-        width: 476px !important;
-        top: 107px !important;
-    }
-</style>
+<form action='/settings/manage-clients' method='POST' id='AddNewClientForm'>
+    {% csrf_token %}
+    <div class="modal fade" id="AddClientModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><h4 class="modal-title">Entrez toutes les informations ici : </h4></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id='ClientName' name="ClientName" autocomplete="off" placeholder="Nom de Client" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-handshake"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id='ICE' name="ICE" autocomplete="off" placeholder="ICE De Client" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-fingerprint"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id='City' name="City" autocomplete="off" placeholder="Ville du client" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-city"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-info">
+                    <i id='IconPlus' class="fas fa-plus"></i> 
+                    <span id='IconSpin' class="spinner-border spinner-border-sm" style='display:none'></span>
+                        Ajouter
+                    </button>
+                    <button type="button" class="btn btn-default btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</from>
+
 <script>
     function TableInfoHandler() {
         // calcule N items , HT , TTC 
@@ -339,12 +346,18 @@
         document.getElementById('HT').innerText = HT
 
         // TTC
-        var TVA = HT / 100 * parseFloat('{{setting.Company_TVATAUX}}'.replaceAll(',','.'))
-    document.getElementById('TVA').innerText = TVA.toFixed(2)
-    var TTC = HT + TVA
-    document.getElementById('TTC').innerText = TTC
+        var TVA = HT / 100 * parseFloat('{{setting.Company_TVATAUX}}'.replaceAll(',', '.'))
+        document.getElementById('TVA').innerText = TVA.toFixed(2)
+        var TTC = HT + TVA
+        document.getElementById('TTC').innerText = TTC
     }
 </script>
+<style>
+    .col-sm-6 {
+        flex: none !important;
+        max-width: 100% !important;
+    }
+</style>
 {% else %}
 <div class="content p-4">
 
@@ -359,6 +372,5 @@
     </div>
 </div>
 {% endif %}
-
 
 {% endblock content %}

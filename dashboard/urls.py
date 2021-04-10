@@ -74,9 +74,9 @@ urlpatterns = [
     # Get Obj Info :
     ###########################################################################
     path('create-new-facture/getclientinfo/<str:clientname>',
-         GETJsonINFO_Handler.GetClientInfoByName, name='Get Client Jsoninfo By Name'),
+         GETJsonINFO_Handler.GetClientInfoByID, name='Get Client Jsoninfo By Name'),
     path('create-new-facture/getproductinfo/<str:productname>',
-         GETJsonINFO_Handler.GetProductInfoByName, name='Get Product Json-info By Name'),
+         GETJsonINFO_Handler.GetProductInfoByID, name='Get Product Json-info By Name'),
     ###########################################################################
 
     # Dashboard Urls
@@ -129,6 +129,7 @@ urlpatterns = [
     path('journal-de-vente/', JournalVent.DownloadJVFile, name='Show All Histories'),
 
     # Situation Client
-    path('situation-client/',SituationClient_Handler.FilterPageHandler)
+    path('situation-client/',SituationClient_Handler.FilterPageHandler_GET),
+    path('situation-client/ajax/',SituationClient_Handler.FilterPageHandler_POST)
 
 ]

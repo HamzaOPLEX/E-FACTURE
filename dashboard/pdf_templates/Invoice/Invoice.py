@@ -12,7 +12,7 @@ from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
 from colour import Color
 
-def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, Company_ICE, Company_City):
+def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     Table_Color = Color(APP_Settings.objects.all().first().Invoice_Color)
     Table_Color = Table_Color.rgb
 
@@ -33,7 +33,6 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
     Year = FactureObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
-
 
     styles = getSampleStyleSheet()
     styles.add(ParagraphStyle(name='ClientSide',
@@ -114,7 +113,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
             return number.title()
 
     # - Start TOTAL,TVA,TTC Table Handler - ##################################################
-    TOTALint, TVA, TTC_int = CalculedTOTAL
+    TOTALint, TVA, TTC_int = (FactureObj.HT,FactureObj.TVA,FactureObj.TTC)
     TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
     TVA_TAUX = Company_TVATAUX
     TVA = ['', f'TVA {TVA_TAUX}%', round(TVA, 2)]
@@ -173,8 +172,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
         return t
     
     company_side = f"""
-                <b>Facturé pour :</b> {str(FactureObj.Client_Name).title()}<br/>
-                <b>ICE :</b> {str(FactureObj.ICE).upper()}<br/>
+                <b>Facturé pour :</b> {str(FactureObj.Client.Client_Name).title()}<br/>
+                <b>ICE :</b> {str(FactureObj.Client.ICE).upper()}<br/>
                 """
     client_side = f"""
                     <b>Facture :</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
@@ -216,7 +215,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, CalculedTOTAL, Company_TVATAUX, C
 
         story.append(PageBreak())
 
-    filename = f'{FactureObj.Client_Name}-{FactureObj.number}-{Date}'
+    filename = f'{FactureObj.Client.Client_Name}-{str(FactureObj.number).zfill(3)}-{Date}'
     filepath = os.path.join(BASE_DIR.parent.parent,
                             'all_facturs')+f"/{filename}.pdf"
     doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',

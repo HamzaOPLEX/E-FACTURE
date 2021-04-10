@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>{{User.username.title}} bienvenue sur la page de gestion des Client </h1>
+                <h1>{{User.username.title}} bienvenue sur la page de gestion des Clients </h1>
             </div>
         </div>
     </div>
@@ -33,14 +33,13 @@
             <div class="card card-default">
                 <!-- <div class="card"> -->
                 <div class="card-header">
-                    <h3 class="card-title">List de Tous Les Client</h3>
+                    <h3 class="card-title">List de Tous Les Clients</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0" style="height: 552px;">
-                    <table class="table table-head-fixed text-nowrap">
+                    <table id='ClientTable' class="table table-head-fixed text-nowrap">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Client</th>
                                 <th>ICE</th>
                                 <th>Ville</th>
@@ -61,7 +60,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Ajouté un Nouvelle Client</h3>
                 </div>
-                <form action="/settings/manage-clients" method="POST">
+                <form action="/settings/manage-clients" method="POST" id='MainAddNewClientForm'>
                     <div class="card-body">
                         {% csrf_token %}
                         <div class="input-group mb-3">
@@ -94,8 +93,11 @@
                             <div class="col-4" style="margin: auto;">
                                 <center>
                                     <button type="submit" class="btn btn-block btn-primary"
-                                        style="background-color:#17a2b8;border-radius: 5px;width: auto;"><i class="fas fa-plus"></i>
-                                        <b> Ajouter</b></button>
+                                        style="background-color:#17a2b8;border-radius: 5px;width: auto;">
+                                        <i id='IconPlus' class="fas fa-plus"></i> 
+                                        <span id='IconSpin' class="spinner-border spinner-border-sm" style='display:none'></span>
+                                        <b> Ajouter</b>
+                                    </button>
                                 </center>
                             </div>
                             <!-- /.col -->

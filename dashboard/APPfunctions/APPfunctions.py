@@ -67,14 +67,12 @@ def generate_table_of_clients(showaction=True, allclients=''):
         City = client.City
         NOS = client.Number_Of_Use
         if showaction:
-            id = client.id
-            D['id'] = id
             D['name'] = name
             D['ICE'] = ICE
             D['City'] = City
-            D['Action'] = f"""<a class='btn btn-info  btn-sm' href='#' onclick='EditClient(\"/settings/manage-clients/edit/{id}\")' title='Edit' data-toggle='tooltip'>
+            D['Action'] = f"""<a class='btn btn-info  btn-sm' href='#' onclick='EditClient(this,\"/settings/manage-clients/edit/{client.id}\")' title='Edit' data-toggle='tooltip'>
                                                 <i class='fas fa-pencil-alt'></i>\n</a>
-                            <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/manage-clients/delete/{id}\");' data-toggle='tooltip'>
+                            <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/manage-clients/delete/{client.id}\");' data-toggle='tooltip'>
                                         <i class='fas fa-trash'></i></a>\n"""
         else:
             D['name'] = name
@@ -93,11 +91,9 @@ def generate_table_of_products(showaction=True, Products=''):
         D['name'] = name
         D['PU'] = PU
         if showaction == True:
-            id = product.id
-            D['id'] = id
-            D['Action'] = f"""<a class='btn btn-info  btn-sm' href='#' onclick='EditProduct(\"/settings/manage-products/edit/{id}\")' title='Edit' data-toggle='tooltip'>
+            D['Action'] = f"""<a class='btn btn-info  btn-sm' href='#' onclick='EditProduct(this,\"/settings/manage-products/edit/{product.id}\")' title='Edit' data-toggle='tooltip'>
                                                 <i class='fas fa-pencil-alt'></i>\n</a>
-                                    <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/manage-products/delete/{id}\");' data-toggle='tooltip'>
+                                    <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/manage-products/delete/{product.id}\");' data-toggle='tooltip'>
                                                 <i class='fas fa-trash'></i></a>\n"""
         tablebody.append(D)
     return tablebody
@@ -108,23 +104,22 @@ def generate_table_of_created_factures(showaction='all', factures=''):
     tablebody = []
     for facture in factures:
         facture_number = f"{str(facture.number).zfill(3)}/{facture.Date.strftime('%Y')}"
-        client = facture.Client_Name
+        client = facture.Client.Client_Name
         date = facture.Date.strftime('%d/%m/%Y')
         isPaid = facture.isPaid
-        HT = APP_Facture_items.objects.filter(BelongToFacture=facture).aggregate(Sum('PT'))['PT__sum']
-        if not HT:
-            HT = 0
-        TVA = HT / 100 * TVA_taux
-        TTC = HT + TVA
+        HT = facture.HT
+        TVA = facture.TVA
+        TTC = facture.TTC
         D = {}
         D['N'] = facture_number
         D['client'] = client
         D['date'] = date
         D['isPaid'] = isPaid
+        D['HT'] = HT
+        D['TVA'] = TVA
+        D['TTC'] = TTC
         if showaction == 'all':
-            D['HT'] = HT
-            D['TVA'] = TVA
-            D['TTC'] = TTC
+
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" data-toggle="tooltip">
                                     <i class="fas fa-pencil-alt"></i>\n</a> 
                                 <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-facturs/delete/{facture.id}\');" title="Delete" data-toggle="tooltip">
@@ -163,14 +158,15 @@ def generate_table_of_devis(devis=''):
     tablebody = []
     for dv in devis:
         Devis_number = dv.number
-        client = dv.Client_Name
+        client = dv.Client.Client_Name
         date = dv.Date
         CreatedBy = dv.CreatedBy
+        HT = dv.HT
         D = {}
-        D['N'] = Devis_number
+        D['Serie'] =  f"{str(Devis_number).zfill(3)}/{date.strftime('%Y')}"
         D['client'] = client
-        D['date'] = date
-        D['CreatedBy'] = CreatedBy
+        D['date'] = date.strftime('%d/%m/%Y')
+        D['HT'] = HT
         D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-devis/edit/{dv.id}" title="Edit" data-toggle="tooltip">
                                 <i class="fas fa-pencil-alt"></i>\n</a> 
                             <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-devis/delete/{dv.id}\');" title="Delete" data-toggle="tooltip">
@@ -187,15 +183,17 @@ def generate_table_of_BL(BL=''):
     tablebody = []
     for bl in BL:
         BL_number = bl.number
-        client = bl.Client_Name
+        client = bl.Client.Client_Name
         date = bl.Date
         CreatedBy = bl.CreatedBy
+        HT = bl.HT
+
         D = {}
         D['choose'] = f'<input class="form-check-input check-box" id="{bl.id}" type="checkbox">'
-        D['N'] = BL_number
+        D['Serie'] = f"{str(BL_number).zfill(3)}/{date.strftime('%Y')}"
         D['client'] = client
-        D['date'] = date
-        D['CreatedBy'] = CreatedBy
+        D['date'] = date.strftime('%d/%m/%Y')
+        D['HT'] = HT        
         D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-bl/edit/{bl.id}" title="Edit" data-toggle="tooltip">
                                 <i class="fas fa-pencil-alt"></i>\n</a> 
                             <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-bl/delete/{bl.id}\');" title="Delete" data-toggle="tooltip">
@@ -248,22 +246,6 @@ def generate_table_of_BL_items(BL_items=''):
     return tablebody
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def Calcule_TVA_TOTAL_TTC(factureitemsobj):
     TOTAL = 0
     TVA_taux = int(APP_Settings.objects.all().first().Company_TVATAUX)
@@ -285,8 +267,17 @@ def Fix_Date(date):
     date = datetime.strftime(date, format)
     return date
 
-
-
-
 def CheckNewNumberisNotExsit(obj):
     pass
+
+def GetNewNumber(obj):
+    All_IDs = [o.number for o in obj.objects.all()]
+    new_number = len(All_IDs) + 1
+    while new_number in All_IDs:
+        new_number = new_number + 1
+    return new_number
+
+
+def GetClientsListWith_ID():
+    Clients = [(f'{str(clientname.Client_Name).upper()}:{str(clientname.City).title()}',clientname.id) for clientname in list(APP_Clients.objects.all())]
+    return Clients

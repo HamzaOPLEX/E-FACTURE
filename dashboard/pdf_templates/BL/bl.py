@@ -5,12 +5,16 @@ from reportlab.platypus import Table, SimpleDocTemplate, TableStyle, Spacer, Par
 from reportlab import platypus
 from reportlab.lib import colors
 from reportlab.lib.units import inch, cm
+from dashboard.models import APP_Settings
 from pathlib import Path
 from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 import textwrap
+from colour import Color
 
-def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
+def DrawNotechPdf(BLObj, BLItemsObj, Company_City):
+    Table_Color = Color(APP_Settings.objects.all().first().Invoice_Color)
+    Table_Color = Table_Color.rgb
     def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
         if len(text) > length:
             wraps = textwrap.wrap(text, length)
@@ -103,10 +107,10 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
             return number.title()
 
     # - Start TOTAL,TVA,TTC Table Handler - ##################################################
-    TOTALint, TVA, TTC_int = CalculedTOTAL
+    TOTALint = BLObj.HT
     TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
     TOTALtableData = [TOTAL]
-    TOTALletter = Number2Letter(str(TTC_int))
+    TOTALletter = Number2Letter(str(TOTALint))
 
     def Info_Table(tabledata):
         colwidths = (200, 90, 200)
@@ -147,7 +151,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colr(245, 123, 32)),
+                ('BACKGROUND', (0, 0), (-1, 0), Table_Color),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
             ]
         )
@@ -159,8 +163,8 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
     ClientSide = styles['ClientSide']
     CompanySide = styles['CompanySide']
     company_side = f"""
-                <b>Client:</b> {str(BLObj.Client_Name).title()}<br/>
-                <b>ICE :</b> {str(BLObj.ICE).title()}<br/>
+                <b>Client:</b> {str(BLObj.Client.Client_Name).title()}<br/>
+                <b>ICE :</b> {str(BLObj.Client.ICE).title()}<br/>
                 """
     client_side = f"""
                     <b>Bon de Laivrason :</b> {BLObj.number}/{Year}<br/>
@@ -209,7 +213,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, CalculedTOTAL, Company_City):
 
         story.append(PageBreak())
 
-    filename = f'{BLObj.Client_Name}-{BLObj.number}-{Date}'
+    filename = f'{BLObj.Client.Client_Name}-{str(BLObj.number).zfill(3)}-{Date}'
     filepath = os.path.join(BASE_DIR.parent.parent,
                             'all_facturs')+f"/{filename}.pdf"
     doc = SimpleDocTemplate(filepath, pagesize=A4, pagetitle='filename',rightMargin=43, leftMargin=43,topMargin=100, bottomMargin=23)
