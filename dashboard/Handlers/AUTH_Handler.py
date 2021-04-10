@@ -65,7 +65,11 @@ def Login(requests):
         if requests.session.session_key and requests.session.exists(requests.session.session_key):
             return redirect('/dashboard')
         else:
-            return render(requests, str(settings.APP_lang)+'/Authentication/login.html', context)
+            try :
+                return render(requests, str(settings.APP_lang)+'/Authentication/login.html', context)
+            except AttributeError:
+                return render(requests, 'fr/Authentication/login.html', context)
+
     elif requests.method == "POST":
         username = requests.POST['username']
         password = requests.POST['password']
