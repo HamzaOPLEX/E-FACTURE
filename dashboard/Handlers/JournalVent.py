@@ -19,7 +19,7 @@ def DownloadJVFile(request):
     for facture in  all_factures :
         facture_items = APP_Facture_items
         date = facture.Date
-        client = facture.Client_Name
+        client = facture.Client.Client_Name
         facture_number = str(facture.number).zfill(3)
         libelle = f'FACTURE N° {facture_number}/{date.strftime("%Y")}'
         HT = facture_items.objects.filter(Date__year=this_year,BelongToFacture=facture).aggregate(Sum('PT'))['PT__sum']
@@ -27,7 +27,7 @@ def DownloadJVFile(request):
             HT = 0
         TVA = HT / 100 * TVA_taux
         TTC = HT + TVA
-        row = ['VE',date.strftime('%Y-%m-%d'), facture.Client_Name, libelle, TTC, '' ]
+        row = ['VE', date.strftime('%Y-%m-%d'), client, libelle, TTC, '']
         data.append(row)
         row = ['VE', '', '', '', '' ,HT]
         data.append(row)
