@@ -145,7 +145,7 @@
                         {{selectproductbody | CreateHTMLSelectOptions}}
                     </select>
                     <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
-                        class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',1);">
+                        class="form-control editOption" onchange="GetInputAndSet2Select('ProductName',0);">
                     </input>
                     <script>
                         function CalculatePT() {
@@ -203,7 +203,7 @@
                         {{selectproductbody | CreateHTMLSelectOptions}}
                     </select>
                     <input type='text' placeholder="choisissez le nom du produit ou entrez-en un nouveau"
-                        class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',2);"></input>
+                        class="form-control editOption" onchange="GetInputAndSet2Select('Edit_ProductName',1);"></input>
                     <script>
                         function CalculatePTedit() {
                             document.getElementById('Edit_PT').value = document.getElementById('Edit_Qs').value * document.getElementById("Edit_PU").value
