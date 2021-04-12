@@ -140,7 +140,6 @@ class APP_Created_Facture(models.Model):
     choose_bywhatpaid = (
         ('Espèces', 'Espèces'),
         ('Chèque', 'Chèque'),
-        ('Cart', 'Cart'),
     )
     choose_ispaid = (
         ('Oui', 'Oui'),
@@ -153,16 +152,12 @@ class APP_Created_Facture(models.Model):
     HT = models.FloatField()
     TVA = models.FloatField()
     TTC = models.FloatField()
-    CreatedBy = models.ForeignKey(
-        APP_User, on_delete=models.SET_NULL, null=True, editable=False)
-    isPaid = models.CharField(choices=choose_ispaid,
-                              max_length=5, default='Non')
-    Paiment_Mathod = models.CharField(
-        max_length=255, choices=choose_bywhatpaid, default='aucun', null=False)
-    ConvertedFromDevis = models.ForeignKey(
-        APP_Created_Devis, on_delete=models.SET_NULL, null=True, editable=False)
-    ConvertedFromBLs = models.TextField(
-        default=False, editable=False, null=True)
+    CreatedBy = models.ForeignKey(APP_User, on_delete=models.SET_NULL, null=True, editable=False)
+    isPaid = models.CharField(choices=choose_ispaid,max_length=5, default='Non')
+    Avance = models.FloatField(default=0)
+    Paiment_Mathod = models.CharField(max_length=255, choices=choose_bywhatpaid, default='aucun', null=False)
+    ConvertedFromDevis = models.ForeignKey(APP_Created_Devis, on_delete=models.SET_NULL, null=True, editable=False)
+    ConvertedFromBLs = models.TextField(default=False, editable=False, null=True)
 
     def __str__(self):
         Year = self.Date.strftime('%Y')
@@ -172,7 +167,7 @@ class APP_Created_Facture(models.Model):
     def clean(self):
         if self.isPaid == "Non":
             self.Paiment_Mathod = 'aucun'
-
+            self.Avance = 0
 
 class APP_Facture_items(models.Model):
     Qs = models.IntegerField(default=0)

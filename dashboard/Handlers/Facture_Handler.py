@@ -62,11 +62,13 @@ def H_Create_New_Facture(requests):
         if datatable and facture_number and client and client != '-' and date and datatable_status == 'valid':
             if isPaid == 'Oui':
                 paid_method = requests.POST['paiementmethod']
-                if paid_method not in ['Cart', 'Espèces', 'Chèque']:
+                avance = int(requests.POST['avance'])
+                if paid_method not in ['Espèces', 'Chèque']:
                     messages.error(requests, "paid method erreur")
                     return redirect('/create-new-facture/')
             else:
                 paid_method = 'aucun'
+                avance = 0
                 isPaid = 'Non'
             # Check if facture_number already Exist
             all_facture_numbers = [n.number for n in All_Factures]
@@ -85,6 +87,7 @@ def H_Create_New_Facture(requests):
                     Date=date,
                     CreatedBy=User,
                     isPaid=isPaid,
+                    Avance=avance,
                     Paiment_Mathod=paid_method,
                     HT=HT,
                     TVA=TVA,

@@ -107,6 +107,7 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         client = facture.Client.Client_Name
         date = facture.Date.strftime('%d/%m/%Y')
         isPaid = facture.isPaid
+        Avance  = facture.Avance
         HT = facture.HT
         TVA = facture.TVA
         TTC = facture.TTC
@@ -115,6 +116,8 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         D['client'] = client
         D['date'] = date
         D['isPaid'] = isPaid
+        D['avance'] = Avance
+        D['reste'] = TTC - Avance
         D['HT'] = HT
         D['TVA'] = TVA
         D['TTC'] = TTC
@@ -135,6 +138,13 @@ def generate_table_of_created_factures(showaction='all', factures=''):
                             '''
         tablebody.append(D)
     return tablebody
+
+
+
+
+
+
+
 
 def generate_table_of_history(histories, simpletable=False):
     histories = list(histories)[::-1]
