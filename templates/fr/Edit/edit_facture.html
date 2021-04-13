@@ -140,6 +140,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>TTC ou HT</label>
+                                <select class="form-control" id='TTTCorHT' name="TTTCorHT">
+                                    <option>TTC</option>
+                                    <option>HT</option>
+                                </select>
+                            </div>
+                        </div>
                         <script>
                             function disabled_or_enabled_paiementmethod() {
                                 var ispaid = document.getElementById('ispaid').value
@@ -154,7 +163,8 @@
                             $('#ispaid').change()
                             document.getElementById('paiementmethod').value = '{{ facture.Paiment_Mathod}}'
                             $('#paiementmethod').change()
-
+                            document.getElementById('TTTCorHT').value = '{{ TTTCorHT }}'
+                            $('#TTTCorHT').change()
                         </script>
                         <div class="ButtnEnregister">
                             <center>

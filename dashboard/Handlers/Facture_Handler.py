@@ -46,7 +46,8 @@ def H_Create_New_Facture(requests):
         client = int(requests.POST['client_name'])
         date = requests.POST['date']
         isPaid = requests.POST['ispaid']
-
+        TTTCorHT = requests.POST['TTTCorHT']
+        print(TTTCorHT)
         # check if len(datatable)!=0 and all len() rows in that table != 4
         if len(datatable) != 0:
             datatable_status = 'not valid'
@@ -79,6 +80,7 @@ def H_Create_New_Facture(requests):
                 HT = 0
                 TVA = 0
                 TTC = 0
+
                 # Created Facture With POST data if facture_number not found
                 CLIENT = get_object_or_404(APP_Clients,id=client)
                 facture = APP_Created_Facture.objects.create(
@@ -110,6 +112,7 @@ def H_Create_New_Facture(requests):
                 facture.HT = HT
                 facture.TVA = TVA
                 facture.TTC = TTC
+                facture.TTTCorHT = TTTCorHT
                 facture.save()
                 # Create a History
                 actiondetail = f'{User.username} crée une nouvelle facture avec le numéro {facture_number} en {Fix_Date(str(datetime.today()))}'
@@ -196,6 +199,8 @@ def H_Edit_Facture(requests, facture_id):
             context['ClientID'] = Facture.Client.id
             context['len_item'] = len(Facture_item)
             context['TT_INFO'] = (Facture.HT,Facture.TVA,Facture.TTC)
+            context['TTTCorHT'] = Facture.TTCorHT
+          
             return render(requests, templatepath, context)
         elif requests.method == "POST":
             # Get Post Data
@@ -204,6 +209,7 @@ def H_Edit_Facture(requests, facture_id):
             ClientID = int(requests.POST['client_name'])
             date = requests.POST['date']
             isPaid = requests.POST['ispaid']
+            TTTCorHT = requests.POST['TTTCorHT']
             # check if len(datatable)!=0 and all len() rows in that table != 4
             if len(datatable) != 0:
                 datatable_status = 'not valid'
@@ -257,7 +263,8 @@ def H_Edit_Facture(requests, facture_id):
                 TTC = HT + TVA
                 Facture.HT = HT
                 Facture.TVA = TVA
-                Facture.TTC = TTC                
+                Facture.TTC = TTC     
+                Facture.TTTCorHT = TTTCorHT           
                 Facture.save()
                 messages.info(
                     requests, f"la facture {Facture.number} a été éditer avec succès")

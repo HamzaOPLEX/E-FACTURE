@@ -145,6 +145,10 @@ class APP_Created_Facture(models.Model):
         ('Oui', 'Oui'),
         ('Non', 'Non')
     )
+    choose_TTTCorHT = (
+        ('HT', 'HT'),
+        ('TTC', 'TTC')
+    )
     number = models.IntegerField(unique=True)
     Client = models.ForeignKey(
         APP_Clients, on_delete=models.RESTRICT, default=False, null=False, editable=True)
@@ -152,6 +156,7 @@ class APP_Created_Facture(models.Model):
     HT = models.FloatField()
     TVA = models.FloatField()
     TTC = models.FloatField()
+    TTCorHT = models.CharField(max_length=3,default='TTC',choices=choose_TTTCorHT)
     CreatedBy = models.ForeignKey(APP_User, on_delete=models.SET_NULL, null=True, editable=False)
     isPaid = models.CharField(choices=choose_ispaid,max_length=5, default='Non')
     Avance = models.FloatField(default=0)

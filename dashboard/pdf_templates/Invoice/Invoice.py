@@ -115,11 +115,15 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     # - Start TOTAL,TVA,TTC Table Handler - ##################################################
     TOTALint, TVA, TTC_int = (FactureObj.HT,FactureObj.TVA,FactureObj.TTC)
     TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
-    TVA_TAUX = Company_TVATAUX
-    TVA = ['', f'TVA {TVA_TAUX}%', round(TVA, 2)]
-    TTC = ['', 'TOTAL TTC', round(TTC_int, 2)]
-    TOTALtableData = [TOTAL, TVA, TTC]
-    TOTALletter = Number2Letter(str(TTC_int))
+    if FactureObj.TTCorHT == 'TTC':
+        TVA_TAUX = Company_TVATAUX
+        TVA = ['', f'TVA {TVA_TAUX}%', round(TVA, 2)]
+        TTC = ['', 'TOTAL TTC', round(TTC_int, 2)]
+        TOTALtableData = [TOTAL, TVA, TTC]
+        TOTALletter = Number2Letter(str(TTC_int))
+    elif FactureObj.TTCorHT == 'HT':
+        TOTALtableData = [TOTAL]
+        TOTALletter = Number2Letter(str(TOTALint))
 
     def chunks(l, n):
         n = max(1, n)
@@ -210,8 +214,12 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         if tabledata.index(chunk) == tabledata.index(tabledata[-1]):
             story.append(TOTAL_table(TOTALtableData,))
             story.append(Spacer(1, .25*inch))
-            Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
-            story.append(Paragraph(Money_msg,FooterMessage))
+            if FactureObj.TTCorHT == 'TTC':
+                Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
+                story.append(Paragraph(Money_msg,FooterMessage))            
+            if FactureObj.TTCorHT == 'HT':
+                Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  HT"
+                story.append(Paragraph(Money_msg,FooterMessage))
 
         story.append(PageBreak())
 
