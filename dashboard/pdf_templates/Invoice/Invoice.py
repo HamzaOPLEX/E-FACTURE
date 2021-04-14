@@ -130,6 +130,19 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         TOTALtableData = [TOTAL]
         TOTALletter = Number2Letter(str(TOTALint))
 
+    # is Paid and Paiment Method
+    if FactureObj.isPaid == 'Oui':
+        ispaid_row = ['','Status','Payée']
+        PaimentMethod_row = ['','Method De Paiement',FactureObj.Paiment_Mathod]
+        TOTALtableData.append(ispaid_row)
+        TOTALtableData.append(PaimentMethod_row)
+    elif FactureObj.isPaid == 'Non':
+        ispaid_row = ['','Status','Non Payée']
+        TOTALtableData.append(ispaid_row)
+
+
+
+
     def chunks(l, n):
         n = max(1, n)
         return (l[i:i+n] for i in range(0, len(l), n))
@@ -147,7 +160,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         return t
 
     def TOTAL_table(tabledata):
-        colwidths = (0, 60, 60)
+        colwidths = (0, 100, 60)
         t = Table(tabledata, colwidths)
         t.hAlign = 'RIGHT'
         GRID_STYLE = TableStyle(
