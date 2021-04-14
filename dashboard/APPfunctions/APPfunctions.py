@@ -117,10 +117,13 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         D['date'] = date
         D['isPaid'] = isPaid
         D['avance'] = Avance
-        D['reste'] = TTC - Avance
-        D['HT'] = HT
-        D['TVA'] = TVA
-        D['TTC'] = TTC
+        if facture.TTCorHT == 'TTC':
+            D['reste'] = str(round(TTC - Avance,2))+' TTC'
+        elif facture.TTCorHT == 'HT':
+            D['reste'] = str(round(HT - Avance,2))+' HT'
+        D['HT'] = round(HT,2)
+        D['TVA'] = round(TVA,2)
+        D['TTC'] = round(TTC,2)
         if showaction == 'all':
 
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" data-toggle="tooltip">

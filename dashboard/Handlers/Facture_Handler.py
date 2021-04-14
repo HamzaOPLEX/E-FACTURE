@@ -112,7 +112,7 @@ def H_Create_New_Facture(requests):
                 facture.HT = HT
                 facture.TVA = TVA
                 facture.TTC = TTC
-                facture.TTTCorHT = TTTCorHT
+                facture.TTCorHT = TTTCorHT
                 facture.save()
                 # Create a History
                 actiondetail = f'{User.username} crée une nouvelle facture avec le numéro {facture_number} en {Fix_Date(str(datetime.today()))}'
@@ -132,8 +132,7 @@ def H_Create_New_Facture(requests):
 def H_Delete_Facture(requests, id):
     context = {'pagetitle': f'Supprimer une facture'}
     # remove delete/<id> from URL
-    redirect_after_done = '/'.join(str(requests.get_full_path()
-                                    ).split('/')[0:-2])
+    redirect_after_done = '/'.join(str(requests.get_full_path()).split('/')[0:-2])
     userid = requests.session['session_id']
     User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
@@ -159,8 +158,7 @@ def H_Delete_Facture(requests, id):
         elif requests.method == "GET":
             return HTTP_404(requests)
     else:
-        APP_Warning.objects.create(
-            what='supprimer', what_detail=f'{User.username} essayez de supprimer la facture avec le nombre {facture.number}', Who=User.username)
+        APP_Warning.objects.create(what='supprimer', what_detail=f'{User.username} essayez de supprimer la facture avec le nombre {facture.number}', Who=User.username)
         return HTTP_403(request=requests, context=context)
 
 @RequireLogin
@@ -264,7 +262,7 @@ def H_Edit_Facture(requests, facture_id):
                 Facture.HT = HT
                 Facture.TVA = TVA
                 Facture.TTC = TTC     
-                Facture.TTTCorHT = TTTCorHT           
+                Facture.TTCorHT = TTTCorHT           
                 Facture.save()
                 messages.info(
                     requests, f"la facture {Facture.number} a été éditer avec succès")

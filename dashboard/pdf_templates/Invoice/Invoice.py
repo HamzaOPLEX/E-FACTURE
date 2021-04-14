@@ -106,7 +106,12 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
             part01 = str(num2words(int(number[0]), lang='fr')+' Dirhams Et ')
             # After point
             part02 = str(num2words(int(number[1]), lang='fr')+' Centimes')
-            allNumber_Parts = part01 + part02
+
+            if int(number[1]) == 0 :
+                allNumber_Parts = part01
+            elif int(number[1]) != 0 :
+                allNumber_Parts = part01 + part02
+            
             return allNumber_Parts.title()
         else:
             number = num2words(int(number), lang='fr')+' Dirhams'
