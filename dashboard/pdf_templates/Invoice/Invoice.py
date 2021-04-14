@@ -103,14 +103,14 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
             number = round(float(number), 2)
             number = str(number).split('.')
             # Befor point
-            part01 = str(num2words(int(number[0]), lang='fr')+' Dirhams Et ')
+            part01 = str(num2words(int(number[0]), lang='fr')+' Dirhams')
             # After point
             part02 = str(num2words(int(number[1]), lang='fr')+' Centimes')
 
             if int(number[1]) == 0 :
                 allNumber_Parts = part01
             elif int(number[1]) != 0 :
-                allNumber_Parts = part01 + part02
+                allNumber_Parts = part01 +' Et '+ part02
             
             return allNumber_Parts.title()
         else:
@@ -233,10 +233,10 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
             story.append(TOTAL_table(TOTALtableData,))
             story.append(Spacer(1, .25*inch))
             if FactureObj.TTCorHT == 'TTC':
-                Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
+                Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  TTC"
                 story.append(Paragraph(Money_msg,FooterMessage))            
             if FactureObj.TTCorHT == 'HT':
-                Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  HT"
+                Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  HT"
                 story.append(Paragraph(Money_msg,FooterMessage))
 
         story.append(PageBreak())

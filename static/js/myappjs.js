@@ -346,27 +346,30 @@ function SaveEdited(row) {
 }
 
 
-
-
-
-
-
-
-
-
 function ValidInputNotEmpty(modaltype) {
     function valid(list_of_inputs,modaltype) {
         let InvalidInputs = []
+        var IDs = ['ClientID', 'paiementmethod']
         for (let index = 0; index < list_of_inputs.length; index++) {
             var theinput = list_of_inputs[index]
-
-            if (theinput.id == 'ClientID'){
-                if (theinput.id == 'ClientID' && theinput.value.trim() == '-') {
-                    $('#ClientID').val('-');
-                    InvalidInputs.push(document.getElementById('ClientID'))
+            if (IDs.includes(theinput.id) == true){
+                if (IDs.includes(theinput.id) == true  && theinput.value == '-') {
+                    if(theinput.id == 'ClientID'){
+                        $('#ClientID').val('-');
+                        InvalidInputs.push(document.getElementById('ClientID'))
+                    }
+                    if (document.getElementById('ispaid').value == 'Oui' && theinput.id == 'paiementmethod') {
+                        $('#paiementmethod').val('-')
+                        InvalidInputs.push(document.getElementById('paiementmethod'))
+                    }
                 }
-                if (theinput.id == 'ClientID' && theinput.value.trim() !== '-') {
-                    RemoveInvalidClass([document.getElementById('ClientID')]);
+                if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
+                    if (theinput.id == 'ClientID') {
+                        RemoveInvalidClass([document.getElementById('ClientID')]);
+                    }
+                    if (theinput.id == 'paiementmethod'){
+                        RemoveInvalidClass([document.getElementById('paiementmethod')]);
+                    }
                 }  
             }
             else{
@@ -416,7 +419,9 @@ function ValidInputNotEmpty(modaltype) {
         var F = document.getElementById('facture_number')
         var C = document.getElementById('ClientID')
         var D = document.getElementById('Date')
-        var list_of_inputs = [F,C,D]
+        var M = document.getElementById('paiementmethod')
+        var list_of_inputs = [F, C, D, M]
+
         valid(list_of_inputs,modaltype);
     }
 }

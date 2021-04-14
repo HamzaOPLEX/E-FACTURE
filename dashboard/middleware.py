@@ -8,7 +8,7 @@ class CheckCompanySettingMiddelWare:
         self.get_response = get_response
     def __call__(self,request):
         ALLOWED_URLS = [
-                            '/settings',
+                            '/settings/global-settings',
                             '/login', 
                             '/logout',
                             '/admin'
@@ -24,7 +24,6 @@ class CheckCompanySettingMiddelWare:
                     break
             except Exception:
                 bypass_check = False
-
 
         if bypass_check == True:
             response = self.get_response(request)

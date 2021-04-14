@@ -115,7 +115,10 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         D['N'] = facture_number
         D['client'] = client
         D['date'] = date
-        D['isPaid'] = isPaid
+        if isPaid == 'Oui':
+            D['status'] = f'<span class="badge badge-success" style="font-size: 14px;">Payée</span>'
+        elif isPaid == 'Non':
+            D['status'] = f'<span class="badge badge-danger" style="font-size: 14px;">Non Payée</span>'
         D['avance'] = Avance
         if facture.TTCorHT == 'TTC':
             D['reste'] = str(round(TTC - Avance,2))+' TTC'
@@ -125,14 +128,12 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         D['TVA'] = round(TVA,2)
         D['TTC'] = round(TTC,2)
         if showaction == 'all':
-
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" data-toggle="tooltip">
                                     <i class="fas fa-pencil-alt"></i>\n</a> 
                                 <a class="btn btn-danger btn-sm" href="#" onclick="EnterPwdToDeletePopup(\'/list-all-facturs/delete/{facture.id}\');" title="Delete" data-toggle="tooltip">
                                     <i class="fas fa-trash"></i></a>\n
                                 <a href="/list-all-facturs/detail/open/{facture.id}" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
                                 '''
-
 
         elif showaction == 'Detail-Edit':
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" target='_blank' data-toggle="tooltip">
@@ -141,13 +142,6 @@ def generate_table_of_created_factures(showaction='all', factures=''):
                             '''
         tablebody.append(D)
     return tablebody
-
-
-
-
-
-
-
 
 def generate_table_of_history(histories, simpletable=False):
     histories = list(histories)[::-1]
