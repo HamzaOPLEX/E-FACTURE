@@ -3,37 +3,37 @@
 function AddNewClient() {
     $(document).ready(function () {
         $("#AddClientModal").modal({ backdrop: false });
-    }); 
+    });
 }
 
 // on submit form use Ajax
-$('#AddNewClientForm').submit(function(e) {
+$('#AddNewClientForm').submit(function (e) {
     e.preventDefault() // prevat form from reloading page
     document.getElementById('IconPlus').style = 'display:none'
     document.getElementById('IconSpin').style = 'display:content'
     $.ajax({
-            type: "POST",
-            url: this.action, // get action from form
-            data: $('#AddNewClientForm').serialize(), // get all inputs from from and convert them to Json
-            dataType: "json",
-            encode: true,
-            success: function (response) { // if respond == 200
-                toastr.success(response.MSG, "demande réussie"); 
-                var ClientName = response.ClientData.Client_Name.toUpperCase() + ':' + response.ClientData.City
-                $("#ClientID").append(new Option(ClientName, response.CLIENT_ID));
-                $("#ClientID").val(response.CLIENT_ID)
-                document.getElementById('IconPlus').style = 'display:content'
-                document.getElementById('IconSpin').style = 'display:none'
-                $('#AddClientModal').modal('hide');
-                document.getElementById("AddNewClientForm").reset();
-            },
-            error: function (response) {
-                document.getElementById('IconPlus').style = 'display:content'
-                document.getElementById('IconSpin').style = 'display:none'
-                toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
-            }
-        })
+        type: "POST",
+        url: this.action, // get action from form
+        data: $('#AddNewClientForm').serialize(), // get all inputs from from and convert them to Json
+        dataType: "json",
+        encode: true,
+        success: function (response) { // if respond == 200
+            toastr.success(response.MSG, "demande réussie");
+            var ClientName = response.ClientData.Client_Name.toUpperCase() + ':' + response.ClientData.City
+            $("#ClientID").append(new Option(ClientName, response.CLIENT_ID));
+            $("#ClientID").val(response.CLIENT_ID)
+            document.getElementById('IconPlus').style = 'display:content'
+            document.getElementById('IconSpin').style = 'display:none'
+            $('#AddClientModal').modal('hide');
+            document.getElementById("AddNewClientForm").reset();
+        },
+        error: function (response) {
+            document.getElementById('IconPlus').style = 'display:content'
+            document.getElementById('IconSpin').style = 'display:none'
+            toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+        }
     })
+})
 
 // on submit form use Ajax
 $('#MainAddNewClientForm').submit(function (e) {
@@ -55,7 +55,7 @@ $('#MainAddNewClientForm').submit(function (e) {
             var ROWS = [ClientName, ICE, City, Action]
             var table = document.getElementById('ClientTable').getElementsByTagName('tbody')[0];
             var new_row = table.insertRow(0)
-            for(i=0;i<ROWS.length;i++){
+            for (i = 0; i < ROWS.length; i++) {
                 new_cell = new_row.insertCell(i)
                 new_cell.innerHTML = ROWS[i]
             }
@@ -93,7 +93,7 @@ function GetSelectedProductThenSet() {
             }
             document.getElementById('circle_addnew').style.display = 'none'
         }
-        if (this.status == 404 || this.status == 502 ){
+        if (this.status == 404 || this.status == 502) {
             document.getElementById('circle_addnew').style.display = 'none'
         }
 
@@ -120,7 +120,7 @@ function GetSelectedProductThenSetEdit() {
             }
             document.getElementById('circle_edit').style.display = 'none'
         }
-        if (this.status == 404 || this.status == 502 ) {
+        if (this.status == 404 || this.status == 502) {
             document.getElementById('circle_edit').style.display = 'none'
         }
     };
@@ -155,10 +155,10 @@ function GetInputAndSet2Select(Idselect, editOptionIndex) {
 // datatable javascipt config code
 $(function () {
     $("#example1").DataTable({
-        "responsive": true, 
+        "responsive": true,
         "info": true,
-        "lengthChange": false, 
-        "autoWidth": false, 
+        "lengthChange": false,
+        "autoWidth": false,
         "searching": false,
     })
     $('#example2').DataTable({
@@ -197,7 +197,7 @@ function EnterPwdToDeletePopup(action) {
     });
 };
 
-function EditProduct(row,action) {
+function EditProduct(row, action) {
     var p = row.parentNode.parentNode;
     var row_data_client = p.innerText
     var row_data_client = row_data_client.split('	').slice(0, 3)
@@ -210,7 +210,7 @@ function EditProduct(row,action) {
 };
 
 
-function EditClient(row,action) {
+function EditClient(row, action) {
     var p = row.parentNode.parentNode;
     var row_data_client = p.innerText
     var row_data_client = row_data_client.split('	').slice(0, 3)
@@ -324,7 +324,7 @@ function tableToJSON() {
 function LoadDatatableAndSubmit() {
     var JsonTable = tableToJSON()
     let tabledata = JSON.parse(JsonTable)
-    if (tabledata.myrows.length > 0){
+    if (tabledata.myrows.length > 0) {
         document.getElementById('tableinput').value = JsonTable
         document.getElementById("Form").submit();
     }
@@ -346,37 +346,40 @@ function SaveEdited(row) {
 }
 
 
-
-
-
-
-
-
-
-
 function ValidInputNotEmpty(modaltype) {
-    function valid(list_of_inputs,modaltype) {
+    function valid(list_of_inputs, modaltype) {
         let InvalidInputs = []
+        var IDs = ['ClientID', 'paiementmethod']
         for (let index = 0; index < list_of_inputs.length; index++) {
             var theinput = list_of_inputs[index]
-
-            if (theinput.id == 'ClientID'){
-                if (theinput.id == 'ClientID' && theinput.value.trim() == '-') {
-                    $('#ClientID').val('-');
-                    InvalidInputs.push(document.getElementById('ClientID'))
+            if (IDs.includes(theinput.id) == true) {
+                if (IDs.includes(theinput.id) == true && theinput.value == '-') {
+                    if (theinput.id == 'ClientID') {
+                        $('#ClientID').val('-');
+                        InvalidInputs.push(document.getElementById('ClientID'))
+                    }
+                    if (document.getElementById('ispaid').value == 'Oui' && theinput.id == 'paiementmethod') {
+                        $('#paiementmethod').val('-')
+                        InvalidInputs.push(document.getElementById('paiementmethod'))
+                    }
                 }
-                if (theinput.id == 'ClientID' && theinput.value.trim() !== '-') {
-                    RemoveInvalidClass([document.getElementById('ClientID')]);
-                }  
+                if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
+                    if (theinput.id == 'ClientID') {
+                        RemoveInvalidClass([document.getElementById('ClientID')]);
+                    }
+                    if (theinput.id == 'paiementmethod') {
+                        RemoveInvalidClass([document.getElementById('paiementmethod')]);
+                    }
+                }
             }
-            else{
+            else {
                 if (theinput.value.trim() == '') {
                     InvalidInputs.push(theinput)
                 };
                 if (theinput.value.trim() !== '') {
                     RemoveInvalidClass([theinput]);
                 };
-            }      
+            }
         }
         if (InvalidInputs.length == 0) {
             if (modaltype == 'addnew') {
@@ -396,13 +399,13 @@ function ValidInputNotEmpty(modaltype) {
             }
         }
     }
-    if (modaltype == 'addnew'){
+    if (modaltype == 'addnew') {
         var Qs = document.getElementById('Qs')
         var ProductName = document.getElementById('ProductName')
         var PU = document.getElementById('PU')
         var PT = document.getElementById('PT')
         var list_of_inputs = [Qs, ProductName, PU, PT]
-        valid(list_of_inputs,modaltype);
+        valid(list_of_inputs, modaltype);
     }
     if (modaltype == 'edit') {
         var Qs = document.getElementById('Edit_Qs')
@@ -410,14 +413,22 @@ function ValidInputNotEmpty(modaltype) {
         var PU = document.getElementById('Edit_PU')
         var PT = document.getElementById('Edit_PT')
         var list_of_inputs = [Qs, ProductName, PU, PT]
-        valid(list_of_inputs,modaltype);
+        valid(list_of_inputs, modaltype);
     }
     if (modaltype == 'clientside') {
         var F = document.getElementById('facture_number')
         var C = document.getElementById('ClientID')
         var D = document.getElementById('Date')
-        var list_of_inputs = [F,C,D]
-        valid(list_of_inputs,modaltype);
+
+        var M = document.getElementById('paiementmethod')
+        if (M == null) {
+            var list_of_inputs = [F, C, D]
+        }
+        else {
+            var list_of_inputs = [F, C, D, M]
+        }
+
+        valid(list_of_inputs, modaltype);
     }
 }
 
@@ -465,14 +476,14 @@ function Selectthengo(table_id) {
     for (let rw = 1; rw < theTable.rows.length; rw++) {
         // get BL id that stored in checkbox that come from APPfunctions :)
         var BL = theTable.rows[rw].cells[0].firstChild
-        if (BL.checked){
+        if (BL.checked) {
             ALL_BLs.push(BL.id)
         }
     }
-    if (ALL_BLs.length == 0){
+    if (ALL_BLs.length == 0) {
         toastr.error('Please Select At Least One BL', "No BL Selected");
     }
-    if (ALL_BLs.length !== 0 ){
+    if (ALL_BLs.length !== 0) {
         POSTselectedBL(ALL_BLs);
     }
 }
@@ -480,7 +491,7 @@ function Selectthengo(table_id) {
 function POSTselectedBL(BLs) {
     var frm = document.getElementById('FormSELECTEDBL')
     var inpt = document.getElementById('SELECTEDBL')
-    inpt.value = BLs 
+    inpt.value = BLs
     frm.submit()
 }
 

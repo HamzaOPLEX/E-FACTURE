@@ -73,7 +73,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="datatable" id="tableinput" value="" required>
                         <div class="form-group">
-                            <label>Numéro de facture </label>
+                            <label>Numéro De BL </label>
                             <input type="number" min="0" class="form-control" name='BL_number' value='{{new_BL_number}}'
                                 id="facture_number" placeholder="N°:" required readonly>
                         </div>
@@ -85,7 +85,8 @@
                                     <option value="-" selected disabled>Sélectionner Un Client</option>
                                     {{ selectbody | CreateHTMLSelectOptionsWith_ID }}
                                 </select>
-                                <button type="button" class="btn btn-success add-new" onclick='AddNewClient()'><i class="fa fa-plus" style="width: 25px;"></i>
+                                <button type="button" class="btn btn-success add-new" onclick='AddNewClient()'><i class="fa fa-plus"
+                                        style="width: 25px;"></i>
                                 </button>
                             </div>
                         </div>

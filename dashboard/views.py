@@ -105,10 +105,10 @@ def Dashboard(requests):
         HT_BL = APP_BL_items.objects.filter(Date__year=this_year).aggregate(Sum('PT'))['PT__sum']
         if not HT_BL:
             HT_BL = 0
-        context['HT'] = HT
-        context['HT_BL'] = HT_BL
+        context['HT'] = round(HT,3)
+        context['HT_BL'] = round(HT_BL,3)
         context['TVA_taux'] = TVA_taux
-        context['TTC'] = TTC
+        context['TTC'] = round(TTC,3)
         ################### End Chiffre D'affair Handler ###################
 
 
