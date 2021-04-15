@@ -352,15 +352,9 @@ function ValidInputNotEmpty(modaltype) {
         var IDs = ['ClientID', 'paiementmethod']
         for (let index = 0; index < list_of_inputs.length; index++) {
             var theinput = list_of_inputs[index]
-<<<<<<< HEAD
             if (IDs.includes(theinput.id) == true) {
                 if (IDs.includes(theinput.id) == true && theinput.value == '-') {
                     if (theinput.id == 'ClientID') {
-=======
-            if (IDs.includes(theinput.id) == true){
-                if (IDs.includes(theinput.id) == true  && theinput.value == '-') {
-                    if(theinput.id == 'ClientID'){
->>>>>>> 7545b7d0b8a03de14d82f962e69f609fe23e5ffa
                         $('#ClientID').val('-');
                         InvalidInputs.push(document.getElementById('ClientID'))
                     }
@@ -368,7 +362,6 @@ function ValidInputNotEmpty(modaltype) {
                         $('#paiementmethod').val('-')
                         InvalidInputs.push(document.getElementById('paiementmethod'))
                     }
-<<<<<<< HEAD
                 }
                 if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
                     if (theinput.id == 'ClientID') {
@@ -378,17 +371,6 @@ function ValidInputNotEmpty(modaltype) {
                         RemoveInvalidClass([document.getElementById('paiementmethod')]);
                     }
                 }
-=======
-                }
-                if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
-                    if (theinput.id == 'ClientID') {
-                        RemoveInvalidClass([document.getElementById('ClientID')]);
-                    }
-                    if (theinput.id == 'paiementmethod'){
-                        RemoveInvalidClass([document.getElementById('paiementmethod')]);
-                    }
-                }  
->>>>>>> 7545b7d0b8a03de14d82f962e69f609fe23e5ffa
             }
             else {
                 if (theinput.value.trim() == '') {
@@ -437,7 +419,6 @@ function ValidInputNotEmpty(modaltype) {
         var F = document.getElementById('facture_number')
         var C = document.getElementById('ClientID')
         var D = document.getElementById('Date')
-<<<<<<< HEAD
 
         var M = document.getElementById('paiementmethod')
         if (M == null) {
@@ -448,12 +429,6 @@ function ValidInputNotEmpty(modaltype) {
         }
 
         valid(list_of_inputs, modaltype);
-=======
-        var M = document.getElementById('paiementmethod')
-        var list_of_inputs = [F, C, D, M]
-
-        valid(list_of_inputs,modaltype);
->>>>>>> 7545b7d0b8a03de14d82f962e69f609fe23e5ffa
     }
 }
 
