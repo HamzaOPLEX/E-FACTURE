@@ -176,7 +176,11 @@ def GlobaleSettings(requests):
     settings = APP_Settings.objects.all().first()
     if requests.method == 'GET':
         context['setting'] = settings
-        return render(requests, str(settings.APP_lang)+'/Settings/global-settings.html', context)
+        try :
+            return render(requests, str(settings.APP_lang)+'/Settings/global-settings.html', context)
+        except Exception :
+            return render(requests, 'fr/Settings/global-settings.html', context)
+
     elif requests.method == 'POST':
         ICE = str(requests.POST['ICE']).strip().upper()
         TVATAUX = requests.POST['TVATAUX']

@@ -5,8 +5,6 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 
-settings = APP_Settings.objects.all().first()
-
 
 # Function Of Decorator That Will Check If User is Loged in  if not redirect him to login
 def RequireLogin(viewfunc):
@@ -66,8 +64,9 @@ def Login(requests):
             return redirect('/dashboard')
         else:
             try :
+                settings = APP_Settings.objects.all().first()
                 return render(requests, str(settings.APP_lang)+'/Authentication/login.html', context)
-            except AttributeError:
+            except Exception:
                 return render(requests, 'fr/Authentication/login.html', context)
 
     elif requests.method == "POST":

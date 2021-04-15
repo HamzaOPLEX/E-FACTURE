@@ -47,7 +47,6 @@ def H_Create_New_Facture(requests):
         date = requests.POST['date']
         isPaid = requests.POST['ispaid']
         TTTCorHT = requests.POST['TTTCorHT']
-        print(TTTCorHT)
         # check if len(datatable)!=0 and all len() rows in that table != 4
         if len(datatable) != 0:
             datatable_status = 'not valid'
@@ -63,7 +62,10 @@ def H_Create_New_Facture(requests):
         if datatable and facture_number and client and client != '-' and date and datatable_status == 'valid':
             if isPaid == 'Oui':
                 paid_method = requests.POST['paiementmethod']
-                avance = int(requests.POST['avance'])
+                try :
+                    avance = round(float(requests.POST['avance']),2)
+                except Exception:
+                    avance = 0
                 if paid_method not in ['Espèces', 'Chèque']:
                     messages.error(requests, "paid method erreur")
                     return redirect('/create-new-facture/')
@@ -223,18 +225,23 @@ def H_Edit_Facture(requests, facture_id):
             if datatable and ClientID and ClientID != '-' and date and datatable_status == 'valid':
                 if isPaid == 'Oui':
                     paid_method = requests.POST['paiementmethod']
-                    if paid_method not in ['Cart', 'Espèces', 'Chèque']:
-                        messages.error(
-                            requests, "Veuillez remplir toutes les données")
+                    try :
+                        avance = round(float(requests.POST['avance']),2)
+                    except Exception:
+                        avance = 0
+                    if paid_method not in ['Espèces', 'Chèque']:
+                        messages.error(requests, "paid method erreur")
                         return redirect('/create-new-facture/')
                 else:
-                    paid_method = "aucun"
+                    paid_method = 'aucun'
+                    avance = 0
                     isPaid = 'Non'
                 client = get_object_or_404(APP_Clients,id=ClientID)
                 Facture.ClientID = client
                 Facture.Date = date
                 Facture.isPaid = isPaid
                 Facture.Paiment_Mathod = paid_method
+                Facture.Avance = avance
                 actiondetail = f'{User.username} editer une facture avec le numéro {Facture.number} en {Fix_Date(str(datetime.today()))}'
                 APP_History.objects.create(
                     CreatedBy=User,
