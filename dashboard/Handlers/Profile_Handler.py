@@ -18,20 +18,6 @@ def Profile(requests):
         context['setting'] = settings
         factures = list(APP_Created_Facture.objects.filter(CreatedBy=User))
         tablebody = []
-        for facture in factures:
-            facture_number = facture.number
-            client = facture.Client_Name
-            date = facture.Date
-            D = {}
-            D['N'] = facture_number
-            D['client'] = client
-            D['date'] = date
-            factureid = facture.id
-            D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{factureid}" title="Edit" data-toggle="tooltip"><i class="fas fa-pencil-alt"></i>\n</a> 
-                            <a class="btn btn-danger btn-sm" href="#" onclick='DeleteFunctionPopUp("/profile/delete/{factureid}")' title="Delete" data-toggle="tooltip"><i class="fas fa-trash"></i></a>\n
-                            <a class="btn btn-primary btn-sm" href="/list-all-facturs/detail/open/{factureid}" title="detail" data-toggle="tooltip"><i class="fas fa-folder"></i></a>\n'''
-            tablebody.append(D)
-        context['tablebody'] = tablebody
         context['User'] = User
         return render(requests, str(settings.APP_lang)+'/Profile/profile.html', context)
 

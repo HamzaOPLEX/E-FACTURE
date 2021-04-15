@@ -34,9 +34,7 @@ def ManageUsers(requests):
                 D['Action'] = f"""<a class='btn btn-info  btn-sm' href='manage-users/edit/{id}' target='_blank' title='Edit' data-toggle='tooltip'>
                                                 <i class='fas fa-pencil-alt'></i>\n</a>
                                   <a class='btn btn-danger btn-sm' href='#' title='Delete' onclick='EnterPwdToDeletePopup(\"/settings/deleteacount/{id}\");' data-toggle='tooltip'>
-                                                <i class='fas fa-trash'></i></a>\n
-                                  <a class='btn btn-warning btn-sm' target='_blank' href='manage-users/profile/{id}' title='detail' data-toggle='tooltip'>
-                                                <i class='fas fa-folder'></i></a>\n"""
+                                                <i class='fas fa-trash'></i></a>\n"""
                 tablebody.append(D)
 
         context['tablebody'] = tablebody
@@ -108,38 +106,7 @@ def DeleteUser(requests, id):
         return HTTP_404(requests)
 
 
-@RequirePermission
-def ShowUserProfile(requests, id):
-    context = {'pagetitle': 'Show User Profile'}
-    userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
-    if requests.method == "GET":
-        settings = APP_Settings.objects.all().first()
-        context['setting'] = settings
-        try:
-            UserTarget = APP_User.objects.get(id=id)
-            factures = list(
-                APP_Created_Facture.objects.filter(CreatedBy=UserTarget))
-            tablebody = []
-            for facture in factures:
-                facture_number = facture.number
-                client = facture.Client_Name
-                date = facture.Date
-                D = {}
-                D['N'] = facture_number
-                D['client'] = client
-                D['date'] = date
-                factureid = facture.id
-                D['Action'] = f'<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{factureid}" title="Edit" data-toggle="tooltip"><i class="fas fa-pencil-alt"></i>\n</a> <a class="btn btn-danger btn-sm" href="/list-all-facturs/delete/{factureid}" title="Delete" data-toggle="tooltip"><i class="fas fa-trash"></i></a>\n<a class="btn btn-primary btn-sm" href="/list-all-facturs/detail/open/{factureid}" title="detail" data-toggle="tooltip"><i class="fas fa-folder"></i></a>\n'
-                tablebody.append(D)
-            context['tablebody'] = tablebody
-            context['UserTarget'] = UserTarget
-            context['User'] = User
-            return render(requests, str(settings.APP_lang)+'/Settings/showprofile.html', context)
-        except APP_User.DoesNotExist:
-            return HTTP_404(requests)
-    else:
-        return HTTP_404(requests)
+
 
 
 @RequirePermission

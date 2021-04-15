@@ -117,8 +117,6 @@ urlpatterns = [
          Users_Handler.EditUser, name='Edit User'),
     path('settings/manage-users/edit/changepwd/<int:id>',
          Users_Handler.ChangeUserPassword, name='Change User Pwd'),
-    path('settings/manage-users/profile/<int:id>',
-         Users_Handler.ShowUserProfile, name='show  User profile'),
     path('settings/deleteacount/<int:id>',
          Users_Handler.DeleteUser, name='Delete User'),
     path('settings/adduser/', Users_Handler.AddUser, name='Add new User'),

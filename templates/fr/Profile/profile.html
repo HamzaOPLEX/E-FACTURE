@@ -118,44 +118,15 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link active" href="#allcreatedfacturebyme"data-toggle="tab">Mes Factures Crées</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#changpwd" data-toggle="tab">Changez votre mot de passe</a>
+                            <li class="nav-item" ><a class="nav-link" href="#changpwd" style="background-color: #0d98a5;color: white !important;" data-toggle="tab">Changez votre mot de passe</a>
                             </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            <div class="active tab-pane" id="allcreatedfacturebyme">
-                                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" role="grid"
-                                                aria-describedby="example2_info">
-                                                <thead>
-                                                    <tr>
-                                                        <th>N°</th>
-                                                        <th>Nom du client</th>
-                                                        <th>La Date</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {{tablebody | CreateTableBody}}
-                                                </tbody>
-                                                <tfoot>
-                                                        <th>N°</th>
-                                                        <th>Nom du client</th>
-                                                        <th>La Date</th>
-                                                        <th>Action</th>
-                                                        </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                             <!-- /.tab-pane -->
-                            <div class="tab-pane" id="changpwd">
+                            <div class="active tab-pane" id="changpwd">
                                 <form action="/profile/changepwd/" method="POST">
                                     {% csrf_token %}
                                     <div class="form-group">
