@@ -119,26 +119,55 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
 
     # - Start TOTAL,TVA,TTC Table Handler - ##################################################
     TOTALint, TVA, TTC_int = (FactureObj.HT,FactureObj.TVA,FactureObj.TTC)
-    TOTAL = ['', 'TOTAL HT', round(TOTALint, 2)]
+    TOTAL = ['TOTAL HT', round(TOTALint, 2)]
     if FactureObj.TTCorHT == 'TTC':
         TVA_TAUX = Company_TVATAUX
-        TVA = ['', f'TVA {TVA_TAUX}%', round(TVA, 2)]
-        TTC = ['', 'TOTAL TTC', round(TTC_int, 2)]
+        TVA = [f'TVA {TVA_TAUX}%', round(TVA, 2)]
+        TTC = ['TOTAL TTC', round(TTC_int, 2)]
         TOTALtableData = [TOTAL, TVA, TTC]
         TOTALletter = Number2Letter(str(TTC_int))
     elif FactureObj.TTCorHT == 'HT':
         TOTALtableData = [TOTAL]
         TOTALletter = Number2Letter(str(TOTALint))
 
+
+    StatusTableData = []
+
     # is Paid and Paiment Method
     if FactureObj.isPaid == 'Oui':
-        ispaid_row = ['','Status','Payée']
-        PaimentMethod_row = ['','Méthode',FactureObj.Paiment_Mathod]
-        TOTALtableData.append(ispaid_row)
-        TOTALtableData.append(PaimentMethod_row)
+        ispaid_row = ['Status','Payée']
+        PaimentMethod_row = ['Méthode De Paiement',FactureObj.Paiment_Mathod]
+        StatusTableData.append(ispaid_row)
+        StatusTableData.append(PaimentMethod_row)
     elif FactureObj.isPaid == 'Non':
-        ispaid_row = ['','Statut','Non Payée']
-        TOTALtableData.append(ispaid_row)
+        ispaid_row = ['Statut','Non Payée']
+        StatusTableData.append(ispaid_row)
+
+
+
+
+    def footer_info_table(tabledata):
+        colwidths = (238, 140, 180)
+        t = Table(tabledata, colwidths)
+        t.hAlign = 'CENTER'
+        GRID_STYLE = TableStyle(
+            [
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER')
+            ]
+        )
+        t.setStyle(GRID_STYLE)
+        return t
+
+    def Status_Table(tabledata):
+        colwidths = (122, 60)
+        t = Table(tabledata, colwidths)
+        t.hAlign = 'LEFT'
+        GRID_STYLE = TableStyle(
+            [('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+             ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ]
+        )
+        t.setStyle(GRID_STYLE)
+        return t
 
 
 
@@ -160,7 +189,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         return t
 
     def TOTAL_table(tabledata):
-        colwidths = (0, 60, 60)
+        colwidths = (60, 60)
         t = Table(tabledata, colwidths)
         t.hAlign = 'RIGHT'
         GRID_STYLE = TableStyle(
@@ -169,8 +198,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         )
         t.setStyle(GRID_STYLE)
         return t
-    # - End TOTAL,TVA,TTC Table Handler - ################################################
 
+    # - End TOTAL,TVA,TTC Table Handler - ################################################
     def DrawPageImages(canvas, doc):
         canvas.saveState()
         canvas.drawImage(str(BASE_DIR)+"/invoice-bg.png", 0, 0, 600, 840)
@@ -215,7 +244,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         tabledata.append(row)
 
 
-    ROWS = 25
+    ROWS = 27
 
     tabledata = list(chunks(tabledata,ROWS))
 
@@ -233,7 +262,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         story.append(tabmestle)
         # check if chunk is last element in tabledata so add TOTAL info to the last table in pages
         if tabledata.index(chunk) == tabledata.index(tabledata[-1]):
-            story.append(TOTAL_table(TOTALtableData,))
+
+            story.append(footer_info_table([[Status_Table(StatusTableData),'',TOTAL_table(TOTALtableData),]]))
             story.append(Spacer(1, .25*inch))
             if FactureObj.TTCorHT == 'TTC':
                 Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  TTC"
