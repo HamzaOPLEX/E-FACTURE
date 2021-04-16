@@ -499,10 +499,10 @@ function POSTselectedBL(BLs) {
 jQuery(document).ready(function ($) {
     var alterClass = function () {
         var ww = document.body.clientWidth;
-        if (ww <= 640) {
+        if (ww <= 685) {
             // Remove 3 Buttns on top nav bar
             document.getElementById('RemoveOn650px').style = 'display:none !important ;'
-        } else if (ww > 640) {
+        } else if (ww > 685) {
             document.getElementById('RemoveOn650px').style = 'display:inherit !important ;'
         };
     };
