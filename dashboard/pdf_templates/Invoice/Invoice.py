@@ -133,11 +133,11 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     # is Paid and Paiment Method
     if FactureObj.isPaid == 'Oui':
         ispaid_row = ['','Status','Payée']
-        PaimentMethod_row = ['','Method De Paiement',FactureObj.Paiment_Mathod]
+        PaimentMethod_row = ['','Méthode',FactureObj.Paiment_Mathod]
         TOTALtableData.append(ispaid_row)
         TOTALtableData.append(PaimentMethod_row)
     elif FactureObj.isPaid == 'Non':
-        ispaid_row = ['','Status','Non Payée']
+        ispaid_row = ['','Statut','Non Payée']
         TOTALtableData.append(ispaid_row)
 
 
@@ -160,7 +160,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         return t
 
     def TOTAL_table(tabledata):
-        colwidths = (0, 100, 60)
+        colwidths = (0, 60, 60)
         t = Table(tabledata, colwidths)
         t.hAlign = 'RIGHT'
         GRID_STYLE = TableStyle(
@@ -214,11 +214,14 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),str(item.PU).strip(), str(item.PT).strip()]
         tabledata.append(row)
 
-    tabledata = list(chunks(tabledata,27))
+
+    ROWS = 25
+
+    tabledata = list(chunks(tabledata,ROWS))
 
     for chunk in tabledata :
-        if len(chunk) <= 27:
-            emptyrows_needed = 27-int(len(chunk))
+        if len(chunk) <= ROWS:
+            emptyrows_needed = ROWS-int(len(chunk))
             for i in range(emptyrows_needed):
                 empty_row = ['', '', '', '']
                 chunk.append(empty_row)
