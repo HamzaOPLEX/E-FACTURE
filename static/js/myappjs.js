@@ -325,6 +325,7 @@ $('#Form').submit(function (e) {
     e.preventDefault() // prevat form from reloading page
     document.getElementById('IconPlus').style = 'display:none'
     document.getElementById('IconSpin').style = 'display:content'
+    document.getElementById('savebttn').disabled = true
     $.ajax({
         type: "POST",
         url: this.action, // get action from form
@@ -340,14 +341,15 @@ $('#Form').submit(function (e) {
                 window.open(response.ROOT_URL, '_self');
                 window.open(response.ROOT_URL+'detail/open/' + response.ID, '_blank').focus();
             });
-            // toastr.success(response.MSG, "demande réussie");
             document.getElementById('IconPlus').style = 'display:content'
             document.getElementById('IconSpin').style = 'display:none'
+            document.getElementById('savebttn').disabled = false
             document.getElementById("Form").reset();
         },
         error: function (response) {
             document.getElementById('IconPlus').style = 'display:content'
             document.getElementById('IconSpin').style = 'display:none'
+            document.getElementById('savebttn').disabled = false
             toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
         }
     })
