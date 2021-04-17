@@ -38,7 +38,10 @@ def H_Create_New_BL(requests):
         return render(requests, str(settings.APP_lang)+'/CreateNew/Creat-New-BL.html', context)
     elif requests.method == "POST":
         # Get Post Data
-        datatable = json.loads(requests.POST['datatable'])['myrows']
+        try :
+            datatable = json.loads(requests.POST['datatable'])['myrows']
+        except json.decoder.JSONDecodeError :
+            pass
         BL_number = requests.POST['BL_number']
         CLIENT_ID = int(requests.POST['client_name'])
         date = requests.POST['date']
@@ -59,8 +62,8 @@ def H_Create_New_BL(requests):
             # Check if BL_number already Exist
             all_BL_numbers = [n.number for n in All_BLs]
             if int(BL_number) in all_BL_numbers:
-                messages.error(requests, f"un BL avec le même numéro ({BL_number}) existe déjà")
-                return redirect('/create-new-bl/')
+                return JsonResponse({'ERR_MSG':f"Un BL avec le même numéro ({BL_number}) existe déjà"}, status=400)
+
             if int(BL_number) not in all_BL_numbers:
                 # Created BL With POST data if BL_number not found
                 CLIENT = get_object_or_404(APP_Clients,id=CLIENT_ID)
@@ -92,12 +95,10 @@ def H_Create_New_BL(requests):
                     )
                 BL.HT = HT
                 BL.save()
-                messages.info(
-                    requests, f"Le BL {BL_number} a été crée avec succès")
-                return redirect(f'/list-all-bl/')
+                MSG = f"Le BL {BL.number} a été crée avec succès"
+                return JsonResponse({'MSG':MSG,'ID':BL.id,'ROOT_URL':'/list-all-bl/'}, status=200)
         else:
-            messages.error(requests, "Veuillez remplir toutes les données")
-            return redirect('/create-new-bl/')
+            return JsonResponse({'ERR_MSG':"Veuillez remplir toutes les données"}, status=400)
 
 
 @RequireLogin
@@ -176,7 +177,11 @@ def H_Edit_BL(requests, BL_id):
         elif requests.method == "POST":
             # Get Post Data
             # get datatable and convert it from json to python dict and get data from myrows
-            datatable = json.loads(requests.POST['datatable'])['myrows']
+            try :
+                datatable = json.loads(requests.POST['datatable'])['myrows']
+            except json.decoder.JSONDecodeError :
+                pass
+
             CLIENT_ID = int(requests.POST['client_name'])
             date = requests.POST['date']
             # check if len(datatable)!=0 and all len() rows in that table != 4
@@ -218,12 +223,11 @@ def H_Edit_BL(requests, BL_id):
                         pass
                 BL.HT = HT
                 BL.save()
-                messages.info(
-                    requests, f"Le BL {BL.number} a été éditer avec succès")
-                return redirect(f'/list-all-bl/')
+                MSG = f"Le BL {BL.number} a été édité avec succes"
+                return JsonResponse({'MSG':MSG,'ID':BL.id,'ROOT_URL':'/list-all-bl/'}, status=200)
             else:
-                messages.error(requests, "Veuillez remplir toutes les données")
-                return redirect(f'/list-all-bl/edit/{BL_id}')
+                return JsonResponse({'ERR_MSG':"Veuillez remplir toutes les données"}, status=400)
+
     else:
         return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer Le BL avec le nombre {BL.BL_number}', User.username, context, templatepath)
 

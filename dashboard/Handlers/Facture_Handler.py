@@ -41,7 +41,10 @@ def H_Create_New_Facture(requests):
         return render(requests, template_path, context)
     elif requests.method == "POST":
         # Get Post Data
-        datatable = json.loads(requests.POST['datatable'])['myrows']
+        try :
+            datatable = json.loads(requests.POST['datatable'])['myrows']
+        except Exception :
+            pass
         facture_number = requests.POST['facture_number']
         client = int(requests.POST['client_name'])
         date = requests.POST['date']
@@ -76,8 +79,7 @@ def H_Create_New_Facture(requests):
             # Check if facture_number already Exist
             all_facture_numbers = [n.number for n in All_Factures]
             if int(facture_number) in all_facture_numbers:
-                messages.error(requests, f"Une facture avec le même numéro ({facture_number}) existe déjà")
-                return redirect('/create-new-facture/')
+                return JsonResponse({'ERR_MSG':f"Une facture avec le même numéro ({facture_number}) existe déjà"}, status=400)
             if int(facture_number) not in all_facture_numbers:
                 HT = 0
                 TVA = 0
@@ -123,12 +125,10 @@ def H_Create_New_Facture(requests):
                     action='créer une facture',
                     action_detail=actiondetail,
                 )
-                messages.info(
-                    requests, f"La facture {facture_number} a été crée avec succès")
-                return redirect(f'/list-all-facturs/')
+                MSG = f"La Facture {facture_number} a été crée avec succès"
+                return JsonResponse({'MSG':MSG,'ID':facture.id,'ROOT_URL':'/list-all-facturs/'}, status=200)
         else:
-            messages.error(requests, "Veuillez remplir toutes les données")
-            return redirect('/create-new-facture/')
+            return JsonResponse({'ERR_MSG':"Veuillez remplir toutes les données"}, status=400)
 
 @RequireLogin
 def H_Delete_Facture(requests, id):
@@ -263,7 +263,7 @@ def H_Edit_Facture(requests, facture_id):
                             BelongToFacture=Facture
                         )                    
                     except Exception as err:
-                        print(err)
+                        pass
                 TVA = HT / 100 * float(settings.Company_TVATAUX)
                 TTC = HT + TVA
                 Facture.HT = HT
@@ -271,12 +271,10 @@ def H_Edit_Facture(requests, facture_id):
                 Facture.TTC = TTC     
                 Facture.TTCorHT = TTTCorHT           
                 Facture.save()
-                messages.info(
-                    requests, f"la facture {Facture.number} a été éditer avec succès")
-                return redirect(f'/list-all-facturs/')
+                MSG = f"La Facture {Facture.number} a été édité avec succès"
+                return JsonResponse({'MSG':MSG,'ID':Facture.id,'ROOT_URL':'/list-all-facturs/'}, status=200)
             else:
-                messages.error(requests, "Veuillez remplir toutes les données")
-                return redirect(f'/list-all-facturs/edit/{facture_id}')
+                return JsonResponse({'ERR_MSG':"Veuillez remplir toutes les données"}, status=400)
     else:
         return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer la facture avec le nombre {Facture.number}', User.username, context, templatepath)
 
@@ -295,7 +293,7 @@ def H_List_All_Factures(requests):
         context['setting'] = settings
         # Generate HTML Table and Pass it in context
         factures = list(APP_Created_Facture.objects.all())
-        tablebody = generate_table_of_created_factures(factures=factures)
+        tablebody = generate_table_of_created_factures(factures=factures)       
         context['tablebody'] = tablebody
         return render(requests, template_path, context)
 

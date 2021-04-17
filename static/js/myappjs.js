@@ -321,15 +321,46 @@ function tableToJSON() {
     myObj.myrows = myRows;
     return JSON.stringify(myObj)
 }
+$('#Form').submit(function (e) {
+    e.preventDefault() // prevat form from reloading page
+    document.getElementById('IconPlus').style = 'display:none'
+    document.getElementById('IconSpin').style = 'display:content'
+    $.ajax({
+        type: "POST",
+        url: this.action, // get action from form
+        data: $('#Form').serialize(), // get all inputs from from and convert them to Json
+        dataType: "json",
+        encode: true,
+        success: function (response) { // if respond == 200
+            Swal.fire(
+                response.MSG,
+                '',
+                'success'
+            ).then(function () {
+                window.open(response.ROOT_URL, '_self');
+                window.open(response.ROOT_URL+'detail/open/' + response.ID, '_blank').focus();
+            });
+            // toastr.success(response.MSG, "demande réussie");
+            document.getElementById('IconPlus').style = 'display:content'
+            document.getElementById('IconSpin').style = 'display:none'
+            document.getElementById("Form").reset();
+        },
+        error: function (response) {
+            document.getElementById('IconPlus').style = 'display:content'
+            document.getElementById('IconSpin').style = 'display:none'
+            toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+        }
+    })
+})
 function LoadDatatableAndSubmit() {
     var JsonTable = tableToJSON()
     let tabledata = JSON.parse(JsonTable)
     if (tabledata.myrows.length > 0) {
         document.getElementById('tableinput').value = JsonTable
-        document.getElementById("Form").submit();
+        // document.getElementById("Form").submit();
     }
     if (tabledata.myrows.length == 0) {
-        toastr.error('Le tableau des éléments de facture est vide', "S'il Vous Plaît Ajouter Un Élément à Votre Facture");
+        toastr.error('Le tableau des éléments. est vide', "S'il Vous Plaît Ajouter Un élément");
     }
 
 }
@@ -358,9 +389,12 @@ function ValidInputNotEmpty(modaltype) {
                         $('#ClientID').val('-');
                         InvalidInputs.push(document.getElementById('ClientID'))
                     }
-                    if (document.getElementById('ispaid').value == 'Oui' && theinput.id == 'paiementmethod') {
-                        $('#paiementmethod').val('-')
-                        InvalidInputs.push(document.getElementById('paiementmethod'))
+                    var isPaid = document.getElementById('ispaid')
+                    if (isPaid != null){
+                        if (document.getElementById('ispaid').value == 'Oui' && theinput.id == 'paiementmethod') {
+                            $('#paiementmethod').val('-')
+                            InvalidInputs.push(document.getElementById('paiementmethod'))
+                        }
                     }
                 }
                 if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
@@ -421,7 +455,8 @@ function ValidInputNotEmpty(modaltype) {
         var D = document.getElementById('Date')
 
         var M = document.getElementById('paiementmethod')
-        if (M == null) {
+        var isPaid = document.getElementById('ispaid')
+        if (M == null && isPaid == null) {
             var list_of_inputs = [F, C, D]
         }
         else {

@@ -38,7 +38,10 @@ def H_Create_New_Devis(requests):
         return render(requests, str(settings.APP_lang)+'/CreateNew/Creat-New-Devis.html', context)
     elif requests.method == "POST":
         # Get Post Data
-        datatable = json.loads(requests.POST['datatable'])['myrows']
+        try :
+            datatable = json.loads(requests.POST['datatable'])['myrows']
+        except json.decoder.JSONDecodeError :
+            pass        
         Devis_number = requests.POST['Devis_number']
         CLIENT_ID = int(requests.POST['client_name'])
         date = requests.POST['date']
@@ -59,8 +62,8 @@ def H_Create_New_Devis(requests):
             # Check if Devis_number already Exist
             all_Devis_numbers = [n.number for n in All_Deviss]
             if int(Devis_number) in all_Devis_numbers:
-                messages.error(requests, f"un Devis avec le même numéro ({Devis_number}) existe déjà")
-                return redirect('/create-new-Devis/')
+                return JsonResponse({'ERR_MSG':f"un Devis avec le même numéro ({Devis_number}) existe déjà"}, status=400)
+
             if int(Devis_number) not in all_Devis_numbers:
                 # Created Devis With POST data if Devis_number not found
                 Client = get_object_or_404(APP_Clients,id=CLIENT_ID)
@@ -96,11 +99,11 @@ def H_Create_New_Devis(requests):
                 Devis.HT = HT
                 Devis.save()
                 [it.save() for it in ALL_ITEMS]
-                messages.info(requests, f"Le Devis {Devis_number} a été crée avec succès")
-                return redirect(f'/list-all-devis/')
+                MSG = f"Le Devis {Devis.number} a été crée avec succès"
+                return JsonResponse({'MSG':MSG,'ID':Devis.id,'ROOT_URL':'/list-all-devis/'}, status=200)
         else:
-            messages.error(requests, "Veuillez remplir toutes les données")
-            return redirect('/create-new-devis/')
+            return JsonResponse({'ERR_MSG':"Veuillez remplir toutes les données"}, status=400)
+
 
 @RequireLogin
 def H_Delete_Devis(requests, id):
@@ -176,7 +179,11 @@ def H_Edit_Devis(requests, Devis_id):
         elif requests.method == "POST":
             # Get Post Data
             # get datatable and convert it from json to python dict and get data from myrows
-            datatable = json.loads(requests.POST['datatable'])['myrows']
+            try :
+                datatable = json.loads(requests.POST['datatable'])['myrows']
+            except json.decoder.JSONDecodeError :
+                pass
+
             Devis_number = requests.POST['Devis_number']
             CLIENT_ID = int(requests.POST['client_name'])
             date = requests.POST['date']
@@ -220,11 +227,11 @@ def H_Edit_Devis(requests, Devis_id):
                         pass
                 Devis.HT = HT
                 Devis.save()
-                messages.info(requests, f"Le Devis {Devis_number} a été éditer avec succès")
-                return redirect(f'/list-all-devis/')
+                MSG = f"Le Devis {Devis_number} a été éditer avec succès"
+                return JsonResponse({'MSG':MSG,'ID':Devis.id,'ROOT_URL':'/list-all-devis/'}, status=200)
             else:
-                messages.error(requests, "Veuillez remplir toutes les données")
-                return redirect(f'/list-all-devis/edit/{Devis_id}')
+                return JsonResponse({'ERR_MSG':"Veuillez remplir toutes les données"}, status=400)
+
     else:
         return PermissionErrMsg_and_Warning_Handler(requests, 'Éditer', f'{User.username} essayez de Éditer Le Devis avec le nombre {Devis.Devis_number}', User.username, context, templatepath)
 

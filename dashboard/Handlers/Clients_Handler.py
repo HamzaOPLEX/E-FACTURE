@@ -63,9 +63,8 @@ def ManageClients(requests):
                 response_data = {"MSG": MSG,'CLIENT_ID':client.id,'ClientData':Client_DATA}
                 return JsonResponse(response_data, status=200)
         else:
-            messages.info(
-                requests, f'veuillez remplir toutes les informations')
-            return redirect('/settings/manage-clients')
+            ERR_MSG = f'veuillez remplir toutes les informations'
+            return JsonResponse({"ERR_MSG": ERR_MSG}, status=400)
 
 
 @RequirePermission
