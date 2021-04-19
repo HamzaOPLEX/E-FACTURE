@@ -212,21 +212,24 @@ def H_Edit_Devis(requests, Devis_id):
                 )
                 APP_Devis_items.objects.filter(BelongToDevis=Devis).delete()
                 HT = 0
+                ITEMS = []
                 for data in datatable:
                     try:
                         PT = data[list(data.keys())[3]]
                         HT = HT + float(PT)
-                        APP_Devis_items.objects.create(
+                        theItem = APP_Devis_items(
                             Qs=data[list(data.keys())[0]],
                             DESIGNATION=data[list(data.keys())[1]],
                             PU=data[list(data.keys())[2]],
                             PT=data[list(data.keys())[3]],
                             BelongToDevis=Devis
                         )
+                        ITEMS.append(theItem)
                     except Exception as err:
                         pass
                 Devis.HT = HT
                 Devis.save()
+                APP_Devis_items.objects.bulk_create(theItem)
                 MSG = f"Le Devis {Devis_number} a été éditer avec succès"
                 return JsonResponse({'MSG':MSG,'ID':Devis.id,'ROOT_URL':'/list-all-devis/'}, status=200)
             else:
