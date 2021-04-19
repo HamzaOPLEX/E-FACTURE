@@ -100,17 +100,20 @@ def H_Create_New_Facture(requests):
                     TTC=TTC
                 )
                 # Turn Json Table Data into Python Dict-
+                ITEMS = []
                 for data in datatable:
                     # For item in DataTable Create item
                     PT = data[list(data.keys())[3]]
                     HT = HT + float(PT)
-                    APP_Facture_items.objects.create(
+                    theItem = APP_Facture_items(
                         Qs=data[list(data.keys())[0]],
                         DESIGNATION=data[list(data.keys())[1]],
                         PU=data[list(data.keys())[2]],
                         PT=PT,
                         BelongToFacture=facture
                     )
+                    ITEMS.append(theItem)
+                APP_Facture_items.objects.bulk_create(ITEMS)
                 TVA = HT / 100 * float(settings.Company_TVATAUX)
                 TTC = HT + TVA
                 facture.HT = HT
@@ -251,19 +254,22 @@ def H_Edit_Facture(requests, facture_id):
                 )
                 APP_Facture_items.objects.filter(BelongToFacture=Facture).delete()
                 HT = 0
+                ITEMS = []
                 for data in datatable:
                     try:
                         PT = data[list(data.keys())[3]]
                         HT = HT + float(PT)
-                        APP_Facture_items.objects.create(
+                        theItem = APP_Facture_items(
                             Qs=data[list(data.keys())[0]],
                             DESIGNATION=data[list(data.keys())[1]],
                             PU=data[list(data.keys())[2]],
                             PT=PT,
                             BelongToFacture=Facture
-                        )                    
+                        )
+                        ITEMS.append(theItem)                    
                     except Exception as err:
                         pass
+                APP_Facture_items.objects.bulk_create(ITEMS)
                 TVA = HT / 100 * float(settings.Company_TVATAUX)
                 TTC = HT + TVA
                 Facture.HT = HT
