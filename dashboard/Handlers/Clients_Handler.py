@@ -15,7 +15,7 @@ from django.contrib.admin.utils import NestedObjects
 def ManageClients(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Context
     context = {'pagetitle': 'Gérer Vos Clients',
                'User': User, 'selecteditem': 'settings'}
@@ -111,7 +111,7 @@ def DeleteClient(requests, id):
 @RequirePermission
 def EditClient(requests, id):
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     client = get_object_or_404(APP_Clients, id=id)
     oldClientName = client.Client_Name
     oldICE = client.ICE

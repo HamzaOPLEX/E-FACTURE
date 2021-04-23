@@ -391,12 +391,9 @@ function ValidInputNotEmpty(modaltype) {
                         $('#ClientID').val('-');
                         InvalidInputs.push(document.getElementById('ClientID'))
                     }
-                    var isPaid = document.getElementById('ispaid')
-                    if (isPaid != null){
-                        if (document.getElementById('ispaid').value == 'Oui' && theinput.id == 'paiementmethod') {
-                            $('#paiementmethod').val('-')
-                            InvalidInputs.push(document.getElementById('paiementmethod'))
-                        }
+                    if (theinput.id == 'paiementmethod') {
+                        $('#paiementmethod').val('-')
+                        InvalidInputs.push(document.getElementById('paiementmethod'))
                     }
                 }
                 if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
@@ -457,13 +454,7 @@ function ValidInputNotEmpty(modaltype) {
         var D = document.getElementById('Date')
 
         var M = document.getElementById('paiementmethod')
-        var isPaid = document.getElementById('ispaid')
-        if (M == null && isPaid == null) {
-            var list_of_inputs = [F, C, D]
-        }
-        else {
-            var list_of_inputs = [F, C, D, M]
-        }
+        var list_of_inputs = [F, C, D, M]
 
         valid(list_of_inputs, modaltype);
     }

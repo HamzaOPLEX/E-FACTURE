@@ -128,6 +128,7 @@ urlpatterns = [
 
     # Situation Client
     path('situation-client/',SituationClient_Handler.FilterPageHandler_GET),
-    path('situation-client/ajax/',SituationClient_Handler.FilterPageHandler_POST)
+    path('situation-client/ajax/',SituationClient_Handler.FilterPageHandler_POST),
+    path('facture-status/ajax/update/<int:id>',Facture_Handler.UpdateFactureStatus)
 
 ]

@@ -19,7 +19,17 @@
                             <div class="form-group">
                                 <label>Client</label>                                
                                 <select id="ClientName" name="ClientID" class="form-control" def style="width: 250px;">
+                                    <option value="*" selected>*</option>
                                     {{ selectbody | CreateHTMLSelectOptionsWith_ID }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Numéro De Facture</label>
+                                <select id="number" name="number" class="form-control" style="width: 120px;">
+                                    <option value="*" selected>*</option>
+                                    {{ Facture_Numbers | CreateHTMLSelectOptions }}
                                 </select>
                             </div>
                         </div>

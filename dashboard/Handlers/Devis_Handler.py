@@ -19,7 +19,7 @@ from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 def H_Create_New_Devis(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Get All Deviss From DB And Work With them
     All_Deviss = APP_Created_Devis.objects.all()
     new_devis_number = GetNewNumber(APP_Created_Devis)
@@ -143,7 +143,7 @@ def H_Delete_Devis(requests, id):
 def H_Edit_Devis(requests, Devis_id):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     settings = APP_Settings.objects.all().first()
     # Context
     context = {'pagetitle': 'Edité Le Devis',
@@ -243,7 +243,7 @@ def H_Edit_Devis(requests, Devis_id):
 def H_List_All_Devis(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # context
     context = {'pagetitle': 'Lister Toutes Les Devis',
                'User': User, 'selecteditem': 'list-all-Deviss'}
@@ -260,7 +260,7 @@ def H_List_All_Devis(requests):
 def H_OpenPdf(requests, Devis_id):
     context = {'pagetitle': 'PDF Devis'}
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
     try:
         Devis = APP_Created_Devis.objects.get(id=Devis_id)
@@ -280,7 +280,7 @@ def H_OpenPdf(requests, Devis_id):
 @RequireLogin
 def H_Devis_To_Facture(requests,Devis_id):
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     Devis = get_object_or_404(APP_Created_Devis,id=Devis_id)
     Devis_items = APP_Devis_items.objects.filter(BelongToDevis=Devis)
     isAlreadyConverted = APP_Created_Facture.objects.filter(ConvertedFromDevis=Devis)

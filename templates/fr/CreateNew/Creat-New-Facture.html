@@ -107,16 +107,7 @@
                                 <div class="form-group">
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label>Cette facture est-elle payée?</label>
-                                    <select class="form-control" id='ispaid' name="ispaid" onchange="disabled_or_enabled_paiementmethod();">
-                                        <option>Non</option>
-                                        <option>Oui</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="avance" class="col-sm-6" style="display: none;">
+                            <div id="avance" class="col-sm-6">
                                 <div class="form-group">
                                     <label>Avance :</label>
                                     <input type="number" class="form-control" name="avance" value="0">
@@ -125,7 +116,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label>Méthode de paiement</label>
-                                    <select class="form-control" id='paiementmethod' name="paiementmethod" disabled>
+                                    <select class="form-control" id='paiementmethod' name="paiementmethod">
                                         <option value="-" disabled selected>Choisir Une Méthode</option>
                                         <option>Espèces</option>
                                         <option>Chèque</option>
@@ -142,20 +133,6 @@
                                 </div>
                             </div>
                         </div>
-                        <script>
-                            function disabled_or_enabled_paiementmethod() {
-                                var ispaid = document.getElementById('ispaid').value
-                                if (ispaid == 'Non') {
-                                    document.getElementById('avance').style = 'display:none'
-                                    document.getElementById('paiementmethod').disabled = true
-                                    RemoveInvalidClass([document.getElementById('paiementmethod')]);
-                                }
-                                else {
-                                    document.getElementById('paiementmethod').disabled = false
-                                    document.getElementById('avance').style = 'display:block'
-                                }
-                            }
-                        </script>
                         <div class="ButtnEnregister">
                             <center>
                                 <button id="savebttn" type="submit" class="btn btn-default btn-info" onclick="ValidInputNotEmpty('clientside');">

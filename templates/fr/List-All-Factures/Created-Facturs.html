@@ -69,6 +69,31 @@
                 </div>
                 <!-- /.card -->
                 </div>
+                <script>
+                    function SubmitThisForm(FormID) {
+                        var ID = "#"+FormID
+                        document.getElementById(FormID).childNodes[1].childNodes[0].style = 'display:inherit'
+                        $.ajax({
+                            type: "POST",
+                            url: document.getElementById(FormID).action, // get action from form
+                            data: $(ID).serialize(), // get all inputs from from and convert them to Json
+                            dataType: "json",
+                            encode: true,
+                            success: function (response) { // if respond == 200
+                                document.getElementById(FormID).childNodes[1].innerHTML = response.ButtonText
+                                console.log(document.getElementById(FormID).childNodes[1])
+                                document.getElementById(FormID).childNodes[1].className = response.css
+                                document.getElementById(FormID).childNodes[0].value = response.newStatus
+                                toastr.success(response.MSG, "demande réussie");
+                                document.getElementById(FormID).childNodes[1].childNodes[0].style = 'display:none'
+                            },
+                            error: function (response) {
+                                toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+                                document.getElementById(FormID).childNodes[1].childNodes[0].style = 'display:none'
+                            }
+                        })
+                    }
+                </script>
                 <form action="" method="POST" id='deleteform'>
                     {% csrf_token %}
                     <div class="modal fade" id="DeleteModal" role="dialog">
