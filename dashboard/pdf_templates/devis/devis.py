@@ -28,7 +28,7 @@ def DrawNotechPdf(DevisObj, DevisItemsObj, Company_City):
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
-    Date = DevisObj.Date.strftime('%Y-%m-%d')
+    Date = DevisObj.Date.strftime('%d-%m-%Y')
     Year = DevisObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
