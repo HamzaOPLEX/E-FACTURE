@@ -86,8 +86,22 @@ def FilterPageHandler_POST(requests):
                     non_paid.append(len(all_none_paid_factures))
                     month = month + 1
                 facture_table_data = generate_table_of_created_factures(showaction='Detail-Edit', factures=factures)
-                MSG = {'MSG': 'Search was done', 'PAID': paid,
-                    'NON_PAID': non_paid, 'FacturesData': facture_table_data}
+
+                TotalAvance = factures.aggregate(Sum('Avance'))['Avance__sum']
+                TotalHT = factures.aggregate(Sum('HT'))['HT__sum']
+                TotalTva = factures.aggregate(Sum('TVA'))['TVA__sum']
+                TotalTTC = factures.aggregate(Sum('TTC'))['TTC__sum']
+
+                TotalData = {
+                                "TotalAvance":TotalAvance,
+                                "TotalHT":TotalHT,
+                                "TotalTva":TotalTva,
+                                "TotalRest":TotalRest,
+                                "TotalTTC":TotalTTC
+                            }
+
+
+                MSG = {'MSG': 'Search was done', 'PAID': paid,'NON_PAID': non_paid, 'FacturesData': facture_table_data}
                 return JsonResponse(MSG,status=200)
 
             if not is_OK: 

@@ -145,6 +145,20 @@
                             <tbody>
 
                             </tbody>
+                            <tfoot>
+                                <tr style=" background: #1d637a; color: white; text-align: center;">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th id="total_avance"></th>
+                                    <th id="total_reset"></th>
+                                    <th id="total_ht"></th>
+                                    <th id="total_tva"></th>
+                                    <th id="total_ttc"></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -196,6 +210,15 @@
         tr {
             text-align: center;
         }
+    .ClientTable          { overflow: auto; height: 100px; }
+    .ClientTable thead th { position: sticky; top: 0; z-index: 1; }
+    .ClientTable tfoot th { position: sticky; bottom: 0; z-index: 1; }
+
+    /* Just common table stuff. Really. */
+    table  { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px 16px; }
+    th     { background: #1d637a;top: -20px !important; }
+    tfoot>tr>th{bottom: -20px !important;}
 </style>
 <script>
     function ChartHandler(paid, non_paid) {
