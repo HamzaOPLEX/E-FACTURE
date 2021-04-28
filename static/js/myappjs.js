@@ -9,8 +9,8 @@ function AddNewClient() {
 // on submit form use Ajax
 $('#AddNewClientForm').submit(function (e) {
     e.preventDefault() // prevat form from reloading page
-    document.getElementById('IconPlus').style = 'display:none'
-    document.getElementById('IconSpin').style = 'display:content'
+    document.querySelector('div.AddClientModal,div.modal-footer > button > i#IconPlus').style = 'display:none'
+    document.querySelector('div.AddClientModal,div.modal-footer > button > span#IconSpin').style = 'display:content'
     $.ajax({
         type: "POST",
         url: this.action, // get action from form
@@ -22,14 +22,14 @@ $('#AddNewClientForm').submit(function (e) {
             var ClientName = response.ClientData.Client_Name.toUpperCase() + ':' + response.ClientData.City
             $("#ClientID").append(new Option(ClientName, response.CLIENT_ID));
             $("#ClientID").val(response.CLIENT_ID)
-            document.getElementById('IconPlus').style = 'display:content'
-            document.getElementById('IconSpin').style = 'display:none'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > i#IconPlus').style = 'display:content'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > span#IconSpin').style = 'display:none'
             $('#AddClientModal').modal('hide');
             document.getElementById("AddNewClientForm").reset();
         },
         error: function (response) {
-            document.getElementById('IconPlus').style = 'display:content'
-            document.getElementById('IconSpin').style = 'display:none'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > i#IconPlus').style = 'display:content'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > span#IconSpin').style  = 'display:none'
             toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
         }
     })
