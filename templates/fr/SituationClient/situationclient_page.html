@@ -292,7 +292,6 @@
 
     }
 
-
     $('#GetClientInfoForm').submit(function (e) {
         e.preventDefault() // prevat form from reloading page
         document.getElementById('IconPlus').style = 'display:none'
@@ -313,9 +312,13 @@
                 var FacturesData = response.FacturesData
                 var table = document.getElementsByClassName('ClientTable')[0].getElementsByTagName('tbody')[0];
                 var c = 0
+                var Rest = 0
                 for(i in FacturesData){
                     var new_row = table.insertRow(i)
                     var ROW = FacturesData[i]
+                    theRest = ROW.reste.replace('TTC','')
+                    theRest = ROW.reste.replace('HT', '')
+                    Rest += parseFloat(theRest.trim())
                     for(j in ROW){
                         new_cell = new_row.insertCell(c)
                         new_cell.innerHTML = ROW[j]
@@ -323,6 +326,12 @@
                     }
                     c = 0
                 }
+                document.getElementById('total_reset').innerText = Rest
+                document.getElementById('total_avance').innerText = response.TotalData.TotalAvance
+                document.getElementById('total_ht').innerText = response.TotalData.TotalHT
+                document.getElementById('total_tva').innerText = response.TotalData.TotalTva
+                document.getElementById('total_ttc').innerText = response.TotalData.TotalTTC
+
 
                 toastr.info(response.MSG);
             },
