@@ -454,7 +454,13 @@ function ValidInputNotEmpty(modaltype) {
         var D = document.getElementById('Date')
 
         var M = document.getElementById('paiementmethod')
-        var list_of_inputs = [F, C, D, M]
+        if (M == null){
+            var list_of_inputs = [F, C, D]
+        }
+        else if (M != null){
+            var list_of_inputs = [F, C, D, M]
+
+        }
 
         valid(list_of_inputs, modaltype);
     }
