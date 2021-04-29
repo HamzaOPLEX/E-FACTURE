@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
+from django.db.models import Sum
 
 @RequireLogin
 def FilterPageHandler_GET(requests):
@@ -91,17 +92,13 @@ def FilterPageHandler_POST(requests):
                 TotalHT = factures.aggregate(Sum('HT'))['HT__sum']
                 TotalTva = factures.aggregate(Sum('TVA'))['TVA__sum']
                 TotalTTC = factures.aggregate(Sum('TTC'))['TTC__sum']
-
                 TotalData = {
                                 "TotalAvance":TotalAvance,
                                 "TotalHT":TotalHT,
                                 "TotalTva":TotalTva,
-                                "TotalRest":TotalRest,
                                 "TotalTTC":TotalTTC
                             }
-
-
-                MSG = {'MSG': 'Search was done', 'PAID': paid,'NON_PAID': non_paid, 'FacturesData': facture_table_data}
+                MSG = {'MSG': 'Search was done', 'PAID': paid,'NON_PAID': non_paid, 'FacturesData': facture_table_data,'TotalData':TotalData}
                 return JsonResponse(MSG,status=200)
 
             if not is_OK: 
