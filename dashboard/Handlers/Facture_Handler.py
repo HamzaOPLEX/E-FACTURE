@@ -19,7 +19,7 @@ from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 def H_Create_New_Facture(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Get All Factures From DB And Work With them
     All_Factures_ID = [facture.number for facture in APP_Created_Facture.objects.all()]
     All_Factures = APP_Created_Facture.objects.all()
@@ -48,8 +48,12 @@ def H_Create_New_Facture(requests):
         facture_number = requests.POST['facture_number']
         client = int(requests.POST['client_name'])
         date = requests.POST['date']
-        isPaid = requests.POST['ispaid']
+        paid_method = requests.POST['paiementmethod']
         TTTCorHT = requests.POST['TTTCorHT']
+        try :
+            avance = round(float(requests.POST['avance']),2)
+        except Exception:
+            avance = 0
         # check if len(datatable)!=0 and all len() rows in that table != 4
         if len(datatable) != 0:
             datatable_status = 'not valid'
@@ -63,19 +67,8 @@ def H_Create_New_Facture(requests):
             datatable_status = 'not valid'
         # Check All Required POST Data
         if datatable and facture_number and client and client != '-' and date and datatable_status == 'valid':
-            if isPaid == 'Oui':
-                paid_method = requests.POST['paiementmethod']
-                try :
-                    avance = round(float(requests.POST['avance']),2)
-                except Exception:
-                    avance = 0
-                if paid_method not in ['Espèces', 'Chèque']:
-                    messages.error(requests, "paid method erreur")
-                    return redirect('/create-new-facture/')
-            else:
+            if paid_method not in ['Espèces', 'Chèque']:
                 paid_method = 'aucun'
-                avance = 0
-                isPaid = 'Non'
             # Check if facture_number already Exist
             all_facture_numbers = [n.number for n in All_Factures]
             if int(facture_number) in all_facture_numbers:
@@ -92,7 +85,7 @@ def H_Create_New_Facture(requests):
                     Client=CLIENT,
                     Date=date,
                     CreatedBy=User,
-                    isPaid=isPaid,
+                    isPaid='Non',
                     Avance=avance,
                     Paiment_Mathod=paid_method,
                     HT=HT,
@@ -100,17 +93,20 @@ def H_Create_New_Facture(requests):
                     TTC=TTC
                 )
                 # Turn Json Table Data into Python Dict-
+                ITEMS = []
                 for data in datatable:
                     # For item in DataTable Create item
                     PT = data[list(data.keys())[3]]
                     HT = HT + float(PT)
-                    APP_Facture_items.objects.create(
+                    theItem = APP_Facture_items(
                         Qs=data[list(data.keys())[0]],
                         DESIGNATION=data[list(data.keys())[1]],
                         PU=data[list(data.keys())[2]],
                         PT=PT,
                         BelongToFacture=facture
                     )
+                    ITEMS.append(theItem)
+                APP_Facture_items.objects.bulk_create(ITEMS)
                 TVA = HT / 100 * float(settings.Company_TVATAUX)
                 TTC = HT + TVA
                 facture.HT = HT
@@ -168,7 +164,7 @@ def H_Delete_Facture(requests, id):
 def H_Edit_Facture(requests, facture_id):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Context
     context = {'pagetitle': 'Edité La facture',
             'User': User, 'selecteditem': 'list-all-factures'}
@@ -208,7 +204,11 @@ def H_Edit_Facture(requests, facture_id):
             datatable = json.loads(requests.POST['datatable'])['myrows']
             ClientID = int(requests.POST['client_name'])
             date = requests.POST['date']
-            isPaid = requests.POST['ispaid']
+            paid_method = requests.POST['paiementmethod']
+            try :
+                avance = round(float(requests.POST['avance']),2)
+            except Exception:
+                avance = 0
             TTTCorHT = requests.POST['TTTCorHT']
             # check if len(datatable)!=0 and all len() rows in that table != 4
             if len(datatable) != 0:
@@ -223,23 +223,11 @@ def H_Edit_Facture(requests, facture_id):
                 datatable_status = 'not valid'
             # Check if all required values are in POST
             if datatable and ClientID and ClientID != '-' and date and datatable_status == 'valid':
-                if isPaid == 'Oui':
-                    paid_method = requests.POST['paiementmethod']
-                    try :
-                        avance = round(float(requests.POST['avance']),2)
-                    except Exception:
-                        avance = 0
-                    if paid_method not in ['Espèces', 'Chèque']:
-                        messages.error(requests, "paid method erreur")
-                        return redirect('/create-new-facture/')
-                else:
+                if paid_method not in ['Espèces', 'Chèque']:
                     paid_method = 'aucun'
-                    avance = 0
-                    isPaid = 'Non'
                 client = get_object_or_404(APP_Clients,id=ClientID)
                 Facture.ClientID = client
                 Facture.Date = date
-                Facture.isPaid = isPaid
                 Facture.Paiment_Mathod = paid_method
                 Facture.Avance = avance
                 actiondetail = f'{User.username} editer une facture avec le numéro {Facture.number} en {Fix_Date(str(datetime.today()))}'
@@ -251,19 +239,22 @@ def H_Edit_Facture(requests, facture_id):
                 )
                 APP_Facture_items.objects.filter(BelongToFacture=Facture).delete()
                 HT = 0
+                ITEMS = []
                 for data in datatable:
                     try:
                         PT = data[list(data.keys())[3]]
                         HT = HT + float(PT)
-                        APP_Facture_items.objects.create(
+                        theItem = APP_Facture_items(
                             Qs=data[list(data.keys())[0]],
                             DESIGNATION=data[list(data.keys())[1]],
                             PU=data[list(data.keys())[2]],
                             PT=PT,
                             BelongToFacture=Facture
-                        )                    
+                        )
+                        ITEMS.append(theItem)                    
                     except Exception as err:
                         pass
+                APP_Facture_items.objects.bulk_create(ITEMS)
                 TVA = HT / 100 * float(settings.Company_TVATAUX)
                 TTC = HT + TVA
                 Facture.HT = HT
@@ -283,7 +274,7 @@ def H_Edit_Facture(requests, facture_id):
 def H_List_All_Factures(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # context
     context = {'pagetitle': 'Lister Toutes Les facture',
             'User': User, 'selecteditem': 'list-all-factures'}
@@ -301,7 +292,7 @@ def H_List_All_Factures(requests):
 def H_OpenPdf(requests, facture_id):
     context = {'pagetitle': 'PDF Facture'}
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
     try:
         Facture = APP_Created_Facture.objects.get(id=facture_id)
@@ -316,3 +307,23 @@ def H_OpenPdf(requests, facture_id):
             return HTTP_404(requests, context)
     except APP_Created_Facture.DoesNotExist:
         return HTTP_404(requests, context)
+
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+@RequirePermission
+def UpdateFactureStatus(requests,id):
+    userid = requests.session['session_id']
+    User = get_object_or_404(APP_User, id=userid)
+    Facture = get_object_or_404(APP_Created_Facture,id=id)
+    if requests.method == 'POST':
+        Status = requests.POST['status']
+        if Status == 'Oui':
+            Facture.isPaid = 'Non'
+            Facture.save()
+            return JsonResponse({'css':'btn btn-danger btn-sm',"ButtonText":"""<span id='IconSpin' class="spinner-border spinner-border-sm" style='display:none'></span> Non Payée""",'newStatus':'Non'})
+        elif Status == 'Non':
+            Facture.isPaid = 'Oui'
+            Facture.save()
+            return JsonResponse({'css':'btn btn-success btn-sm',"ButtonText":"""<span id='IconSpin' class="spinner-border spinner-border-sm" style='display:none'></span> Payée""",'newStatus':'Oui'})

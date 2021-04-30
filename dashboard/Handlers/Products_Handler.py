@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 def ManageProducts(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Context
     context = {'pagetitle': 'Gérer Les Produits',
                'User': User, 'selecteditem': 'settings'}

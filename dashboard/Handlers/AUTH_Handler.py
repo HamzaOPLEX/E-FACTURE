@@ -5,7 +5,6 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib import messages
 from django.shortcuts import redirect, render, get_object_or_404
 
-
 # Function Of Decorator That Will Check If User is Loged in  if not redirect him to login
 def RequireLogin(viewfunc):
     def Check_User_Login(*args, **kwargs):
@@ -14,7 +13,7 @@ def RequireLogin(viewfunc):
             try:
                 userid = requests.session['session_id']
                 Userstatus = get_object_or_404(
-                    APP_User.objects, id=userid).account_status
+                    APP_User, id=userid).account_status
             except KeyError:
                 requests.session.flush()
                 messages.info(requests, 'Votre session a expiré veuillez vous connecter pour continuer')
@@ -37,7 +36,7 @@ def RequirePermission(viewfunc):
         if requests.session.session_key and requests.session.exists(requests.session.session_key):
             try:
                 userid = requests.session['session_id']
-                User = get_object_or_404(APP_User.objects, id=userid)
+                User = get_object_or_404(APP_User, id=userid)
             except KeyError:
                 requests.session.flush()
                 messages.info(requests, 'Votre session a expiré veuillez vous connecter pour continuer')
@@ -99,3 +98,11 @@ def Logout(requests):
     if requests.session.get('session_id'):
         requests.session.flush()
     return redirect('/login/')
+
+
+@RequireLogin
+def HTTP_403(request, context=None, *args, **kwargs):
+    settings = APP_Settings.objects.all().first()
+    response = render(request, str(settings.APP_lang)+"/ErrorPages/403.html", context=context)
+    response.status_code = 403
+    return response

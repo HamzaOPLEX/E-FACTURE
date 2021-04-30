@@ -12,7 +12,7 @@ from dashboard.APPfunctions.APPfunctions import Fix_Date
 def Profile(requests):
     context = {'pagetitle': 'User Profile'}
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     if requests.method == "GET":
         settings = APP_Settings.objects.all().first()
         context['setting'] = settings
@@ -26,7 +26,7 @@ def Profile(requests):
 def Delete_My_Acount(requests):
     context = {'pagetitle': 'Delete My Account'}
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
     if requests.method == "POST":
         password = requests.POST['password']
@@ -45,7 +45,7 @@ def Delete_My_Acount(requests):
 @RequireLogin
 def Change_Password(requests):
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     if requests.method == "POST":
         oldpwd = requests.POST['oldpwd']
         newpwd = requests.POST['newpwd']

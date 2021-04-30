@@ -133,15 +133,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
 
     StatusTableData = []
 
-    # is Paid and Paiment Method
-    if FactureObj.isPaid == 'Oui':
-        ispaid_row = ['Status','Payée']
-        PaimentMethod_row = ['Méthode De Paiement',FactureObj.Paiment_Mathod]
-        StatusTableData.append(ispaid_row)
-        StatusTableData.append(PaimentMethod_row)
-    elif FactureObj.isPaid == 'Non':
-        ispaid_row = ['Statut','Non Payée']
-        StatusTableData.append(ispaid_row)
+    PaimentMethod_row = ['Méthode De Paiement',FactureObj.Paiment_Mathod]
+    StatusTableData.append(PaimentMethod_row)
 
 
 
@@ -187,6 +180,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         )
         t.setStyle(GRID_STYLE)
         return t
+    from reportlab.lib.units import mm
 
     def TOTAL_table(tabledata):
         colwidths = (60, 60)
@@ -203,6 +197,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     def DrawPageImages(canvas, doc):
         canvas.saveState()
         canvas.drawImage(str(BASE_DIR)+"/invoice-bg.png", 0, 0, 600, 840)
+        canvas.setFont("Helvetica", 10)
+        canvas.drawRightString(205*mm, 5*mm, 'Page '+str(canvas.getPageNumber()))
         canvas.restoreState()
 
     #create the table for our document

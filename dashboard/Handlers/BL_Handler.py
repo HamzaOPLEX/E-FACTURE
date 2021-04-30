@@ -19,7 +19,7 @@ from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 def H_Create_New_BL(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Get All BLs From DB And Work With them
     All_BLs = APP_Created_BL.objects.all()
     new_bl_number = GetNewNumber(APP_Created_BL)
@@ -83,18 +83,21 @@ def H_Create_New_BL(requests):
                     action_detail=actiondetail,
                 )
                 # Turn Json Table Data into Python Dict
+                ITEMS = []
                 for data in datatable:
                     # For item in DataTable Create item
                     HT = HT + float(data[list(data.keys())[3]])
-                    APP_BL_items.objects.create(
+                    theItem = APP_BL_items(
                         Qs=data[list(data.keys())[0]],
                         DESIGNATION=data[list(data.keys())[1]],
                         PU=data[list(data.keys())[2]],
                         PT=data[list(data.keys())[3]],
                         BelongToBL=BL,
                     )
+                    ITEMS.append(theItem)
                 BL.HT = HT
                 BL.save()
+                APP_BL_items.objects.bulk_create(ITEMS)
                 MSG = f"Le BL {BL.number} a été crée avec succès"
                 return JsonResponse({'MSG':MSG,'ID':BL.id,'ROOT_URL':'/list-all-bl/'}, status=200)
         else:
@@ -142,7 +145,7 @@ def H_Edit_BL(requests, BL_id):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
     settings = APP_Settings.objects.all().first()
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # Context
     context = {'pagetitle': 'Edité Le BL',
                'User': User, 'selecteditem': 'list-all-BLs'}
@@ -208,21 +211,24 @@ def H_Edit_BL(requests, BL_id):
                 )
                 APP_BL_items.objects.filter(BelongToBL=BL).delete()
                 HT = 0
+                ITEMS = []
                 for data in datatable:
                     try:
                         PT = data[list(data.keys())[3]]
                         HT = HT + float(PT)
-                        APP_BL_items.objects.create(
+                        theItem = APP_BL_items(
                             Qs=data[list(data.keys())[0]],
                             DESIGNATION=data[list(data.keys())[1]],
                             PU=data[list(data.keys())[2]],
                             PT=data[list(data.keys())[3]],
                             BelongToBL=BL
                         )
+                        ITEMS.append(theItem)
                     except Exception as err:
                         pass
                 BL.HT = HT
                 BL.save()
+                APP_BL_items.objects.bulk_create(ITEMS)
                 MSG = f"Le BL {BL.number} a été édité avec succes"
                 return JsonResponse({'MSG':MSG,'ID':BL.id,'ROOT_URL':'/list-all-bl/'}, status=200)
             else:
@@ -238,7 +244,7 @@ def H_List_All_BL(requests):
     # Get Loged User Id from Session_id
     userid = requests.session['session_id']
     settings = APP_Settings.objects.all().first()
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     # context
     context = {'pagetitle': 'Lister Toutes Les BL',
                'User': User, 'selecteditem': 'list-all-BLs'}
@@ -266,7 +272,7 @@ def H_List_All_BL(requests):
 def H_OpenPdf(requests, BL_id):
     context = {'pagetitle': 'PDF BL'}
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     context['User'] = User
     try:
         BL = APP_Created_BL.objects.get(id=BL_id)
@@ -286,7 +292,7 @@ def H_OpenPdf(requests, BL_id):
 @RequireLogin
 def BLsTOFacture(requests):
     userid = requests.session['session_id']
-    User = get_object_or_404(APP_User.objects, id=userid)
+    User = get_object_or_404(APP_User, id=userid)
     if requests.method == 'POST':
         selected_bls = requests.POST['SELECTEDBL']
         selected_bls = selected_bls.split(',')

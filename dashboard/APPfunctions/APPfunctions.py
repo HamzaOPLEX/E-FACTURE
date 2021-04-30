@@ -113,12 +113,12 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         TTC = facture.TTC
         D = {}
         D['N'] = facture_number
-        D['client'] = client
+        D['client'] = f'{client}<br>{facture.Client.ICE}'
         D['date'] = date
         if isPaid == 'Oui':
-            D['status'] = f'<span class="badge badge-success" style="font-size: 14px;">Payée</span>'
+            D['status'] = f'''<form id="StatusForm{facture.id}" method="POST" action="/facture-status/ajax/update/{facture.id}"><input type="hidden" name="status" value="Oui"><button class="btn btn-success btn-sm" type="button"  onclick="SubmitThisForm('StatusForm{facture.id}')" style="font-size: 14px;"><span id='IconSpin' class="spinner-border spinner-border-sm" style='display:none'></span> Payée</button></form>'''
         elif isPaid == 'Non':
-            D['status'] = f'<span class="badge badge-danger" style="font-size: 14px;">Non Payée</span>'
+            D['status'] = f'''<form id="StatusForm{facture.id}" method="POST" action="/facture-status/ajax/update/{facture.id}"><input type="hidden" name="status" value="Non"><button class="btn btn-danger btn-sm" type="button" onclick="SubmitThisForm('StatusForm{facture.id}')" style="font-size: 14px;" ><span id='IconSpin' class="spinner-border spinner-border-sm" style='display:none'></span> Non Payée</button></form>'''
         D['avance'] = Avance
         if facture.TTCorHT == 'TTC':
             D['reste'] = str(round(TTC - Avance,2))+' TTC'
@@ -127,6 +127,7 @@ def generate_table_of_created_factures(showaction='all', factures=''):
         D['HT'] = round(HT,2)
         D['TVA'] = round(TVA,2)
         D['TTC'] = round(TTC,2)
+
         if showaction == 'all':
             D['Action'] = f'''<a class="btn btn-info btn-sm" href="/list-all-facturs/edit/{facture.id}" title="Edit" data-toggle="tooltip">
                                     <i class="fas fa-pencil-alt"></i>\n</a> 

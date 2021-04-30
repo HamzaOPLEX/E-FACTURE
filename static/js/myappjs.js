@@ -9,8 +9,8 @@ function AddNewClient() {
 // on submit form use Ajax
 $('#AddNewClientForm').submit(function (e) {
     e.preventDefault() // prevat form from reloading page
-    document.getElementById('IconPlus').style = 'display:none'
-    document.getElementById('IconSpin').style = 'display:content'
+    document.querySelector('div.AddClientModal,div.modal-footer > button > i#IconPlus').style = 'display:none'
+    document.querySelector('div.AddClientModal,div.modal-footer > button > span#IconSpin').style = 'display:content'
     $.ajax({
         type: "POST",
         url: this.action, // get action from form
@@ -22,14 +22,14 @@ $('#AddNewClientForm').submit(function (e) {
             var ClientName = response.ClientData.Client_Name.toUpperCase() + ':' + response.ClientData.City
             $("#ClientID").append(new Option(ClientName, response.CLIENT_ID));
             $("#ClientID").val(response.CLIENT_ID)
-            document.getElementById('IconPlus').style = 'display:content'
-            document.getElementById('IconSpin').style = 'display:none'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > i#IconPlus').style = 'display:content'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > span#IconSpin').style = 'display:none'
             $('#AddClientModal').modal('hide');
             document.getElementById("AddNewClientForm").reset();
         },
         error: function (response) {
-            document.getElementById('IconPlus').style = 'display:content'
-            document.getElementById('IconSpin').style = 'display:none'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > i#IconPlus').style = 'display:content'
+            document.querySelector('div.AddClientModal,div.modal-footer > button > span#IconSpin').style  = 'display:none'
             toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
         }
     })
@@ -391,12 +391,9 @@ function ValidInputNotEmpty(modaltype) {
                         $('#ClientID').val('-');
                         InvalidInputs.push(document.getElementById('ClientID'))
                     }
-                    var isPaid = document.getElementById('ispaid')
-                    if (isPaid != null){
-                        if (document.getElementById('ispaid').value == 'Oui' && theinput.id == 'paiementmethod') {
-                            $('#paiementmethod').val('-')
-                            InvalidInputs.push(document.getElementById('paiementmethod'))
-                        }
+                    if (theinput.id == 'paiementmethod') {
+                        $('#paiementmethod').val('-')
+                        InvalidInputs.push(document.getElementById('paiementmethod'))
                     }
                 }
                 if (IDs.includes(theinput.id) == true && theinput.value !== '-') {
@@ -457,12 +454,12 @@ function ValidInputNotEmpty(modaltype) {
         var D = document.getElementById('Date')
 
         var M = document.getElementById('paiementmethod')
-        var isPaid = document.getElementById('ispaid')
-        if (M == null && isPaid == null) {
+        if (M == null){
             var list_of_inputs = [F, C, D]
         }
-        else {
+        else if (M != null){
             var list_of_inputs = [F, C, D, M]
+
         }
 
         valid(list_of_inputs, modaltype);
@@ -554,3 +551,26 @@ jQuery(document).ready(function ($) {
 
 
 
+function SubmitThisForm(FormID) {
+    var ID = "#" + FormID
+    document.getElementById(FormID).childNodes[1].childNodes[0].style = 'display:inherit'
+    $.ajax({
+        type: "POST",
+        url: document.getElementById(FormID).action, // get action from form
+        data: $(ID).serialize(), // get all inputs from from and convert them to Json
+        dataType: "json",
+        encode: true,
+        success: function (response) { // if respond == 200
+            document.getElementById(FormID).childNodes[1].innerHTML = response.ButtonText
+            console.log(document.getElementById(FormID).childNodes[1])
+            document.getElementById(FormID).childNodes[1].className = response.css
+            document.getElementById(FormID).childNodes[0].value = response.newStatus
+            toastr.success(response.MSG, "demande réussie");
+            document.getElementById(FormID).childNodes[1].childNodes[0].style = 'display:none'
+        },
+        error: function (response) {
+            toastr.error(response.responseJSON.ERR_MSG, "demande infructueuse");
+            document.getElementById(FormID).childNodes[1].childNodes[0].style = 'display:none'
+        }
+    })
+}

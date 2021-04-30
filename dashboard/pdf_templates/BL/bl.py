@@ -28,7 +28,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, Company_City):
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
-    Date = BLObj.Date.strftime('%Y-%m-%d')
+    Date = BLObj.Date.strftime('%d-%m-%Y')
     Year = BLObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
@@ -190,11 +190,12 @@ def DrawNotechPdf(BLObj, BLItemsObj, Company_City):
                str(item.PU).strip(), str(item.PT).strip()]
         tabledata.append(row)
 
-    tabledata = list(chunks(tabledata,27))
+    MAX_ROWS = 30
 
+    tabledata = list(chunks(tabledata,MAX_ROWS))
     for chunk in tabledata :
-        if len(chunk) <= 27:
-            emptyrows_needed = 27-int(len(chunk))
+        if len(chunk) <= MAX_ROWS:
+            emptyrows_needed = MAX_ROWS-int(len(chunk))
             for i in range(emptyrows_needed):
                 empty_row = ['', '', '', '']
                 chunk.append(empty_row)
@@ -208,8 +209,8 @@ def DrawNotechPdf(BLObj, BLItemsObj, Company_City):
         if tabledata.index(chunk) == tabledata.index(tabledata[-1]):
             story.append(TOTAL_table(TOTALtableData,))
             story.append(Spacer(1, .25*inch))
-            Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
-            story.append(Paragraph(Money_msg,FooterMessage))
+            # Money_msg = f"Arrêté le Présente  facture  la somme de {TOTALletter}  TTC"
+            # story.append(Paragraph(Money_msg,FooterMessage))
 
         story.append(PageBreak())
 

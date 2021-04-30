@@ -19,7 +19,17 @@
                             <div class="form-group">
                                 <label>Client</label>                                
                                 <select id="ClientName" name="ClientID" class="form-control" def style="width: 250px;">
+                                    <option value="*" selected>*</option>
                                     {{ selectbody | CreateHTMLSelectOptionsWith_ID }}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Numéro De Facture</label>
+                                <select id="number" name="number" class="form-control" style="width: 120px;">
+                                    <option value="*" selected>*</option>
+                                    {{ Facture_Numbers | CreateHTMLSelectOptions }}
                                 </select>
                             </div>
                         </div>
@@ -135,6 +145,20 @@
                             <tbody>
 
                             </tbody>
+                            <tfoot>
+                                <tr style=" background: #1d637a; color: white; text-align: center;">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th id="total_avance"></th>
+                                    <th id="total_reset"></th>
+                                    <th id="total_ht"></th>
+                                    <th id="total_tva"></th>
+                                    <th id="total_ttc"></th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -186,6 +210,15 @@
         tr {
             text-align: center;
         }
+    .ClientTable          { overflow: auto; height: 100px; }
+    .ClientTable thead th { position: sticky; top: 0; z-index: 1; }
+    .ClientTable tfoot th { position: sticky; bottom: 0; z-index: 1; }
+
+    /* Just common table stuff. Really. */
+    table  { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px 16px; }
+    th     { background: #1d637a;top: -20px !important; }
+    tfoot>tr>th{bottom: -20px !important;}
 </style>
 <script>
     function ChartHandler(paid, non_paid) {
@@ -259,7 +292,6 @@
 
     }
 
-
     $('#GetClientInfoForm').submit(function (e) {
         e.preventDefault() // prevat form from reloading page
         document.getElementById('IconPlus').style = 'display:none'
@@ -280,9 +312,13 @@
                 var FacturesData = response.FacturesData
                 var table = document.getElementsByClassName('ClientTable')[0].getElementsByTagName('tbody')[0];
                 var c = 0
+                var Rest = 0
                 for(i in FacturesData){
                     var new_row = table.insertRow(i)
                     var ROW = FacturesData[i]
+                    theRest = ROW.reste.replace('TTC','')
+                    theRest = ROW.reste.replace('HT', '')
+                    Rest += parseFloat(theRest.trim())
                     for(j in ROW){
                         new_cell = new_row.insertCell(c)
                         new_cell.innerHTML = ROW[j]
@@ -290,6 +326,12 @@
                     }
                     c = 0
                 }
+                document.getElementById('total_reset').innerText = Rest
+                document.getElementById('total_avance').innerText = response.TotalData.TotalAvance
+                document.getElementById('total_ht').innerText = response.TotalData.TotalHT
+                document.getElementById('total_tva').innerText = response.TotalData.TotalTva
+                document.getElementById('total_ttc').innerText = response.TotalData.TotalTTC
+
 
                 toastr.info(response.MSG);
             },
