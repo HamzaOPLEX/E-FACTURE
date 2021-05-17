@@ -140,6 +140,8 @@ class APP_Created_Facture(models.Model):
     choose_bywhatpaid = (
         ('Espèces', 'Espèces'),
         ('Chèque', 'Chèque'),
+        ('Letter', 'Letter'),
+        ('Virement', 'Virement'),
     )
     choose_ispaid = (
         ('Oui', 'Oui'),
