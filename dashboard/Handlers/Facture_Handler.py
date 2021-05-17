@@ -223,7 +223,7 @@ def H_Edit_Facture(requests, facture_id):
                 datatable_status = 'not valid'
             # Check if all required values are in POST
             if datatable and ClientID and ClientID != '-' and date and datatable_status == 'valid':
-                if paid_method not in ['Espèces', 'Chèque']:
+                if paid_method not in ['Espèces', 'Chèque','Virement','Lettre']:
                     paid_method = 'aucun'
                 client = get_object_or_404(APP_Clients,id=ClientID)
                 Facture.ClientID = client
