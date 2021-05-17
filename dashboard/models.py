@@ -91,7 +91,7 @@ class APP_Created_Devis(models.Model):
 
 
 class APP_Devis_items(models.Model):
-    Qs = models.IntegerField(default=0)
+    Qs = models.FloatField(default=0)
     DESIGNATION = models.TextField(default=None)
     PU = models.FloatField(default=0)
     PT = models.FloatField(default=0)
@@ -121,7 +121,7 @@ class APP_Created_BL(models.Model):
 
 
 class APP_BL_items(models.Model):
-    Qs = models.IntegerField(default=0)
+    Qs = models.FloatField(default=0)
     DESIGNATION = models.TextField(default=None)
     PU = models.FloatField(default=0)
     PT = models.FloatField(default=0)
@@ -177,7 +177,7 @@ class APP_Created_Facture(models.Model):
             self.Avance = 0
 
 class APP_Facture_items(models.Model):
-    Qs = models.IntegerField(default=0)
+    Qs = models.FloatField(default=0)
     DESIGNATION = models.TextField(default=None)
     PU = models.FloatField(default=0)
     PT = models.FloatField(default=0)
