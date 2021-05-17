@@ -133,12 +133,12 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
 
     StatusTableData = []
     if FactureObj.Paiment_Mathod == 'Lettre' : 
-        method = 'lettre de change'
+        method = 'Lettre De Change'
     elif FactureObj.Paiment_Mathod == 'Virement':
-        method = 'Virement bancaire'
+        method = 'Virement Bancaire'
     else :
         method = FactureObj.Paiment_Mathod
-    PaimentMethod_row = ['Méthode De Paiement',method]
+    PaimentMethod_row = ['mode de paiement',method]
     StatusTableData.append(PaimentMethod_row)
 
 
@@ -157,7 +157,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         return t
 
     def Status_Table(tabledata):
-        colwidths = (122, 60)
+        colwidths = (90, 100)
         t = Table(tabledata, colwidths)
         t.hAlign = 'LEFT'
         GRID_STYLE = TableStyle(
