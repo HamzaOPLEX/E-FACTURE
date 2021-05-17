@@ -67,7 +67,7 @@ def H_Create_New_Facture(requests):
             datatable_status = 'not valid'
         # Check All Required POST Data
         if datatable and facture_number and client and client != '-' and date and datatable_status == 'valid':
-            if paid_method not in ['Espèces', 'Chèque']:
+            if paid_method not in ['Espèces', 'Chèque','Virement','Lettre']:
                 paid_method = 'aucun'
             # Check if facture_number already Exist
             all_facture_numbers = [n.number for n in All_Factures]
