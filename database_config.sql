@@ -5,5 +5,5 @@ ALTER TABLE dashboard_app_products CONVERT TO CHARACTER SET utf8 COLLATE utf8_ge
 ALTER TABLE dashboard_app_devis_items CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE dashboard_app_bl_items CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE dashboard_app_facture_items CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE dashboard_app_warnning CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE dashboard_app_warning CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE dashboard_app_history CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
