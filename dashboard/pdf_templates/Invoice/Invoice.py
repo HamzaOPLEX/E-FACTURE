@@ -245,7 +245,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         tabledata.append(row)
 
 
-    ROWS = 27
+    ROWS = 25
 
     tabledata = list(chunks(tabledata,ROWS))
 
