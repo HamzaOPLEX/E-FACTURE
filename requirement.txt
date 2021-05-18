@@ -5,3 +5,5 @@ reportlab==3.5.59
 dj_static
 colour
 openpyxl
+arabic_reshaper
+python-bidi

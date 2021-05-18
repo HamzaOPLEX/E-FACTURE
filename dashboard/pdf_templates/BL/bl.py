@@ -28,6 +28,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, Company_City):
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
+    GLOBAL_CONFIG_PATH = str(str(BASE_DIR.parent)+"/global_config/")
     Date = BLObj.Date.strftime('%d-%m-%Y')
     Year = BLObj.Date.strftime('%Y')
     tabledata = []
@@ -138,7 +139,7 @@ def DrawNotechPdf(BLObj, BLItemsObj, Company_City):
 
     def DrawPageImages(canvas, doc):
         canvas.saveState()
-        canvas.drawImage(str(BASE_DIR)+"/invoice-bg.png", 0, 0, 600, 840)
+        canvas.drawImage(GLOBAL_CONFIG_PATH+"invoice-bg.png", 0, 0, 600, 840)
         canvas.restoreState()
 
     #create the table for our document

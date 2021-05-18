@@ -2,6 +2,7 @@ import os
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Table, SimpleDocTemplate, TableStyle, Spacer, Paragraph,PageBreak
+from reportlab.pdfbase import pdfmetrics
 from dashboard.models import APP_Settings
 from reportlab import platypus
 from reportlab.lib import colors
@@ -9,6 +10,10 @@ from reportlab.lib.units import inch, cm
 from pathlib import Path
 from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
+from reportlab.pdfbase.ttfonts import TTFont
+import arabic_reshaper
+from bidi.algorithm import get_display
+
 import textwrap
 from colour import Color
 
@@ -29,15 +34,18 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
 
     story = []
     BASE_DIR = Path(__file__).resolve().parent
+    GLOBAL_CONFIG_PATH = str(str(BASE_DIR.parent)+"/global_config/")
     Date = FactureObj.Date.strftime('%d-%m-%Y')
     Year = FactureObj.Date.strftime('%Y')
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
-
+    pdfmetrics.registerFont(TTFont('Arabic', GLOBAL_CONFIG_PATH+"Arabic.ttf"))
     styles = getSampleStyleSheet()
+
+
     styles.add(ParagraphStyle(name='ClientSide',
                               alignment=TA_LEFT,
-                              fontName='Helvetica',
+                              fontName='Arabic',
                               fontSize=10,
                               textColor=colors.black,
                               leading=13,
@@ -49,7 +57,6 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
                               borderPadding=10,
                               borderColor=colors.black,
                               borderRadius=5
-
                               ))
     styles.add(ParagraphStyle(name='CompanySide',
                               alignment=TA_LEFT,
@@ -141,7 +148,10 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     PaimentMethod_row = ['mode de paiement',method]
     StatusTableData.append(PaimentMethod_row)
 
-
+    def ReshapeArabic(txt):
+        txt = arabic_reshaper.reshape(txt)
+        txt = get_display(txt)
+        return txt
 
 
     def footer_info_table(tabledata):
@@ -201,7 +211,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     # - End TOTAL,TVA,TTC Table Handler - ################################################
     def DrawPageImages(canvas, doc):
         canvas.saveState()
-        canvas.drawImage(str(BASE_DIR)+"/invoice-bg.png", 0, 0, 600, 840)
+        canvas.drawImage(GLOBAL_CONFIG_PATH+"invoice-bg.png", 0, 0, 600, 840)
         canvas.setFont("Helvetica", 10)
         canvas.drawRightString(205*mm, 5*mm, 'Page '+str(canvas.getPageNumber()))
         canvas.restoreState()
@@ -214,6 +224,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         GRID_STYLE = TableStyle(
             [
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONT', (0, 0), (-1, -1), 'Arabic'),
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
                 ('BACKGROUND', (0, 0), (-1, 0), Table_Color),
@@ -222,26 +233,33 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         )
         t.setStyle(GRID_STYLE)
         return t
-    
+
+
     company_side = f"""
-                <b>Facturé pour :</b> {str(FactureObj.Client.Client_Name).title()}<br/>
-                <b>ICE :</b> {str(FactureObj.Client.ICE).upper()}<br/>
-                """
-    client_side = f"""
                     <b>Facture :</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
                     <b>{str(Company_City).upper()} le :</b> {Date}"""
+    client_side = f"""
+                <font name="HELVETICA"><b>Facturé pour :</b></font> {str(FactureObj.Client.Client_Name).title()}<br/>
+                <font name="HELVETICA"><b>ICE :</b> {str(FactureObj.Client.ICE).upper()}<br/></font>
+                """
 
+    client_side = ReshapeArabic(client_side)
     client_company_table_data = [
-        [Paragraph(client_side, ClientSide), '',
-         Paragraph(company_side, CompanySide)],
+        [Paragraph(company_side, CompanySide),'',Paragraph(client_side, ClientSide)],
     ]
     client_company_table = Info_Table(client_company_table_data)
 
     # def colr(x, y, z):
     #     return (x/255, y/255, z/255)
     # change this to for item in facture items , tabledata.append(item)
+
     for item in FactureItemsObj:
-        row = [str(item.Qs).strip(), str(item.DESIGNATION).strip().title(),str(item.PU).strip(), str(item.PT).strip()]
+        row = [ 
+            ReshapeArabic(str(item.Qs).strip()),
+            ReshapeArabic(str(item.DESIGNATION).strip().title()),
+            ReshapeArabic(str(item.PU).strip()),
+            ReshapeArabic(str(item.PT).strip()),
+        ]
         tabledata.append(row)
 
 
