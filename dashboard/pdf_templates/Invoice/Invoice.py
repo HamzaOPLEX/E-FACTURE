@@ -46,7 +46,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     styles.add(ParagraphStyle(name='ClientSide',
                               alignment=TA_LEFT,
                               fontName='Arabic',
-                              fontSize=10,
+                              fontSize=9,
                               textColor=colors.black,
                               leading=13,
                               wordWrap='LTR',
@@ -244,6 +244,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
                 """
 
     client_side = ReshapeArabic(client_side)
+    print(client_side)
     client_company_table_data = [
         [Paragraph(company_side, CompanySide),'',Paragraph(client_side, ClientSide)],
     ]
