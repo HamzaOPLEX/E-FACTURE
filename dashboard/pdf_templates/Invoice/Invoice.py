@@ -215,10 +215,9 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         canvas.setFont("Helvetica", 10)
         canvas.drawRightString(205*mm, 5*mm, 'Page '+str(canvas.getPageNumber()))
         canvas.restoreState()
-
     #create the table for our document
-    def myTable(tabledata):
-        colwidths = (30, 350, 60, 60)
+    def myTable(tabledata,innergrid_index):
+        colwidths = (40, 350, 60, 60)
         t = Table(tabledata, colwidths)
         t.hAlign = 'RIGHT'
         GRID_STYLE = TableStyle(
@@ -229,6 +228,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
                 ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
                 ('BACKGROUND', (0, 0), (-1, 0), Table_Color),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('INNERGRID', (0, 0), (-1, innergrid_index), 0.25, colors.black),
             ]
         )
         t.setStyle(GRID_STYLE)
@@ -244,25 +244,37 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
                 """
 
     client_side = ReshapeArabic(client_side)
-    print(client_side)
     client_company_table_data = [
         [Paragraph(company_side, CompanySide),'',Paragraph(client_side, ClientSide)],
     ]
     client_company_table = Info_Table(client_company_table_data)
 
-    # def colr(x, y, z):
-    #     return (x/255, y/255, z/255)
-    # change this to for item in facture items , tabledata.append(item)
+
+    s = getSampleStyleSheet()
+    s = s["BodyText"]
+    s.wordWrap = 'CJK'
 
     for item in FactureItemsObj:
-        row = [ 
-            ReshapeArabic(str(item.Qs).strip()),
-            ReshapeArabic(str(item.DESIGNATION).strip().title()),
-            ReshapeArabic(str(item.PU).strip()),
-            ReshapeArabic(str(item.PT).strip()),
+        Qs = Paragraph(str(item.Qs).strip(), s)
+        DESIGNATION = Paragraph(str(item.DESIGNATION).strip().title(), s)
+        PU = Paragraph(str(item.PU).strip(), s)
+        PT = Paragraph(str(item.PT).strip(), s)
+        # row = [ 
+        #     ReshapeArabic(Qs),
+        #     ReshapeArabic(DESIGNATION),
+        #     ReshapeArabic(PU),
+        #     ReshapeArabic(PT),
+        # ]
+        row = [
+            Paragraph(str(item.Qs).strip(), s),
+            Paragraph(str(item.DESIGNATION).strip().title(), s),
+            Paragraph(str(item.PU).strip(), s),
+            Paragraph(str(item.PT).strip(), s),
         ]
         tabledata.append(row)
 
+    # get len of tabledata to use it in internal grid 
+    innergrid_index = len(tabledata)
 
     ROWS = 25
 
@@ -278,19 +290,16 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         story.append(client_company_table)
         story.append(Spacer(1, .25*inch))
         chunk.insert(0,header)
-        tabmestle = myTable(chunk)
+        tabmestle = myTable(chunk,innergrid_index)
+
         story.append(tabmestle)
         # check if chunk is last element in tabledata so add TOTAL info to the last table in pages
         if tabledata.index(chunk) == tabledata.index(tabledata[-1]):
 
             story.append(footer_info_table([[Status_Table(StatusTableData),'',TOTAL_table(TOTALtableData),]]))
             story.append(Spacer(1, .25*inch))
-            if FactureObj.TTCorHT == 'TTC':
-                Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  TTC"
-                story.append(Paragraph(Money_msg,FooterMessage))            
-            if FactureObj.TTCorHT == 'HT':
-                Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  HT"
-                story.append(Paragraph(Money_msg,FooterMessage))
+            Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  {FactureObj.TTCorHT}"
+            story.append(Paragraph(Money_msg,FooterMessage))
 
         story.append(PageBreak())
 
