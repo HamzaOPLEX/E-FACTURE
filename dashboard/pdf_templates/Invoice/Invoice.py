@@ -8,30 +8,15 @@ from reportlab import platypus
 from reportlab.lib import colors
 from reportlab.lib.units import inch, cm
 from pathlib import Path
-from num2words import num2words
 from reportlab.lib.enums import TA_JUSTIFY, TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.pdfbase.ttfonts import TTFont
-import arabic_reshaper
-from bidi.algorithm import get_display
-
-import textwrap
 from colour import Color
+from ..global_config.text_handler import *
+from ..global_config.tables_handler import *
+
+
 
 def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
-    Table_Color = Color(APP_Settings.objects.all().first().Invoice_Color)
-    Table_Color = Table_Color.rgb
-
-    def draw_wrapped_line(canvas, text, length, x_pos, y_pos, y_offset):
-        if len(text) > length:
-            wraps = textwrap.wrap(text, length)
-            for x in range(len(wraps)):
-                canvas.drawCentredString(x_pos, y_pos, wraps[x])
-                y_pos -= y_offset
-            y_pos += y_offset  # add back offset after last wrapped line
-        else:
-            canvas.drawCentredString(x_pos, y_pos, text)
-        return y_pos
-
     story = []
     BASE_DIR = Path(__file__).resolve().parent
     GLOBAL_CONFIG_PATH = str(str(BASE_DIR.parent)+"/global_config/")
@@ -40,9 +25,25 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     tabledata = []
     header = ('QS', 'DISIGNATION', 'P.U', 'PT')
     pdfmetrics.registerFont(TTFont('Arabic', GLOBAL_CONFIG_PATH+"Arabic.ttf"))
+
+
+
+
+
+    # Styles ################################################################
     styles = getSampleStyleSheet()
 
-
+    styles.add(ParagraphStyle(name='TableContent',
+                              alignment=TA_CENTER,
+                              fontName='Arabic',
+                              fontSize=9,
+                              textColor=colors.black,
+                              leading=13,
+                              wordWrap='LTR',
+                              splitLongWords=True,
+                              spaceShrinkage=0.05,
+                              backColor=None,
+                              ))
     styles.add(ParagraphStyle(name='ClientSide',
                               alignment=TA_LEFT,
                               fontName='Arabic',
@@ -103,28 +104,11 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     FooterMessage = styles['FooterMessage']
     ClientSide = styles['ClientSide']
     CompanySide = styles['CompanySide']
-    def Number2Letter(number):
-        if ',' in str(number):
-            number = number.replace(',', '')
-        elif '.' in str(number):
-            number = round(float(number), 2)
-            number = str(number).split('.')
-            # Befor point
-            part01 = str(num2words(int(number[0]), lang='fr')+' Dirhams')
-            # After point
-            part02 = str(num2words(int(number[1]), lang='fr')+' Centimes')
+    TableContent = styles['TableContent']
 
-            if int(number[1]) == 0 :
-                allNumber_Parts = part01
-            elif int(number[1]) != 0 :
-                allNumber_Parts = part01 +' Et '+ part02
-            
-            return allNumber_Parts.title()
-        else:
-            number = num2words(int(number), lang='fr')+' Dirhams'
-            return number.title()
+    #############################################################################
 
-    # - Start TOTAL,TVA,TTC Table Handler - ##################################################
+    # - Start TOTAL,TVA,TTC Table Handler - ######################################
     TOTALint, TVA, TTC_int = (FactureObj.HT,FactureObj.TVA,FactureObj.TTC)
     TOTAL = ['TOTAL HT', round(TOTALint, 2)]
     if FactureObj.TTCorHT == 'TTC':
@@ -136,6 +120,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     elif FactureObj.TTCorHT == 'HT':
         TOTALtableData = [TOTAL]
         TOTALletter = Number2Letter(str(TOTALint))
+    #############################################################################
 
 
     StatusTableData = []
@@ -148,145 +133,41 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     PaimentMethod_row = ['mode de paiement',method]
     StatusTableData.append(PaimentMethod_row)
 
-    def ReshapeArabic(txt):
-        txt = arabic_reshaper.reshape(txt)
-        txt = get_display(txt)
-        return txt
-
-
-    def footer_info_table(tabledata):
-        colwidths = (238, 140, 180)
-        t = Table(tabledata, colwidths)
-        t.hAlign = 'CENTER'
-        GRID_STYLE = TableStyle(
-            [
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER')
-            ]
-        )
-        t.setStyle(GRID_STYLE)
-        return t
-
-    def Status_Table(tabledata):
-        colwidths = (90, 100)
-        t = Table(tabledata, colwidths)
-        t.hAlign = 'LEFT'
-        GRID_STYLE = TableStyle(
-            [('GRID', (0, 0), (-1, -1), 0.25, colors.black),
-             ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ]
-        )
-        t.setStyle(GRID_STYLE)
-        return t
-
-
-
-
-    def chunks(l, n):
-        n = max(1, n)
-        return (l[i:i+n] for i in range(0, len(l), n))
-
-    def Info_Table(tabledata):
-        colwidths = (190, 100, 200)
-        t = Table(tabledata, colwidths)
-        t.hAlign = 'CENTER'
-        GRID_STYLE = TableStyle(
-            [
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER')
-            ]
-        )
-        t.setStyle(GRID_STYLE)
-        return t
-    from reportlab.lib.units import mm
-
-    def TOTAL_table(tabledata):
-        colwidths = (60, 60)
-        t = Table(tabledata, colwidths)
-        t.hAlign = 'RIGHT'
-        GRID_STYLE = TableStyle(
-            [('GRID', (0, 0), (-1, -1), 0.25, colors.black),
-             ('ALIGN', (0, 0), (-1, -1), 'CENTER'), ]
-        )
-        t.setStyle(GRID_STYLE)
-        return t
-
-    # - End TOTAL,TVA,TTC Table Handler - ################################################
-    def DrawPageImages(canvas, doc):
-        canvas.saveState()
-        canvas.drawImage(GLOBAL_CONFIG_PATH+"invoice-bg.png", 0, 0, 600, 840)
-        canvas.setFont("Helvetica", 10)
-        canvas.drawRightString(205*mm, 5*mm, 'Page '+str(canvas.getPageNumber()))
-        canvas.restoreState()
-    #create the table for our document
-    def myTable(tabledata,innergrid_index):
-        colwidths = (40, 350, 60, 60)
-        t = Table(tabledata, colwidths)
-        t.hAlign = 'RIGHT'
-        GRID_STYLE = TableStyle(
-            [
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('FONT', (0, 0), (-1, -1), 'Arabic'),
-                ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-                ('LINEBEFORE', (0, 1), (-1, -1), 1, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), Table_Color),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-                ('INNERGRID', (0, 0), (-1, innergrid_index), 0.25, colors.black),
-            ]
-        )
-        t.setStyle(GRID_STYLE)
-        return t
-
-
-    company_side = f"""
-                    <b>Facture :</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
-                    <b>{str(Company_City).upper()} le :</b> {Date}
-                    """
-    client_side = f"""
-                <font name="HELVETICA"><b>Facturé pour :</b></font> {str(FactureObj.Client.Client_Name).title()}<br/>
-                <font name="HELVETICA"><b>ICE :</b> {str(FactureObj.Client.ICE).upper()}<br/></font>
-                """
+    # TOP Header ################################################################
+    company_side = f""" <b>Facture :</b> {str(FactureObj.number).zfill(3)}/{Year}<br/> <b>{str(Company_City).upper()} le :</b> {Date} """
+    client_side = f""" <font name="HELVETICA"><b>Facturé pour :</b></font> {str(FactureObj.Client.Client_Name).title()}<br/> <font name="HELVETICA"><b>ICE :</b> {str(FactureObj.Client.ICE).upper()}<br/></font> """
 
     client_side = ReshapeArabic(client_side)
-    client_company_table_data = [
-        [Paragraph(company_side, CompanySide),'',Paragraph(client_side, ClientSide)],
-    ]
+    client_company_table_data = [ [Paragraph(company_side, CompanySide),'',Paragraph(client_side, ClientSide)], ]
     client_company_table = Info_Table(client_company_table_data)
+    #############################################################################
 
-
-    s = getSampleStyleSheet()
-    s = s["BodyText"]
-    s.wordWrap = 'CJK'
 
     TABLE_ROWS_NUMBER = 0
 
-
-
     for item in FactureItemsObj:
-        Qs = Paragraph(str(item.Qs).strip(), s)
-        DESIGNATION = Paragraph(str(item.DESIGNATION).strip().title(), s)
-        PU = Paragraph(str(item.PU).strip(), s)
-        PT = Paragraph(str(item.PT).strip(), s)
-        L = len(textwrap.wrap(str(item.DESIGNATION).strip().title(),60))
-        TABLE_ROWS_NUMBER += L 
-        # row = [ 
-        #     ReshapeArabic(Qs),
-        #     ReshapeArabic(DESIGNATION),
-        #     ReshapeArabic(PU),
-        #     ReshapeArabic(PT),
-        # ]
+        Qs = Paragraph(ReshapeArabic(str(item.Qs).strip()), TableContent),
+        DESIGNATION = Paragraph(ReshapeArabic(str(item.DESIGNATION).strip().title()), TableContent),
+        PU = Paragraph(ReshapeArabic(str(item.PU).strip()), TableContent),
+        PT = Paragraph(ReshapeArabic(str(item.PT).strip()), TableContent),
+        if len(str(item.DESIGNATION).strip().title()) >= 60:
+            L = len(textwrap.wrap(str(item.DESIGNATION).strip().title(),60))
+            TABLE_ROWS_NUMBER += L 
+
         row = [
-            Paragraph(str(item.Qs).strip(), s),
-            Paragraph(str(item.DESIGNATION).strip().title(), s),
-            Paragraph(str(item.PU).strip(), s),
-            Paragraph(str(item.PT).strip(), s),
+            Qs,
+            DESIGNATION,
+            PU,
+            PT
         ]
         tabledata.append(row)
 
     # get len of tabledata to use it in internal grid 
-    innergrid_index = len(tabledata)
+    ROWS = 25
 
-    ROWS = TABLE_ROWS_NUMBER
-    print(TABLE_ROWS_NUMBER)
+    # split table data to N_ROWS of chunks
     tabledata = list(chunks(tabledata,ROWS))
-
+    # loop into chunks
     for chunk in tabledata :
         if len(chunk) <= ROWS:
             emptyrows_needed = ROWS-int(len(chunk))
@@ -297,17 +178,16 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         story.append(client_company_table)
         story.append(Spacer(1, .25*inch))
         chunk.insert(0,header)
-        tabmestle = myTable(chunk,innergrid_index)
+        innergrid_index = len(chunk)
+        table_style = myTable(chunk,innergrid_index)
 
-        story.append(tabmestle)
+        story.append(table_style)
         # check if chunk is last element in tabledata so add TOTAL info to the last table in pages
         if tabledata.index(chunk) == tabledata.index(tabledata[-1]):
-
             story.append(footer_info_table([[Status_Table(StatusTableData),'',TOTAL_table(TOTALtableData),]]))
             story.append(Spacer(1, .25*inch))
             Money_msg = f"Arrêté la présente facture à la somme de <b><i>{TOTALletter}</i></b>  {FactureObj.TTCorHT}"
             story.append(Paragraph(Money_msg,FooterMessage))
-
         story.append(PageBreak())
 
     filename = f'{FactureObj.Client.Client_Name}-{str(FactureObj.number).zfill(3)}-{Date}'
