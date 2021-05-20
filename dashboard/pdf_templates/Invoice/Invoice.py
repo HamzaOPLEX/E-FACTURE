@@ -237,7 +237,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
 
     company_side = f"""
                     <b>Facture :</b> {str(FactureObj.number).zfill(3)}/{Year}<br/>
-                    <b>{str(Company_City).upper()} le :</b> {Date}"""
+                    <b>{str(Company_City).upper()} le :</b> {Date}
+                    """
     client_side = f"""
                 <font name="HELVETICA"><b>Facturé pour :</b></font> {str(FactureObj.Client.Client_Name).title()}<br/>
                 <font name="HELVETICA"><b>ICE :</b> {str(FactureObj.Client.ICE).upper()}<br/></font>
@@ -254,11 +255,17 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     s = s["BodyText"]
     s.wordWrap = 'CJK'
 
+    TABLE_ROWS_NUMBER = 0
+
+
+
     for item in FactureItemsObj:
         Qs = Paragraph(str(item.Qs).strip(), s)
         DESIGNATION = Paragraph(str(item.DESIGNATION).strip().title(), s)
         PU = Paragraph(str(item.PU).strip(), s)
         PT = Paragraph(str(item.PT).strip(), s)
+        L = len(textwrap.wrap(str(item.DESIGNATION).strip().title(),60))
+        TABLE_ROWS_NUMBER += L 
         # row = [ 
         #     ReshapeArabic(Qs),
         #     ReshapeArabic(DESIGNATION),
@@ -276,8 +283,8 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     # get len of tabledata to use it in internal grid 
     innergrid_index = len(tabledata)
 
-    ROWS = 25
-
+    ROWS = TABLE_ROWS_NUMBER
+    print(TABLE_ROWS_NUMBER)
     tabledata = list(chunks(tabledata,ROWS))
 
     for chunk in tabledata :
