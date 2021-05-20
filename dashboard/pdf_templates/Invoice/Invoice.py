@@ -147,11 +147,11 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
 
     for item in FactureItemsObj:
         Qs = Paragraph(ReshapeArabic(str(item.Qs).strip()), TableContent),
-        DESIGNATION = Paragraph(ReshapeArabic(str(item.DESIGNATION).strip().title()), TableContent),
+        DESIGNATION = Paragraph(ReshapeArabic(str(item.DESIGNATION).strip()), TableContent),
         PU = Paragraph(ReshapeArabic(str(item.PU).strip()), TableContent),
         PT = Paragraph(ReshapeArabic(str(item.PT).strip()), TableContent),
         if len(str(item.DESIGNATION).strip().title()) >= 60:
-            L = len(textwrap.wrap(str(item.DESIGNATION).strip().title(),60))
+            L = len(textwrap.wrap(str(item.DESIGNATION).strip(),60))
             TABLE_ROWS_NUMBER += L 
 
         row = [
