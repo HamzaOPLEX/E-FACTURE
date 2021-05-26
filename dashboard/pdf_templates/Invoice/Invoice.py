@@ -169,6 +169,7 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
     tabledata = list(chunks(tabledata,ROWS))
     # loop into chunks
     for chunk in tabledata :
+        innergrid_index = len(chunk)
         if len(chunk) <= ROWS:
             emptyrows_needed = ROWS-int(len(chunk))
             for i in range(emptyrows_needed):
@@ -178,7 +179,6 @@ def DrawNotechPdf(FactureObj, FactureItemsObj, Company_TVATAUX,Company_City ):
         story.append(client_company_table)
         story.append(Spacer(1, .25*inch))
         chunk.insert(0,header)
-        innergrid_index = len(chunk)
         table_style = myTable(chunk,innergrid_index)
 
         story.append(table_style)
