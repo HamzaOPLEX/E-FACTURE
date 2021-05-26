@@ -226,7 +226,7 @@ def H_Edit_Facture(requests, facture_id):
                 if paid_method not in ['Espèces', 'Chèque','Virement','Lettre']:
                     paid_method = 'aucun'
                 client = get_object_or_404(APP_Clients,id=ClientID)
-                Facture.ClientID = client
+                Facture.Client = client
                 Facture.Date = date
                 Facture.Paiment_Mathod = paid_method
                 Facture.Avance = avance
