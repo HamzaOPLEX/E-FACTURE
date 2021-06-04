@@ -229,7 +229,7 @@ def H_Edit_Devis(requests, Devis_id):
                         pass
                 Devis.HT = HT
                 Devis.save()
-                APP_Devis_items.objects.bulk_create(theItem)
+                APP_Devis_items.objects.bulk_create(ITEMS)
                 MSG = f"Le Devis {Devis_number} a été éditer avec succès"
                 return JsonResponse({'MSG':MSG,'ID':Devis.id,'ROOT_URL':'/list-all-devis/'}, status=200)
             else:
