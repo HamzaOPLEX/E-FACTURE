@@ -227,8 +227,10 @@ function EditClient(row, action) {
 function check_if_inputval_is_already_in_select(selec, data2check) {
     // true : option exist
     // false : option does not exist
-    if ($("#" + selec + " option[value='" + data2check + "']").length !== 0) { return true };
-    if ($("#" + selec + " option[value='" + data2check + "]'").length == 0) { return false };
+    data2check = toString(data2check)
+    data2check = data2check.replace('"',"'")
+    if ($(`#${selec} option[value="${data2check}"]`).length !== 0) { return true };
+    if ($(`#${selec} option[value="${data2check}"]`).length == 0) { return false };
 }
 
 
@@ -289,7 +291,8 @@ function EditSelectedRow(row) {
         text: row_data[1]
     };
     var newOption = new Option(data.text, data.val, false, false);
-    if ($('#Edit_ProductName').find("option[value='" + data.val + "']").length) {
+    data.val = data.val.replace('"', "'")
+    if ($('#Edit_ProductName').find(`option[value="$(data.val)"]`).length) {
         $('#Edit_ProductName').val(data.val).trigger('change');
     } else {
         var newOption = new Option(data.text, data.val, true, true);
