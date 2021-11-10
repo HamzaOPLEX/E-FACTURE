@@ -1,2 +1,3 @@
 # NTFM
-Nord Ouest Technologie Facture Manager
+Web APP to Manage Invoices easy and fast 
+developed by Hamza with Love
