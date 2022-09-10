@@ -1,7 +1,7 @@
-Django==3.1.7
+Django
 mysqlclient
-num2words==0.5.10
-reportlab==3.5.59
+num2words
+reportlab
 dj_static
 colour
 openpyxl

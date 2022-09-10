@@ -1,1 +1,1 @@
-from NTFM.wsgi import application
+from Settings.wsgi import application
