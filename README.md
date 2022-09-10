@@ -1,3 +1,2 @@
-# NTFM
-Web APP to Manage Invoices easy and fast 
-developed by Hamza with Love
+# E-FACTURE
+A Way To Manage Your Invoice From AnyWhere
